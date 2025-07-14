@@ -1,4 +1,6 @@
 credentials.json
 backend/.env
-secrets/*
+backend/secrets/*
 .idea/*
+backend/__pycache__/*
+test_main.http
