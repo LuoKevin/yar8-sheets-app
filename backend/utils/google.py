@@ -2,20 +2,37 @@ from typing import List
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from config import GOOGLE_CREDENTIALS_PATH, SPREADSHEET_ID, SCRIPT_ID, STUDY_GROUPS_RANGE
+from config import GOOGLE_CREDENTIALS_PATH
 
-def read_sheet_data() -> List[List[str]]:
-    creds = service_account.Credentials.from_service_account_file(
+creds = service_account.Credentials.from_service_account_file(
         GOOGLE_CREDENTIALS_PATH,
-        scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"],
+        scopes=["https://www.googleapis.com/auth/spreadsheets"],
     )
 
-    service = build("sheets", "v4", credentials=creds)
+service = build("sheets", "v4", credentials=creds)
+
+def read_sheet_range(spreadsheet_id: str, cell_range: str) -> List[List[str]]:
     sheet = service.spreadsheets()
 
     results = sheet.values().get(
-        spreadsheetId=SPREADSHEET_ID,
-        range=STUDY_GROUPS_RANGE,
+        spreadsheetId=spreadsheet_id,
+        range=cell_range,
     ).execute()
 
     return results.get("values", [])
+
+def write_to_range(spreadsheet_id: str, sheet_cell_range: str, value: str, input_option='USER_ENTERED') -> None:
+
+    body = {
+        'values': [[value]],
+
+    }
+
+    result = service.spreadsheets().values().update(
+        spreadsheetId=spreadsheet_id,
+        range=sheet_cell_range,
+        valueInputOption=input_option,
+        body=body,
+    ).execute()
+
+    #TODO: Add exception handling here
