@@ -1,5 +1,8 @@
-fastapi
+fastapi~=0.116.1
 uvicorn
-python-dotenv
-google-api-python-client
+python-dotenv~=1.1.1
+google-api-python-client~=2.176.0
 google-auth
+protobuf~=6.31.1
+pydantic~=2.11.7
+utils~=1.0.2

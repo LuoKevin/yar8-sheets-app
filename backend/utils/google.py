@@ -1,8 +1,10 @@
+from typing import List
+
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from config import GOOGLE_CREDENTIALS_PATH, SPREADSHEET_ID, SCRIPT_ID, STUDY_GROUPS_RANGE
 
-def read_sheet_data():
+def read_sheet_data() -> List[List[str]]:
     creds = service_account.Credentials.from_service_account_file(
         GOOGLE_CREDENTIALS_PATH,
         scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"],

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
+from pydantic import BaseModel
 
-@dataclass
-class StudyGroup:
+class StudyGroup(BaseModel):
     leader:str
     members:List[str]

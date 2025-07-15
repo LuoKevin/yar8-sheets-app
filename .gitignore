@@ -2,5 +2,7 @@ credentials.json
 backend/.env
 backend/secrets/*
 .idea/*
-backend/__pycache__/*
 test_main.http
+*.py[cod]
+__pycache__/
+**/__pycache__/
