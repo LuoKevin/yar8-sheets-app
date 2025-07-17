@@ -2,18 +2,19 @@ from ..config import Settings
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
-class GoogleSheetsServiceProvider:
+
+class GoogleServiceProvider:
     # Singleton object provider
     _sheets_service = None
+    _settings = Settings()
+    _creds = service_account.Credentials.from_service_account_file(
+        _settings.GOOGLE_CREDENTIALS_PATH,
+        scopes=_settings.SERVICE_SCOPE,
+    )
 
     @classmethod
     def get_sheets_service(cls):
         if cls._sheets_service is None:
-            settings = Settings()
-            creds = service_account.Credentials.from_service_account_file(
-                settings.GOOGLE_CREDENTIALS_PATH,
-                scopes=settings.SERVICE_SCOPE,
-            )
-            cls._sheets_service = build("sheets", "v4", credentials=creds)
+            cls._sheets_service = build("sheets", "v4", credentials=cls._creds)
 
         return cls._sheets_service

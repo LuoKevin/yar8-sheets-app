@@ -1,11 +1,11 @@
 from typing import List
 
-from backend.sheets_client.provider import GoogleSheetsServiceProvider
+from backend.sheets_client.provider import GoogleServiceProvider
 
 
 class GoogleSheetsClient:
     def __init__(self):
-        self._service = GoogleSheetsServiceProvider.get_sheets_service()
+        self._service = GoogleServiceProvider.get_sheets_service()
 
     def read_sheet_range(self, spreadsheet_id: str, cell_range: str) -> List[List[str]]:
         sheet = self._service.spreadsheets()

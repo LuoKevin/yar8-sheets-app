@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from backend.config import Settings
 from backend.services.study_groups_service import get_study_groups
 from backend.sheets_client.client import GoogleSheetsClient
+from backend.sheets_client.macros import GoogleSheetsMacros
 
 app = FastAPI()
 
@@ -11,8 +12,10 @@ app = FastAPI()
 class DateModel(BaseModel):
     date: str
 
+
 settings = Settings()
 google_api_client = GoogleSheetsClient()
+google_macros = GoogleSheetsMacros()
 SCRAMBLE_FUNC_NAME = "PasteValueLock"
 RESET_FUNC_NAME = "Reset"
 
@@ -46,4 +49,18 @@ def post_study_group_date(data: DateModel):
             status_code=400,
             detail=f"Error: {str(e)}"
         )
-    #TODO: client methods should not be called at this layer
+    # TODO: client methods should not be called at this layer
+
+
+@app.post("/reset-groups")
+def reset_study_groups():
+    try:
+        google_macros.reset(settings.SPREADSHEET_ID)
+        return {
+            "status": "Reset successful",
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Error: {str(e)}"
+        )
