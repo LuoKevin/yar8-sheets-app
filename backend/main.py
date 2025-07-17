@@ -29,7 +29,7 @@ async def root():
 def study_sheet_data():
     return {
         "study_sheet_data": get_study_groups(
-            google_api_client.read_sheet_range(settings.SPREADSHEET_ID, "Groups_Current!C5:O20")
+            google_api_client.read_range(settings.SPREADSHEET_ID, "Groups_Current!C5:O20")
         )
     }
 
@@ -38,7 +38,7 @@ def study_sheet_data():
 def post_study_group_date(data: DateModel):
     try:
         # TODO: add date validation here
-        google_api_client.write_to_range(settings.SPREADSHEET_ID, "Groups_Current!C1", data.date)
+        google_api_client.write_range(settings.SPREADSHEET_ID, "Groups_Current!C1", data.date)
         return {
             "status": "success",
             "study_group_date": data.date
