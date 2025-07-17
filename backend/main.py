@@ -1,33 +1,41 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+from backend.config import Settings
 from backend.services.study_groups_service import get_study_groups
-from backend.utils.google_sheets_api import GoogleSheetsAPI
-from config import SPREADSHEET_ID, SCRIPT_ID, STUDY_GROUPS_RANGE, STUDY_DATE_CELL, GOOGLE_CREDENTIALS_PATH
+from backend.sheets_client.client import GoogleSheetsClient
+
 app = FastAPI()
+
 
 class DateModel(BaseModel):
     date: str
 
-google_api_client = GoogleSheetsAPI(GOOGLE_CREDENTIALS_PATH)
+settings = Settings()
+google_api_client = GoogleSheetsClient()
+SCRAMBLE_FUNC_NAME = "PasteValueLock"
+RESET_FUNC_NAME = "Reset"
+
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
+
 @app.get("/study-sheet-data")
 def study_sheet_data():
     return {
         "study_sheet_data": get_study_groups(
-            google_api_client.read_sheet_range(SPREADSHEET_ID, STUDY_GROUPS_RANGE)
+            google_api_client.read_sheet_range(settings.SPREADSHEET_ID, "Groups_Current!C5:O20")
         )
     }
+
 
 @app.post("/study-group-date")
 def post_study_group_date(data: DateModel):
     try:
         # TODO: add date validation here
-        google_api_client.write_to_range(SPREADSHEET_ID, STUDY_DATE_CELL, data.date)
+        google_api_client.write_to_range(settings.SPREADSHEET_ID, "Groups_Current!C1", data.date)
         return {
             "status": "success",
             "study_group_date": data.date
@@ -38,3 +46,4 @@ def post_study_group_date(data: DateModel):
             status_code=400,
             detail=f"Error: {str(e)}"
         )
+    #TODO: client methods should not be called at this layer

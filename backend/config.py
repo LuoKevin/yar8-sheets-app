@@ -1,18 +1,12 @@
-from dotenv import load_dotenv
-import os
+from typing import List
+from pydantic.v1 import BaseSettings
 
-env_path = os.path.join(os.path.dirname(__file__), ".env")
-load_dotenv(dotenv_path=env_path)
+class Settings(BaseSettings):
+    GOOGLE_CREDENTIALS_PATH: str
+    SPREADSHEET_ID: str
+    SERVICE_SCOPE: List[str] = [
+        "https://www.googleapis.com/auth/spreadsheets",
+    ]
 
-creds_raw = os.getenv("GOOGLE_CREDENTIALS_PATH")
-
-GOOGLE_CREDENTIALS_PATH = (
-    os.path.abspath(os.path.join(os.path.dirname(__file__), creds_raw))
-    if creds_raw and not os.path.isabs(creds_raw)
-    else creds_raw
-)
-
-SPREADSHEET_ID = os.getenv("SPREADSHEET_ID")
-SCRIPT_ID = os.getenv("SCRIPT_ID")
-STUDY_GROUPS_RANGE = os.getenv("STUDY_GROUPS_RANGE")
-STUDY_DATE_CELL = os.getenv("STUDY_DATE_CELL")
+    class Config:
+        env_file = ".env"
