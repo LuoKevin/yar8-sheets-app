@@ -20,21 +20,25 @@ class GoogleSheetsMacros:
 
         clear_range(spreadsheet_id, self._GROUPS_SHEET_NAME, "B1:B200")
 
+    def _toggle_shuffle(self,spreadsheet_id: str):
+        toggle_shuffle_cell = f"{self._GROUPS_SHEET_NAME}!I1"
+        if self._sheets_client.read_cell(spreadsheet_id, toggle_shuffle_cell) == "TRUE":
+            self._sheets_client.write_cell(spreadsheet_id, toggle_shuffle_cell, "FALSE")
+        else:
+            self._sheets_client.write_cell(spreadsheet_id, toggle_shuffle_cell, "TRUE")
+
+
     def paste_value_lock(self, spreadsheet_id):
         client = self._sheets_client
         copy_range = f"{self._GROUPS_SHEET_NAME}!AC3:AE103"
         paste_range = f"{self._GROUPS_SHEET_NAME}!AF3:AH103"
-        toggle_shuffle_cell = f"{self._GROUPS_SHEET_NAME}!I1"
         alt_run: bool = client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!I2") == "TRUE"
 
         while (
                 client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") != "OK" or
                 (alt_run and client.read_cell(spreadsheet_id, "Exceptions!E1") != "OK")
         ):
-            if client.read_cell(spreadsheet_id, toggle_shuffle_cell) == "TRUE":
-                client.write_cell(spreadsheet_id, toggle_shuffle_cell, "FALSE")
-            else:
-                client.write_cell(spreadsheet_id, toggle_shuffle_cell, "TRUE")
+            self._toggle_shuffle(spreadsheet_id)
 
         client.write_range(spreadsheet_id, paste_range, client.read_range(spreadsheet_id, copy_range))
         client.write_cell(spreadsheet_id,f"{self._GROUPS_SHEET_NAME}!M1", "TRUE")
