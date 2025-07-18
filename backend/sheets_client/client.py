@@ -21,11 +21,11 @@ class GoogleSheetsClient:
             self,
             spreadsheet_id: str,
             sheet_cell_range: str,
-            value: str,
+            values: List[List[str]],
             input_option='USER_ENTERED'
     ) -> None:
         body = {
-            'values': [[value]],
+            'values': values
         }
 
         result = self._service.spreadsheets().values().update(
@@ -43,7 +43,7 @@ class GoogleSheetsClient:
             cell: str,
             value: str,
     ) -> None:
-        self.write_range(spreadsheet_id, cell, value)
+        self.write_range(spreadsheet_id, cell, [[value]])
 
     def read_cell(self, spreadsheet_id: str, cell: str, ):
         resp = self.read_range(spreadsheet_id, cell)

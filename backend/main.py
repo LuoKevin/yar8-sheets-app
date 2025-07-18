@@ -38,7 +38,7 @@ def study_sheet_data():
 def post_study_group_date(data: DateModel):
     try:
         # TODO: add date validation here
-        google_api_client.write_range(settings.SPREADSHEET_ID, "Groups_Current!C1", data.date)
+        google_api_client.write_cell(settings.SPREADSHEET_ID, "Groups_Current!C1", data.date)
         return {
             "status": "success",
             "study_group_date": data.date
@@ -58,6 +58,19 @@ def reset_study_groups():
         google_macros.reset(settings.SPREADSHEET_ID)
         return {
             "status": "Reset successful",
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Error: {str(e)}"
+        )
+
+@app.post("/shuffle-lock")
+def shuffle_lock():
+    try:
+        google_macros.paste_value_lock(settings.SPREADSHEET_ID)
+        return {
+            "status": "success",
         }
     except Exception as e:
         raise HTTPException(
