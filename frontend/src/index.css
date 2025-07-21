@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@layer utilities {
+   @keyframes bob {
+   0%, 100% { transform: translateY(0); }
+   50%      { transform: translateY(var(--bob-dist, -3px)); }
+ }
+ @keyframes sway {
+   0%, 100% { transform: rotate(0deg); }
+   50%      { transform: rotate(calc(1deg * var(--sway-mult, 1))); }
+ }
+ .animate-bob {
+   animation: bob var(--bob-duration, 4s) ease-in-out infinite;
+ }
+ .animate-sway {
+   animation: sway var(--sway-duration, 5s) ease-in-out infinite;
+ }
+
+}
