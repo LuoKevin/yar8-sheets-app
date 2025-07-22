@@ -1,30 +1,16 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import NameGrid from './components/NameGrid';
-
-const rows = [
-  ['Alice','Bob','Charlie'],
-  ['Dave','Eve','Frank'],
-  ['Grace','Heidi','Ivan'],
-];
-
-
+import { useEffect, useState } from 'react';
+import StudyGroupGrid from './components/StudyGroupGrid';
+import { useStudyGroupData } from './components/UseStudyGroupData';
+import { StudyGroup } from './api/sheet';
 
 const App = () => {
-  const [names] = useState([
-    "Emma", "Liam", "Olivia", "Noah", "Ava",
-    "William", "Sophia", "James", "Isabella", "Benjamin",
-    "Mia", "Lucas", "Charlotte", "Henry", "Amelia",
-    "Alexander", "Harper", "Michael", "Evelyn"
-  ]);
+  const studyGroups = useStudyGroupData();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
-        Floating Name Grid
-      </h1>
-      <NameGrid initialNames={names} />
+    <div className="min-h-screen overflow-hidden">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+        <StudyGroupGrid groups={studyGroups} />
+      </div>
     </div>
   );
 };

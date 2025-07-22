@@ -19,7 +19,7 @@ class DateDataResponse(BaseModel):
 
 
 class StudyGroupResponse(BaseModel):
-    data: List[StudyGroup]
+    groups: List[StudyGroup]
 
 settings = Settings()
 google_api_client = GoogleSheetsClient()
@@ -29,7 +29,7 @@ google_macros = GoogleSheetsMacros()
 def get_study_group_data():
     try:
         group_range = google_api_client.read_range(settings.SPREADSHEET_ID, "Groups_Current!C5:O20")
-        return StudyGroupResponse(data = get_study_groups(group_range))
+        return StudyGroupResponse(groups= get_study_groups(group_range))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

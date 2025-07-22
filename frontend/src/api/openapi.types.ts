@@ -95,8 +95,8 @@ export interface components {
         };
         /** StudyGroupResponse */
         StudyGroupResponse: {
-            /** Data */
-            data: components["schemas"]["StudyGroup"][];
+            /** Groups */
+            groups: components["schemas"]["StudyGroup"][];
         };
         /** ValidationError */
         ValidationError: {
