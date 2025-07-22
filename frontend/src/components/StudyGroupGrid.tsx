@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import StudyGroupColumn from "./StudyGroupColumn";
 
 interface StudyGroup {
@@ -12,38 +12,53 @@ interface StudyGroupGridProps {
 }
 
 const StudyGroupGrid = ({ groups }: StudyGroupGridProps) => {
-  const [currentGroups, setCurrentGroups] = useState(groups);
+  const [displayGroups, setDisplayGroups] = useState<StudyGroup[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
-  
+  const initialRender = useRef(true);
+
   useEffect(() => {
-    if (JSON.stringify(groups) !== JSON.stringify(currentGroups)) {
-      const animateGroupChange = async () => {
-        setIsAnimating(true);
-        setCurrentGroups(groups);
-        setTimeout(() => setIsAnimating(false), 1000);
-      };
-      animateGroupChange();
+    if (initialRender.current) {
+      // Set initial groups without animation on first render
+      setDisplayGroups(groups);
+      initialRender.current = false;
+    } else {
+      // Only animate when groups actually change
+      if (JSON.stringify(groups) !== JSON.stringify(displayGroups)) {
+        const animateGroupChange = async () => {
+          setIsAnimating(true);
+          await new Promise(resolve => setTimeout(resolve, 500)); // Wait for exit animations
+          setDisplayGroups(groups);
+          setIsAnimating(false);
+        };
+        animateGroupChange();
+      }
     }
   }, [groups]);
 
+  if(displayGroups.length == 0) return null
+
   return (
+    
     <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
-      {/* Main grid container with slide-up animation */}
+      <AnimatePresence mode="wait">
       <motion.div
+      key= {`${isAnimating}`}
         className="flex justify-center w-full px-4 py-8 mx-auto bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20"
-        initial={{ opacity: 0, y: "100vh" }} // Starts below viewport
-        animate={{ opacity: 1, y: 0 }} // Slides up to normal position
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ 
           type: "spring",
-          stiffness: 60,
+          stiffness: 150,
           damping: 15,
           delay: 0.2
         }}
+        exit={{
+            opacity: 0
+        }}
       >
-        {/* Columns container - now with vertical alignment */}
         <div className="flex flex-wrap justify-center gap-8 w-full max-w-6xl">
-          <AnimatePresence mode="popLayout">
-            {currentGroups.map((group, index) => (
+          <AnimatePresence mode="wait">
+            {displayGroups.map((group, index) => (
               <StudyGroupColumn
                 key={`${group.leader}-${index}`}
                 leader={group.leader}
@@ -54,7 +69,8 @@ const StudyGroupGrid = ({ groups }: StudyGroupGridProps) => {
           </AnimatePresence>
         </div>
       </motion.div>
-      
+    </AnimatePresence>
+
     </div>
   );
 };

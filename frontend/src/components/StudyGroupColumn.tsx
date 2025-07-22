@@ -16,8 +16,8 @@ const StudyGroupColumn = ({ leader, members, isAnimating }: StudyGroupColumnProp
       animate={{ opacity: 1, x: 0 }}
       transition={{
         type: "spring",
-        stiffness: 100,
-        damping: 20,
+        stiffness: 150,
+        damping: 15,
         delay: 0.2
       }}
     >
