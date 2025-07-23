@@ -9,6 +9,11 @@ const colorThemes = [
   { start: "#23074d", end: "#cc5333", angle: 135 }  // Purple to orange
 ];
 
+interface GradientBackgroundProps {
+    isLoading: boolean
+    isShuffling: boolean
+}
+
 const GradientBackground = () => {
   const [currentTheme, setCurrentTheme] = useState(0);
   const startColor = useMotionValue(colorThemes[0].start);

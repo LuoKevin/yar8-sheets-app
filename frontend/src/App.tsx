@@ -31,7 +31,7 @@ const App = () => {
           onSelect={handleDateSelect}
         />
         {/* {dashboardData.loading ? "loading" : ""} */}
-        <StudyGroupGrid groups={groups} />
+        <StudyGroupGrid groups={groups} loading={groupsLoading} error={groupsError} />
       </div>
     </div>
   );

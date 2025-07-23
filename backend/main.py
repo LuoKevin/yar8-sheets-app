@@ -1,13 +1,7 @@
-from typing import List
-
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from backend.config import Settings
 from backend.routers.sheets import sheets_router
-from backend.services.study_groups_service import get_study_groups
-from backend.sheets_client.client import GoogleSheetsClient
-from backend.sheets_client.macros import GoogleSheetsMacros
 
 app = FastAPI(
     title="YAR8 Sheets API",
