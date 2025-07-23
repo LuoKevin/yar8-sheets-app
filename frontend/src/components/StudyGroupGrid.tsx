@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import StudyGroupColumn from "./StudyGroupColumn";
 
@@ -14,26 +14,16 @@ interface StudyGroupGridProps {
 }
 
 const StudyGroupGrid = ({ groups, loading, error }: StudyGroupGridProps) => {
-  const [displayGroups, setDisplayGroups] = useState<StudyGroup[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const initialRender = useRef(true);
+ const [displayGroups, setDisplayGroups] = useState(groups);
+  const initial = useRef(true);
 
+  // when `groups` changes, just update state
   useEffect(() => {
-    if (initialRender.current) {
-      // Set initial groups without animation on first render
+    if (initial.current) {
+      initial.current = false;
       setDisplayGroups(groups);
-      initialRender.current = false;
     } else {
-      // Only animate when groups actually change
-      if (JSON.stringify(groups) !== JSON.stringify(displayGroups)) {
-        const animateGroupChange = async () => {
-          setIsAnimating(true);
-          await new Promise(resolve => setTimeout(resolve, 500)); // Wait for exit animations
-          setDisplayGroups(groups);
-          setIsAnimating(false);
-        };
-        animateGroupChange();
-      }
+      setDisplayGroups(groups);
     }
   }, [groups]);
 
@@ -61,36 +51,23 @@ const StudyGroupGrid = ({ groups, loading, error }: StudyGroupGridProps) => {
         )}
       </AnimatePresence>
         {/* Main Grid */}
-      <AnimatePresence mode="wait">
-      <motion.div
-      key= {`${isAnimating}`}
-        className="flex justify-center w-full px-4 py-8 mx-auto bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ 
-          type: "spring",
-          stiffness: 150,
-          damping: 15,
-          delay: 0.2
-        }}
-        exit={{
-            opacity: 0
-        }}
-      >
-        <div className="flex flex-wrap justify-center gap-8 w-full max-w-6xl">
-          <AnimatePresence mode="wait">
-            {displayGroups.map((group, index) => (
+      <LayoutGroup>
+        <motion.div
+          layout
+          className="grid h-full w-full gap-4"
+          style={{ gridTemplateColumns: `repeat(${displayGroups.length},1fr)` }}
+          transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
+        >
+          {displayGroups.map((group) => (
+            <motion.div key={group.leader} layout>
               <StudyGroupColumn
-                key={`${group.leader}-${index}`}
                 leader={group.leader}
                 members={group.members}
-                isAnimating={isAnimating}
               />
-            ))}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+            </motion.div>
+          ))}
+        </motion.div>
+      </LayoutGroup>
 
     </div>
   );

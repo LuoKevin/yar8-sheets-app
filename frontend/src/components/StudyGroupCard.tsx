@@ -46,10 +46,11 @@ const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGr
     <motion.div
       className={`h-32 w-32 perspective-1000 origin-center ${isLeader ? "mb-4" : "my-1"}`}
       layout
+      layoutId = {name}
       transition={{
         type: "spring",
-        stiffness: 150,
-        damping: 15
+        stiffness: 500,
+        damping: 30
       }}
     >
       <motion.div

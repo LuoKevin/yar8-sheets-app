@@ -24,3 +24,8 @@ export function fetchStudyDates(): Promise<StudyDatesResponse> {
     .get<StudyDatesResponse>("/sheets/study-dates")
     .then(value => value.data)
 }
+
+export function postResetGroups(): Promise<void> {
+    return api
+    .post("/sheets/reset-groups")
+}
