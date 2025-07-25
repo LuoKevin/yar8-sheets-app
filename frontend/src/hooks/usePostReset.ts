@@ -3,9 +3,9 @@ import { postResetGroups } from '../api/sheet';
 
 interface PostResetGroupsResponse {
   resetGroups: () => Promise<void>
-  success: boolean
-  loading: boolean
-  error: string | null
+  resetSuccess: boolean
+  resetLoading: boolean
+  resetError: string | null
 }
 
 export function usePostResetGroups(): PostResetGroupsResponse {
@@ -27,5 +27,5 @@ export function usePostResetGroups(): PostResetGroupsResponse {
     }
   };
 
-  return {resetGroups, success, loading, error} as PostResetGroupsResponse;
+  return {resetGroups, resetSuccess: success, resetLoading:loading, resetError:error} as PostResetGroupsResponse;
 }

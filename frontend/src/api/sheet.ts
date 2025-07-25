@@ -29,3 +29,7 @@ export function postResetGroups(): Promise<void> {
     return api
     .post("/sheets/reset-groups")
 }
+
+export function shuffleAndLock(): Promise<void> {
+    return api.post("/sheets/shuffle-lock")
+} 

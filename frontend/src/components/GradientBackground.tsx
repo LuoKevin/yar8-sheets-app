@@ -16,9 +16,9 @@ interface GradientBackgroundProps {
 
 const GradientBackground = () => {
   const [currentTheme, setCurrentTheme] = useState(0);
-  const startColor = useMotionValue(colorThemes[0].start);
-  const endColor = useMotionValue(colorThemes[0].end);
-  const angle = useMotionValue(colorThemes[0].angle);
+  const startColor = useMotionValue(colorThemes[3].start);
+  const endColor = useMotionValue(colorThemes[3].end);
+  const angle = useMotionValue(colorThemes[3].angle);
 
   // Create a transform that generates the gradient string
   const background = useTransform(
@@ -48,10 +48,10 @@ const GradientBackground = () => {
   };
 
   // Auto-cycle colors every 20 seconds
-  useEffect(() => {
-    const interval = setInterval(nextTheme, 20000);
-    return () => clearInterval(interval);
-  }, [currentTheme]);
+  // useEffect(() => {
+  //   const interval = setInterval(nextTheme, 20000);
+  //   return () => clearInterval(interval);
+  // }, [currentTheme]);
 
   return (
     <>

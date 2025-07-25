@@ -26,11 +26,16 @@ settings = Settings()
 google_api_client = GoogleSheetsClient()
 google_macros = GoogleSheetsMacros()
 
+displayed_groups_range = "Groups_Current!C5:O20"
+
 @sheets_router.get("/study-group-data", response_model=StudyGroupResponse, summary="Get current study group data")
 async def get_study_group_data():
     try:
-        group_range = google_api_client.read_range(settings.SPREADSHEET_ID, "Groups_Current!C5:O20")
-        return StudyGroupResponse(groups= get_study_groups(group_range))
+        group_range = google_api_client.read_range(settings.SPREADSHEET_ID, displayed_groups_range)
+        print(group_range)
+        new_groups = get_study_groups(group_range)
+        print(new_groups)
+        return StudyGroupResponse(groups=new_groups)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -66,3 +71,24 @@ async def get_study_dates():
         return StudyDatesResponse(activeDate=active_date, dates=date_range[0])
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
+# @sheets_router.websocket("/ws-shuffle")
+# async def ws_shuffle_study_groups(ws: WebSocket):
+#     await ws.accept()
+#
+#     loop = asyncio.get_event_loop()
+#
+#     main_task: asyncio.Future = loop.run_in_executor(
+#         None,
+#         google_macros.paste_value_lock,
+#         settings.SPREADSHEET_ID,
+#     )
+#
+#     while not main_task.done():
+#         await ws.send_json({"type": "shuffle"})
+#         await asyncio.sleep(1)
+#
+#     final = await main_task
+#     groups = get_study_groups(google_api_client.read_range(settings.SPREADSHEET_ID, "Groups_Current!C5:O20"))
+#     await ws.send_json({"type": "complete", "groups": list(map(StudyGroup.to_json, groups))})
+#     await ws.close()

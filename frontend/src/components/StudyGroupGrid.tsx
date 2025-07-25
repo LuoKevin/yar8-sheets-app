@@ -31,7 +31,7 @@ const StudyGroupGrid = ({ groups, loading, error }: StudyGroupGridProps) => {
 
   return (
     
-    <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="relative z-10 min-h-screen flex flex-col items-center justify-top p-4">
     {/* Loading Overlay */}
       <AnimatePresence>
         {loading && (

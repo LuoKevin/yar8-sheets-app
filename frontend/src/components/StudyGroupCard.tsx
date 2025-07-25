@@ -50,7 +50,7 @@ const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGr
       transition={{
         type: "spring",
         stiffness: 500,
-        damping: 30
+        damping: 30,
       }}
     >
       <motion.div
