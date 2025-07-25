@@ -16,7 +16,7 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/gcp-service-account.json
     volumes:
-      - ./backend:/app/backend
+      - ./backend:/app/
       - ./backend/secrets/gcp-service-account.json:/run/secrets/gcp-service-account.json:ro
 
   web:

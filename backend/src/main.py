@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from backend.routers.sheets import sheets_router
+from .routers.sheets import sheets_router
 
 app = FastAPI(
     title="YAR8 Sheets API",

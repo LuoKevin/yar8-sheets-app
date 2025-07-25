@@ -1,5 +1,5 @@
 from typing import List
-from backend.models.study_group import StudyGroup
+from ..models.study_group import StudyGroup
 
 def rows_to_cols(rows: List[List[str]]) -> List[List[str]]:
     if not rows:

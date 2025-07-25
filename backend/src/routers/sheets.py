@@ -3,11 +3,11 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from backend.config import Settings
-from backend.models.study_group import StudyGroup
-from backend.services.study_groups_service import get_study_groups
-from backend.sheets_client.client import GoogleSheetsClient
-from backend.sheets_client.macros import GoogleSheetsMacros
+from ..config import Settings
+from ..models.study_group import StudyGroup
+from ..services.study_groups_service import get_study_groups
+from ..sheets_client.client import GoogleSheetsClient
+from ..sheets_client.macros import GoogleSheetsMacros
 
 sheets_router = APIRouter(prefix="/sheets", tags=["sheets"])
 
