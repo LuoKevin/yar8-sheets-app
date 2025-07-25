@@ -20,9 +20,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "local-dev": "cross-env NODE_ENV=local vite",
-    "local-build": "cross-env NODE_ENV=local tsc && vite build",
-    "dev-build": "cross-env NODE_ENV=development tsc && vite build",
+    "local-dev": "vite --mode local-dev",
+    "local-build": "tsc && vite build --mode local-dev",
+    "dev-build": "tsc && vite build --mode development",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest"
