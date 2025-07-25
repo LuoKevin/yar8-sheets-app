@@ -3,9 +3,10 @@ services:
 
   api:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: backend
+      dockerfile: Dockerfile
 
+    container_name: yar8-app-api
     ports:
       - "8000:8000"
     env_file:
@@ -15,12 +16,14 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/gcp-service-account.json
     volumes:
+      - ./backend:/app/backend
       - ./backend/secrets/gcp-service-account.json:/run/secrets/gcp-service-account.json:ro
 
   web:
     build: 
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: frontend
+      dockerfile: Dockerfile
+    container_name: yar8-app-ui
     ports:
       - "3000:80"
     env_file:
