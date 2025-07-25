@@ -1,6 +1,6 @@
 from typing import List
 
-from backend.sheets_client.provider import GoogleServiceProvider
+from .provider import GoogleServiceProvider
 
 
 class GoogleSheetsClient:

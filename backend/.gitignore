@@ -1,0 +1,9 @@
+credentials.json
+backend/.env
+backend/secrets/*
+test_main.http
+*.py[cod]
+__pycache__/
+**/__pycache__/
+secrets
+.env

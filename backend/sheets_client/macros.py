@@ -1,4 +1,4 @@
-from backend.sheets_client.client import GoogleSheetsClient
+from .client import GoogleSheetsClient
 
 class GoogleSheetsMacros:
     _GROUPS_SHEET_NAME = "Groups_Current"

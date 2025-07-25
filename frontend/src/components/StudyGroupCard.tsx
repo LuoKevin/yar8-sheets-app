@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { motion, Variants } from "framer-motion"
 
 interface StudyGroupCardProps {
   name: string;
@@ -7,7 +7,7 @@ interface StudyGroupCardProps {
 }
 
 const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGroupCardProps) => {
-	const cardVariants = {
+	const cardVariants: Variants = {
 		rest: {
 			scale: 1,
 			transition: {

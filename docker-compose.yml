@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+
+    ports:
+      - "8000:8000"
+    env_file:
+      - backend/.env
+    secrets:
+      - gcp_service_account
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/gcp-service-account.json
+    volumes:
+      - ./backend/secrets/gcp-service-account.json:/run/secrets/gcp-service-account.json:ro
+
+  web:
+    build: 
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3000:80"
+    env_file:
+      - frontend/.env
+
+secrets:
+  gcp_service_account:
+    external: true

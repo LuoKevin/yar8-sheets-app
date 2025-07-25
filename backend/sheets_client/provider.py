@@ -8,7 +8,7 @@ class GoogleServiceProvider:
     _sheets_service = None
     _settings = Settings()
     _creds = service_account.Credentials.from_service_account_file(
-        _settings.GOOGLE_CREDENTIALS_PATH,
+        _settings.GOOGLE_APPLICATION_CREDENTIALS,
         scopes=_settings.SERVICE_SCOPE,
     )
 

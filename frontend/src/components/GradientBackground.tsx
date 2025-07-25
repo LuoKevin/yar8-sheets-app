@@ -1,4 +1,4 @@
-import { motion, useMotionValue, animate, useTransform } from "framer-motion"
+import { motion, useMotionValue, animate, useTransform, MotionValue, useMotionTemplate } from "framer-motion"
 import { useState, useEffect } from "react"
 
 const colorThemes = [
@@ -14,19 +14,20 @@ interface GradientBackgroundProps {
     isShuffling: boolean
 }
 
+
+
 const GradientBackground = () => {
 	const [currentTheme, setCurrentTheme] = useState(0)
-	const startColor = useMotionValue(colorThemes[3].start)
-	const endColor = useMotionValue(colorThemes[3].end)
-	const angle = useMotionValue(colorThemes[3].angle)
+	const startColor = useMotionValue<string>(colorThemes[3].start)
+	const endColor = useMotionValue<string>(colorThemes[3].end)
+	const angle = useMotionValue<number>(colorThemes[3].angle)
 
 	// Create a transform that generates the gradient string
-	const background = useTransform(
-		[startColor, endColor, angle],
-		([start, end, angleValue]) => 
-			`linear-gradient(${angleValue}deg, ${start}, ${end})`
-	)
+	const background = useMotionTemplate`
+    linear-gradient(${angle}deg, ${startColor}, ${endColor})
+  `
 
+  
 	const nextTheme = () => {
 		const newTheme = (currentTheme + 1) % colorThemes.length
     
