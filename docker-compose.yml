@@ -10,7 +10,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - backend/.env
+      - backend/.env.local
     secrets:
       - gcp_service_account
     environment:
