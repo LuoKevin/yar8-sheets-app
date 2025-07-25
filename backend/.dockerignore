@@ -1,0 +1,7 @@
+# flyctl launch added from .gitignore
+**/credentials.json
+**/test_main.http
+**/*.py[cod]
+**/__pycache__
+**/**/__pycache__
+fly.toml

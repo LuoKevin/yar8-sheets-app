@@ -12,13 +12,17 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^22.0.0",
     "axios": "^1.10.0",
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.1",
     "motion": "^12.23.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "vite",
+    "local-dev": "cross-env NODE_ENV=local vite",
+    "local-build": "cross-env NODE_ENV=local tsc && vite build",
+    "dev-build": "cross-env NODE_ENV=development tsc && vite build",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest"
