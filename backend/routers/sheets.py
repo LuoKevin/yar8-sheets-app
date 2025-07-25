@@ -32,9 +32,7 @@ displayed_groups_range = "Groups_Current!C5:O20"
 async def get_study_group_data():
     try:
         group_range = google_api_client.read_range(settings.SPREADSHEET_ID, displayed_groups_range)
-        print(group_range)
         new_groups = get_study_groups(group_range)
-        print(new_groups)
         return StudyGroupResponse(groups=new_groups)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

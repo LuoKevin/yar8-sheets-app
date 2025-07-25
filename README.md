@@ -14,3 +14,9 @@ This app is designed to create a smoother user experience in handling the YAR8 G
 
 ### 🖼️ Frontend
 - 🎨 **TypeScript**: ⚛️ React, ⚡ Vite, 💨 TailwindCSS, 🌀 Motion.dev
+
+## 🧰 Features
+- Simple clean UI layout
+- Study group date selection
+- Resetting groups
+- Shuffling and live-updates
