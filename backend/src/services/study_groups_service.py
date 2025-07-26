@@ -18,7 +18,6 @@ def get_study_groups(rows: List[List[str]]) -> List[StudyGroup]:
     groups: List[StudyGroup] = []
 
     columns: List[List[str]] = rows_to_cols(rows)
-    print(columns)
     for col in columns:
         if not col or col[0] in invalid_leader_names:
             continue

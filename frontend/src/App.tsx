@@ -9,16 +9,26 @@ import { usePostResetGroups } from "./hooks/usePostReset"
 import { StudyGroup } from "./api/sheet"
 import { useShuffle } from "./hooks/useShuffle"
 import { LoadingText } from "./components/LoadingText"
+import LoadingIndicator from "./components/LoadingIndicator"
+import { useToast } from "./hooks/useToast"
+import SimpleToast from "./components/SimpleToast"
+import { FetchStatus } from "./hooks/types"
+
+
 
 const App = () => {
-	// const dashboardData = useGroupDashboard()
-
-
-	const datesData = useStudyDatesData()
-	const [activeDate, setActiveDate] = useState(datesData.activeDate)
-	const {fetchGroups, groups, groupsLoading, groupsError, manualSetGroups, scrambleGroups} = useStudyGroupData(activeDate)
+	const {toastMessage, toastStatus, showToast} = useToast()
+	const {dates, activeDate: currentDate, isDatesLoading} = useStudyDatesData()
+	const {
+		fetchGroups, 
+		groups, 
+		groupsLoading, 
+		groupsError,
+		manualSetGroups, 
+		scrambleGroups
+		} = useStudyGroupData(currentDate)
 	const {resetGroups, resetSuccess, resetLoading, resetError} = usePostResetGroups()
-	const { status, isShuffling, startShuffle } = useShuffle(
+	const { status: shuffleStatus, isShuffling, startShuffle } = useShuffle(
 		()=>{scrambleGroups()},
 		(newGroups: StudyGroup[]) => {manualSetGroups(newGroups)}
 	)
@@ -30,12 +40,25 @@ const App = () => {
 	const handleResetGroups = () => {
 		resetGroups().then(() => {
 			fetchGroups()
+		}).then(() => {
+			if(groupsError != null) {
+				showToast(`Reset failed. Reason:${groupsError}`, 'error')
+				return
+			}
+			showToast("Reset successful!", 'success')
+
 		})
 	}
 
 	const handleShuffle = () => {
 		startShuffle().then(() => {
 			fetchGroups()
+		}).then( () => {
+			if(shuffleStatus == FetchStatus.ERROR) {
+				showToast(`Shuffling failed. Idiot.`, 'error')
+				return
+			}
+			showToast("Shuffling successful!",'success')
 		})
 
 	}
@@ -46,10 +69,11 @@ const App = () => {
 		<div className="min-h-screen overflow-hidden">
 			<GradientBackground />
 			<div className="relative z-10 min-h-screen flex flex-col items-center justify-top p-4">
+				<LoadingIndicator isLoading={isDatesLoading} />
 				<div className="w-full max-w-lg flex items-center space-x-4 mb-6">
 					<DateSelector
-						dates={datesData.dates}
-						initialDate={datesData.activeDate}
+						dates={dates}
+						initialDate={currentDate}
 						onSelect={handleDateSelect}
 					/>
 					<Button disabled={resetLoading||isShuffling} onClick={() => handleResetGroups()}>Reset Groups</Button>
@@ -59,8 +83,14 @@ const App = () => {
 				<div className="w-full max-w-lg flex items-center justify-center space-x-4 mb-6">
 					<LoadingText visible={isShuffling} text='Shuffling'/>
 					<LoadingText visible={resetLoading} text= 'Resetting'/>
-				</div>
-				{/* {dashboardData.loading ? "loading" : ""} */}
+					{toastMessage && (
+       					<SimpleToast 
+          					message={toastMessage}
+          					type={toastStatus}
+							onClose={() => showToast('')}
+							// Clear when manually closed
+        				/>)
+					}</div>
 				<StudyGroupGrid groups={groups} loading={groupsLoading} error={groupsError} />
 			</div>
 		</div>

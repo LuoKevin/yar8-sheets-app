@@ -4,11 +4,12 @@ import { fetchStudyDates, StudyDatesResponse } from "../api/sheet"
 interface StudyDatesData {
   activeDate: string
   dates: string[]
+  isDatesLoading: boolean
 }
 
 
 export function useStudyDatesData(): StudyDatesData {
-	const [dates, setDates] = useState<StudyDatesResponse>({activeDate: "", dates: []})
+	const [datesData, setDates] = useState<StudyDatesResponse>({activeDate: "", dates: []})
 	const [loading, setLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string | null>(null)
 
@@ -22,5 +23,5 @@ export function useStudyDatesData(): StudyDatesData {
 			.finally(() => setLoading(false))
 	}, [])
 
-	return dates
+	return {activeDate: datesData.activeDate, dates: datesData.dates,isDatesLoading: loading}
 }
