@@ -89,6 +89,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/sheets/current-balanced-groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get current balanced study groups */
+        get: operations["get_current_balanced_study_groups_sheets_current_balanced_groups_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -103,6 +120,24 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** Leader */
+        Leader: {
+            /** Name */
+            name: string;
+            /** Talk Weight */
+            talk_weight: number;
+            /** Present */
+            present: boolean;
+        };
+        /** Member */
+        Member: {
+            /** Name */
+            name: string;
+            /** Talk Weight */
+            talk_weight: number;
+            /** Present */
+            present: boolean;
+        };
         /** StudyDatesResponse */
         StudyDatesResponse: {
             /** Activedate */
@@ -112,15 +147,25 @@ export interface components {
         };
         /** StudyGroup */
         StudyGroup: {
-            /** Leader */
-            leader: string;
+            leader: components["schemas"]["Leader"];
             /** Members */
-            members: string[];
+            members: components["schemas"]["Member"][];
         };
         /** StudyGroupResponse */
         StudyGroupResponse: {
             /** Groups */
             groups: components["schemas"]["StudyGroup"][];
+        };
+        /** StudySessionResponse */
+        StudySessionResponse: {
+            /** Leaders */
+            leaders: components["schemas"]["Leader"][];
+            /** Members */
+            members: components["schemas"]["Member"][];
+            /** Study Groups */
+            study_groups: components["schemas"]["StudyGroup"][];
+            /** Date */
+            date: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -249,6 +294,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StudyDatesResponse"];
+                };
+            };
+        };
+    };
+    get_current_balanced_study_groups_sheets_current_balanced_groups_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudySessionResponse"];
                 };
             };
         };
