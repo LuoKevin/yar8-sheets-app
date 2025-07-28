@@ -8,3 +8,4 @@ pydantic~=2.11.7
 utils~=1.0.2
 numpy
 pytest
+pydantic-settings

@@ -17,6 +17,17 @@ class GoogleSheetsClient:
 
         return results.get("values", [])
 
+    def read_ranges(self, spreadsheet_id: str, cell_ranges: List[str]) -> List[List[List[str]]]:
+
+        results =  self._service.spreadsheets().values().batchGet(
+            spreadsheetId=spreadsheet_id,
+            ranges=cell_ranges,
+            majorDimension='COLUMNS',
+        ).execute()
+
+        ranges = results.get("valueRanges", [])
+        return list(map(lambda r: r.get("values", []), ranges))
+
     def write_range(
             self,
             spreadsheet_id: str,

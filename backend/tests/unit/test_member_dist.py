@@ -5,7 +5,6 @@ from backend.src.models.study_session import StudySession
 from backend.src.models.leader import Leader
 from backend.src.models.member import Member
 
-
 class MyTestCase(unittest.TestCase):
 
     members:List[Member] = [
@@ -29,14 +28,12 @@ class MyTestCase(unittest.TestCase):
 
     session = StudySession(date="01/11/2025", leaders=leaders, members=members)
 
-    def test_something(self):
+    def test_groups(self):
         balanced_groups = self.session.get_balanced_groups()
         for group in balanced_groups:
             print(group.leader.name)
             print(group.members)
         assert True
-
-
 
 if __name__ == '__main__':
     unittest.main()

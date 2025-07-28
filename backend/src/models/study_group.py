@@ -1,8 +1,8 @@
 from typing import List
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 
-from backend.src.models.leader import Leader
-from backend.src.models.member import Member
+from .leader import Leader
+from .member import Member
 
 
 class StudyGroup(BaseModel):

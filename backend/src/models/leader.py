@@ -1,6 +1,6 @@
-from backend.src.models.member import Member
+from pydantic import BaseModel
 
-class Leader(Member):
+class Leader(BaseModel):
     name: str
     talk_weight: float
     present: bool

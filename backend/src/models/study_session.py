@@ -1,11 +1,9 @@
-from itertools import combinations
 from typing import List
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
 import random
-from numpy import var, isclose
 
-from .leader import Leader
 from .member import Member
+from .leader import Leader
 from .study_group import StudyGroup
 
 
@@ -15,63 +13,47 @@ class StudySession(BaseModel):
     members: List[Member]
 
     def get_balanced_groups(self):
+        if len(self.members) == 0: return []
         balanced_members: List[List[Member]] = (self._distribute_members())
         random.shuffle(balanced_members)
         groups: List[StudyGroup] = []
-        leader_iter = iter(self.leaders)
+        leader_iter = filter(lambda leader: leader.present, self.leaders)
         for group in balanced_members:
             groups.append(StudyGroup(members=group, leader=leader_iter.__next__()))
         return groups
 
     def _distribute_members(self) -> List[List[Member]]:
-        members = list(filter(lambda member: member.present, self.members))
+        members = list(filter(lambda m: m.present, self.members))
         leaders = list(filter(lambda leader: leader.present, self.leaders))
-        num_groups = len(leaders)
-        m = len(members)
+        n = len(leaders)
 
-        if num_groups == 0:
-            return []
+        groups = [[] for _ in range(n)]
+        sums = [0] * n
 
-        if m < num_groups:
-            return [members]
+        members: List[Member] = sorted(members, key=lambda m: m.talk_weight, reverse=True)
 
-        min_size = m // num_groups
-        remainder = m % num_groups
-        group_sizes = [min_size + 1 if i < remainder else min_size for i in range(num_groups)]
+        for member in members:
+            value = member.talk_weight
+            smallest_sum_index = sums.index(min(sums))
+            groups[smallest_sum_index].append(member)
+            sums[smallest_sum_index] += value
 
-        #sorted by talk-weight-descending
-        sorted_members = sorted(members, key=lambda x: -x.talk_weight)
+        max_len = max(len(group) for group in groups)
+        min_len = min(len(group) for group in groups)
 
-        def generate_partitions(
-                elements: List[Member],
-                sizes: List[int]
-        ) -> List[List[List[Member]]]:
-            """Recursively generates all equal-sized partitions."""
-            if not sizes:
-                return [[]]
+        while max_len - min_len > 1:
+            max_group_index = max(range(n), key=lambda i: (len(groups[i]), sums[i]))
+            min_group_index = min(range(n), key=lambda i: (len(groups[i]), sums[i]))
 
-            size = sizes[0]
-            partitions = []
+            if groups[max_group_index]:
 
-            # Generate unique combinations
-            for combo in combinations(elements, size):
-                remaining = [m for m in elements if m not in combo]
-                for sub_part in generate_partitions(remaining, sizes[1:]):
-                    partitions.append([list(combo)] + sub_part)
+                element_to_move = groups[max_group_index].pop()
+                sums[max_group_index] -= element_to_move
 
-            return partitions
+                groups[min_group_index].append(element_to_move)
+                sums[min_group_index] += element_to_move
 
-        best_groups: List[List[Member]] = []
-        best_variance = float('inf')
+                max_len = max(len(group) for group in groups)
+                min_len = min(len(group) for group in groups)
 
-        for partition in generate_partitions(sorted_members, group_sizes):
-            sums = [sum(m.talk_weight for m in group) for group in partition]
-            variance = var(sums)
-
-            if variance < best_variance:
-                best_variance = variance
-                best_groups = partition
-                if isclose(best_variance, 0):
-                    break
-
-        return best_groups
+        return groups

@@ -1,6 +1,5 @@
 from typing import List
-from pydantic.v1 import BaseSettings
-
+from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     GOOGLE_APPLICATION_CREDENTIALS: str
     SPREADSHEET_ID: str
