@@ -4,8 +4,11 @@ import type { paths, components } from "./openapi.types"
 
 export type StudyGroupResponse = components["schemas"]["StudyGroupResponse"]
 export type StudyGroup = components["schemas"]["StudyGroup"]
+export type Leader = components["schemas"]["Leader"]
+export type Member = components["schemas"]["Member"]
 export type DateModel = components["schemas"]["DateModel"]
 export type StudyDatesResponse = components["schemas"]["StudyDatesResponse"]
+export type StudySessionResponse = components["schemas"]["StudySessionResponse"]
 
 export function fetchStudyGroupData(): Promise<StudyGroup[]> {
 	return api
@@ -33,3 +36,7 @@ export function postResetGroups(): Promise<void> {
 export function shuffleAndLock(): Promise<void> {
 	return api.post("/sheets/shuffle-lock")
 } 
+
+export function fetchBalancedGroups(): Promise<StudySessionResponse> {
+	return api.get("/sheets/current-balanced-groups")
+}

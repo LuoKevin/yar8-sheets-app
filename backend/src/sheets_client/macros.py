@@ -3,14 +3,14 @@ from .client import GoogleSheetsClient
 class GoogleSheetsMacros:
     _GROUPS_SHEET_NAME = "Groups_Current"
     _ATTENDANCE_SHEET_NAME = "Attendance_Current"
+    _LOCKED_COPY_RANGE = "AF3:AH103"
     _sheets_client = GoogleSheetsClient()
 
     def reset(self, spreadsheet_id: str):
         clear_range = self._sheets_client.clear_range
         write_cell = self._sheets_client.write_cell
 
-
-        clear_range(spreadsheet_id, self._GROUPS_SHEET_NAME, "AF3:AH103")
+        clear_range(spreadsheet_id, self._GROUPS_SHEET_NAME, self._LOCKED_COPY_RANGE)
         clear_range(spreadsheet_id, self._ATTENDANCE_SHEET_NAME, "B1:B200")
 
         write_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!M1", "FALSE")

@@ -1,3 +1,6 @@
+import math
+from functools import reduce
+from math import isclose
 from typing import List
 from pydantic import BaseModel
 import random
@@ -17,43 +20,73 @@ class StudySession(BaseModel):
         balanced_members: List[List[Member]] = (self._distribute_members())
         random.shuffle(balanced_members)
         groups: List[StudyGroup] = []
-        leader_iter = filter(lambda leader: leader.present, self.leaders)
+        leader_iter = filter(lambda l: l.present, self.leaders)
         for group in balanced_members:
             groups.append(StudyGroup(members=group, leader=leader_iter.__next__()))
-        return groups
+        for missing_leader in filter(lambda l: not l.present, self.leaders):
+            groups.append(StudyGroup(members=[], leader=missing_leader))
+        organized_groups: List[StudyGroup] = []
+        for leader in self.leaders:
+            next_group = next(filter(lambda g: g.leader.name == leader.name, groups))
+            organized_groups.append(next_group)
+        return organized_groups
 
-    def _distribute_members(self) -> List[List[Member]]:
-        members = list(filter(lambda m: m.present, self.members))
-        leaders = list(filter(lambda leader: leader.present, self.leaders))
-        n = len(leaders)
+    def _distribute_members(self, iterations=1000):
+        members = self.members
+        n = len(list(filter(lambda l: l.present, self.leaders)))
 
-        groups = [[] for _ in range(n)]
-        sums = [0] * n
+        if not members or n <= 0:
+            return [[] for _ in range(n)]
 
-        members: List[Member] = sorted(members, key=lambda m: m.talk_weight, reverse=True)
+        total_sum = sum(map(lambda mem: mem.talk_weight, members))
+        avg_sum = total_sum / min(n, len(members))  # Handle case when n > len(values)
+        best_groups = None
+        best_deviation = float('inf')
 
-        for member in members:
-            value = member.talk_weight
-            smallest_sum_index = sums.index(min(sums))
-            groups[smallest_sum_index].append(member)
-            sums[smallest_sum_index] += value
+        # Calculate target sizes (some groups size m, others m+1, some 0 if n > len(values))
+        m = len(members) // n
+        remainder = len(members) % n
+        target_sizes = []
 
-        max_len = max(len(group) for group in groups)
-        min_len = min(len(group) for group in groups)
+        for i in range(n):
+            if i < len(members):
+                # Groups get either m or m+1 elements
+                target_sizes.append(m + 1 if i < remainder else m)
+            else:
+                # Excess groups get 0 elements (when n > len(values))
+                target_sizes.append(0)
 
-        while max_len - min_len > 1:
-            max_group_index = max(range(n), key=lambda i: (len(groups[i]), sums[i]))
-            min_group_index = min(range(n), key=lambda i: (len(groups[i]), sums[i]))
+        for _ in range(iterations):
+            # Shuffle for randomization
+            shuffled = members.copy()
+            random.shuffle(shuffled)
 
-            if groups[max_group_index]:
+            # Initialize groups with target sizes
+            groups = [[] for _ in range(n)]
+            sums = [0] * n
+            indices = [i for i in range(n) if target_sizes[i] > 0]  # Only consider groups that should get items
 
-                element_to_move = groups[max_group_index].pop()
-                sums[max_group_index] -= element_to_move
+            # Assign values to groups maintaining exact size constraints
+            for member in shuffled:
+                # Among groups that need more items, pick the one with smallest current sum
+                chosen_index = min(indices, key=lambda i: sums[i])
+                groups[chosen_index].append(member)
+                sums[chosen_index] += member.talk_weight
 
-                groups[min_group_index].append(element_to_move)
-                sums[min_group_index] += element_to_move
+                # Remove group from consideration if it reached target size
+                if len(groups[chosen_index]) == target_sizes[chosen_index]:
+                    indices.remove(chosen_index)
 
-                max_len = max(len(group) for group in groups)
-                min_len = min(len(group) for group in groups)
+            # Calculate sum deviation from ideal (only for non-empty groups)
+            current_deviation = sum(abs(s - avg_sum) for s in sums if s > 0)
 
-        return groups
+            # Keep track of best solution
+            if current_deviation < best_deviation:
+                best_groups = [group.copy() for group in groups]
+                best_deviation = current_deviation
+
+                # Early exit if we find a perfectly balanced solution
+                if isclose(best_deviation, 0, abs_tol=1e-9):
+                    break
+
+        return best_groups

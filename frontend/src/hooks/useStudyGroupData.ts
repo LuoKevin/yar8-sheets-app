@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import type { StudyGroup, StudyGroupResponse } from "../api/sheet"
+import type { Member, StudyGroup, StudyGroupResponse } from "../api/sheet"
 import { fetchStudyGroupData } from "../api/sheet"
 
 interface StudyGroupData {
@@ -56,7 +56,7 @@ export function useStudyGroupData(date: string): StudyGroupData {
 	}
 
 	const scrambleGroups = () => {
-		const allMembers: string[] = groups.reduce((acc: string[], group) => acc.concat(group.members), [])
+		const allMembers: Member[] = groups.reduce((acc: Member[], group) => acc.concat(group.members), [])
 		const randomized = scrambleArr(allMembers)
 
 		const numGroupsToSplit = groups.reduce((acc, group) => group.members.length > 0 ? acc + 1: acc, 0)

@@ -6,7 +6,7 @@ import { FetchStatus } from "./types"
 interface ShuffleData {
     status: FetchStatus
     isShuffling: boolean
-    startShuffle: () => Promise<void>
+	startShuffle: () => Promise<void>
 }
 
 export function useShuffle(onShuffle: () => void, onFinish: (newGroups: StudyGroup[]) => void): ShuffleData {

@@ -17,15 +17,12 @@ class GoogleSheetsStudyClient:
 
     def get_current_study_session(self, spreadsheet_id: str) -> StudySession | None:
         # (All Leaders, Present Leaders, Members, Weights, Date)
-        logging.getLogger().debug(f"Spreadsheet ID: {spreadsheet_id}")
         batch_data = self._sheets_client.read_ranges(spreadsheet_id,[
             self._ALL_LEADERS_RANGE,
             self._PRESENT_LEADERS_RANGE,
             self._REG_MEMBERS_RANGE,
             self._REG_MEMBERS_WEIGHTS_RANGE,
             self._CURRENT_DATE_CELL])
-        logging.getLogger().debug("Got data from spreadsheet")
-        print(batch_data)
 
         all_leaders = batch_data[0][0]
         present_leaders = batch_data[1][0] if len(batch_data[1]) > 0 else []

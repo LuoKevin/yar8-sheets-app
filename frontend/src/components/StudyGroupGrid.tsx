@@ -2,11 +2,7 @@ import { motion, AnimatePresence, LayoutGroup } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
 import StudyGroupColumn from "./StudyGroupColumn"
 import LoadingIndicator from "./LoadingIndicator";
-
-interface StudyGroup {
-  leader: string;
-  members: string[];
-}
+import { StudyGroup } from "../api/sheet";
 
 interface StudyGroupGridProps {
   groups: StudyGroup[];
@@ -44,10 +40,10 @@ const StudyGroupGrid = ({ groups, loading, error }: StudyGroupGridProps) => {
 					transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
 				>
 					{displayGroups.map((group) => (
-						<motion.div key={group.leader} layout>
+						<motion.div key={group.leader.name} layout>
 							<StudyGroupColumn
-								leader={group.leader}
-								members={group.members}
+								leader={group.leader.name}
+								members={group.members.map((mem) => mem.name)}
 							/>
 						</motion.div>
 					))}

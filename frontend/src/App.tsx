@@ -13,6 +13,7 @@ import LoadingIndicator from "./components/LoadingIndicator"
 import { useToast } from "./hooks/useToast"
 import SimpleToast from "./components/SimpleToast"
 import { FetchStatus } from "./hooks/types"
+import { useStudySession } from "./hooks/useStudySession"
 
 
 
@@ -33,13 +34,15 @@ const App = () => {
 		(newGroups: StudyGroup[]) => {manualSetGroups(newGroups)}
 	)
 
+	const {fetchStudySession, groups:studyGroups} = useStudySession()
+
 	const handleDateSelect = () => {
-		fetchGroups()
+		fetchStudySession()
 	}
   
 	const handleResetGroups = () => {
 		resetGroups().then(() => {
-			fetchGroups()
+			fetchStudySession()
 		}).then(() => {
 			if(groupsError != null) {
 				showToast(`Reset failed. Reason:${groupsError}`, 'error')
@@ -52,7 +55,7 @@ const App = () => {
 
 	const handleShuffle = () => {
 		startShuffle().then(() => {
-			fetchGroups()
+			fetchStudySession()
 		}).then( () => {
 			if(shuffleStatus == FetchStatus.ERROR) {
 				showToast(`Shuffling failed. Idiot.`, 'error')
@@ -63,7 +66,7 @@ const App = () => {
 
 	}
 
-	useEffect(() => {fetchGroups()}, [])
+	useEffect(() => {fetchStudySession()}, [])
 
 	return (
 		<div className="min-h-screen overflow-hidden">
@@ -91,7 +94,7 @@ const App = () => {
 							// Clear when manually closed
         				/>)
 					}</div>
-				<StudyGroupGrid groups={groups} loading={groupsLoading} error={groupsError} />
+				<StudyGroupGrid groups={studyGroups} loading={false} error={null} />
 			</div>
 		</div>
 	)
