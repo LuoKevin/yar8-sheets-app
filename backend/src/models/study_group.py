@@ -1,6 +1,10 @@
 from typing import List
-from pydantic import BaseModel
+from pydantic.v1 import BaseModel
+
+from backend.src.models.leader import Leader
+from backend.src.models.member import Member
+
 
 class StudyGroup(BaseModel):
-    leader:str
-    members:List[str]
+    leader:Leader
+    members:List[Member]
