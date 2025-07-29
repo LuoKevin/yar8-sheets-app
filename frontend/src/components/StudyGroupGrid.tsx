@@ -32,28 +32,34 @@ const StudyGroupGrid = ({ groups, loading, error }: StudyGroupGridProps) => {
 
 	return (
     
-		<div className="relative z-10 min-h-screen flex flex-col items-center justify-top p-4">
+		<div className="relative z-10 min-h-screen w-full px-2 sm:px-4">
 			{/* Loading Overlay */}
 			<LoadingIndicator isLoading={loading} />
+
 			{/* Main Grid */}
-			<LayoutGroup>
-				<motion.div
-					layout
-					className="grid h-full w-full gap-4"
-					style={{ gridTemplateColumns: `repeat(${displayGroups.length},1fr)` }}
-					transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
-				>
-					{displayGroups.map((group) => (
+			<div className="w-full pt-4">
+				<div className="min-w-full overflow-x-auto">
+				<div className="pl-4 sm:pl-0 w-max mx-auto">
+					<LayoutGroup>
+					<motion.div
+						layout
+						className="grid gap-4 auto-cols-[minmax(150px,1fr)] grid-flow-col"
+						style={{ width: "max-content" }} // allows full natural width
+						transition={{ layout: { type: "spring", stiffness: 300, damping: 30 } }}
+					>
+						{displayGroups.map((group) => (
 						<motion.div key={group.leader} layout>
 							<StudyGroupColumn
-								leader={group.leader}
-								members={group.members}
+							leader={group.leader}
+							members={group.members}
 							/>
 						</motion.div>
-					))}
-				</motion.div>
-			</LayoutGroup>
-
+						))}
+					</motion.div>
+					</LayoutGroup>
+				</div>
+				</div>
+			</div>
 		</div>
 	)
 }

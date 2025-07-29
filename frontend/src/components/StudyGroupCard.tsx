@@ -1,9 +1,9 @@
 import { motion, Variants } from "framer-motion"
 
 interface StudyGroupCardProps {
-  name: string;
-  isLeader?: boolean;
-  isAnimating?: boolean;
+	name: string;
+	isLeader?: boolean;
+	isAnimating?: boolean;
 }
 
 const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGroupCardProps) => {
@@ -44,9 +44,9 @@ const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGr
 
 	return (
 		<motion.div
-			className={`h-32 w-32 perspective-1000 origin-center ${isLeader ? "mb-4" : "my-1"}`}
+			className={`w-28 h-28 sm:w-32 sm:h-32 perspective-1000 origin-center ${isLeader ? "mb-4" : "my-1"}`}
 			layout
-			layoutId = {name}
+			layoutId={name}
 			transition={{
 				type: "spring",
 				stiffness: 500,
@@ -54,24 +54,20 @@ const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGr
 			}}
 		>
 			<motion.div
-				className={`w-full rounded-xl shadow-lg flex items-center justify-center p-4 cursor-pointer border-2 transition-colors duration-200 ${
-					isLeader 
-						? "h-24 bg-yellow-500 border-yellow-200 hover:bg-yellow-600" 
-						: "h-24 bg-indigo-600 border-indigo-400 hover:bg-indigo-500"
-				}`}
+				className={`w-full rounded-xl shadow-lg flex items-center justify-center p-2 cursor-pointer border-2 transition-colors duration-200 ${isLeader
+						? "h-24 bg-yellow-500 hover:bg-yellow-400"
+						: "h-24 bg-indigo-700 hover:bg-indigo-600"
+					}`}
 				variants={cardVariants}
 				initial="rest"
 				animate={isAnimating ? "rest" : "float"}
 				whileHover={!isAnimating ? "hover" : {}}
-				style={{
-					boxShadow: isLeader 
-						? "0 4px 20px rgba(99, 102, 241, 0.3)" 
-						: "0 2px 10px rgba(99, 102, 241, 0.2)"
-				}}
+
 			>
-				<span className={`font-bold text-white text-center ${
-					isLeader ? "text-lg" : "text-md"
-				}`}>
+				<span className="font-extrabold text-white text-center leading-tight text-xl sm:text-2xl"
+					style={{
+						textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+					}}>
 					{name}
 				</span>
 			</motion.div>

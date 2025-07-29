@@ -61,14 +61,14 @@ const GradientBackground = () => {
 				style={{ background }}
 			/>
       
-			<motion.button
+			{/* <motion.button
 				onClick={nextTheme}
 				className="fixed bottom-8 right-8 z-20 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white border border-white/30 hover:bg-white/30 transition-all shadow-lg hover:scale-105 active:scale-95"
 				whileHover={{ scale: 1.05 }}
 				whileTap={{ scale: 0.95 }}
 			>
         Change Colors
-			</motion.button>
+			</motion.button> */}
 		</>
 	)
 }

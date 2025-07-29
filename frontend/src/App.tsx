@@ -66,9 +66,9 @@ const App = () => {
 	useEffect(() => {fetchGroups()}, [])
 
 	return (
-		<div className="min-h-screen overflow-hidden">
+		<div className="min-h-screen w-screen overflow-x-visible">
 			<GradientBackground />
-			<div className="relative z-10 min-h-screen flex flex-col items-center justify-top p-4">
+			<div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4">
 				<LoadingIndicator isLoading={isDatesLoading} />
 				<div className="w-full max-w-lg flex items-center space-x-4 mb-6">
 					<DateSelector
@@ -80,7 +80,7 @@ const App = () => {
 					<Button disabled= {isShuffling||resetLoading} onClick={() => handleShuffle()}>Shuffle and Lock</Button>
 
 				</div>
-				<div className="w-full max-w-lg flex items-center justify-center space-x-4 mb-6">
+				<div className="w-full pb-2">
 					<LoadingText visible={isShuffling} text='Shuffling'/>
 					<LoadingText visible={resetLoading} text= 'Resetting'/>
 					{toastMessage && (
@@ -91,7 +91,9 @@ const App = () => {
 							// Clear when manually closed
         				/>)
 					}</div>
-				<StudyGroupGrid groups={groups} loading={groupsLoading} error={groupsError} />
+				<div className="w-full pb-2">
+  					<StudyGroupGrid groups={groups} loading={groupsLoading} error={groupsError} />
+				</div>
 			</div>
 		</div>
 	)
