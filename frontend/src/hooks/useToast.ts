@@ -1,16 +1,16 @@
-import { use, useState } from 'react';
+import { use, useState } from 'react'
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type ToastType = 'success' | 'error' | 'warning' | 'info'
 
 export const useToast = () => {
-  const [toastMessage, setToastMessage] = useState<string>(''); // Just stores the message string
+  const [toastMessage, setToastMessage] = useState<string>('') // Just stores the message string
   const [toastStatus, setToastStatus] = useState<string>('info')
 
   const showToast = (message: string, type: ToastType = 'info', duration = 3000) => {
-    setToastMessage(message);
+    setToastMessage(message)
     setToastStatus(type)
-    setTimeout(() => setToastMessage(''), duration); // Auto-clear after duration
-  };
+    setTimeout(() => setToastMessage(''), duration) // Auto-clear after duration
+  }
 
-  return { toastMessage, toastStatus, showToast };
-};
+  return { toastMessage, toastStatus, showToast }
+}

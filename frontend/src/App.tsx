@@ -1,102 +1,106 @@
-import StudyGroupGrid from "./components/StudyGroupGrid"
-import { useStudyGroupData } from "./hooks/useStudyGroupData"
-import GradientBackground from "./components/GradientBackground"
-import DateSelector from "./components/DateSelector"
-import { useStudyDatesData } from "./hooks/useStudyDatesData"
-import { useEffect, useState } from "react"
-import { Button } from "./components/Button"
-import { usePostResetGroups } from "./hooks/usePostReset"
-import { StudyGroup } from "./api/sheet"
-import { useShuffle } from "./hooks/useShuffle"
-import { LoadingText } from "./components/LoadingText"
-import LoadingIndicator from "./components/LoadingIndicator"
-import { useToast } from "./hooks/useToast"
-import SimpleToast from "./components/SimpleToast"
-import { FetchStatus } from "./hooks/types"
-
-
+import StudyGroupGrid from './components/StudyGroupGrid'
+import { useStudyGroupData } from './hooks/useStudyGroupData'
+import GradientBackground from './components/GradientBackground'
+import DateSelector from './components/DateSelector'
+import { useStudyDatesData } from './hooks/useStudyDatesData'
+import { useEffect, useState } from 'react'
+import { Button } from './components/Button'
+import { usePostResetGroups } from './hooks/usePostReset'
+import { StudyGroup } from './api/sheet'
+import { useShuffle } from './hooks/useShuffle'
+import { LoadingText } from './components/LoadingText'
+import LoadingIndicator from './components/LoadingIndicator'
+import { useToast } from './hooks/useToast'
+import SimpleToast from './components/SimpleToast'
+import { FetchStatus } from './hooks/types'
 
 const App = () => {
-	const {toastMessage, toastStatus, showToast} = useToast()
-	const {dates, activeDate: currentDate, isDatesLoading} = useStudyDatesData()
-	const {
-		fetchGroups, 
-		groups, 
-		groupsLoading, 
-		groupsError,
-		manualSetGroups, 
-		scrambleGroups
-		} = useStudyGroupData(currentDate)
-	const {resetGroups, resetSuccess, resetLoading, resetError} = usePostResetGroups()
-	const { status: shuffleStatus, isShuffling, startShuffle } = useShuffle(
-		()=>{scrambleGroups()},
-		(newGroups: StudyGroup[]) => {manualSetGroups(newGroups)}
-	)
+  const { toastMessage, toastStatus, showToast } = useToast()
+  const { dates, activeDate: currentDate, isDatesLoading } = useStudyDatesData()
+  const { fetchGroups, groups, groupsLoading, groupsError, manualSetGroups, scrambleGroups } =
+    useStudyGroupData(currentDate)
+  const { resetGroups, resetSuccess, resetLoading, resetError } = usePostResetGroups()
+  const {
+    status: shuffleStatus,
+    isShuffling,
+    startShuffle,
+  } = useShuffle(
+    () => {
+      scrambleGroups()
+    },
+    (newGroups: StudyGroup[]) => {
+      manualSetGroups(newGroups)
+    },
+  )
 
-	const handleDateSelect = () => {
-		fetchGroups()
-	}
-  
-	const handleResetGroups = () => {
-		resetGroups().then(() => {
-			fetchGroups()
-		}).then(() => {
-			if(groupsError != null) {
-				showToast(`Reset failed. Reason:${groupsError}`, 'error')
-				return
-			}
-			showToast("Reset successful!", 'success')
+  const handleDateSelect = () => {
+    fetchGroups()
+  }
 
-		})
-	}
+  const handleResetGroups = () => {
+    resetGroups()
+      .then(() => {
+        fetchGroups()
+      })
+      .then(() => {
+        if (groupsError != null) {
+          showToast(`Reset failed. Reason:${groupsError}`, 'error')
+          return
+        }
+        showToast('Reset successful!', 'success')
+      })
+  }
 
-	const handleShuffle = () => {
-		startShuffle().then(() => {
-			fetchGroups()
-		}).then( () => {
-			if(shuffleStatus == FetchStatus.ERROR) {
-				showToast(`Shuffling failed. Idiot.`, 'error')
-				return
-			}
-			showToast("Shuffling successful!",'success')
-		})
+  const handleShuffle = () => {
+    startShuffle()
+      .then(() => {
+        fetchGroups()
+      })
+      .then(() => {
+        if (shuffleStatus == FetchStatus.ERROR) {
+          showToast(`Shuffling failed. Idiot.`, 'error')
+          return
+        }
+        showToast('Shuffling successful!', 'success')
+      })
+  }
 
-	}
+  useEffect(() => {
+    fetchGroups()
+  }, [])
 
-	useEffect(() => {fetchGroups()}, [])
-
-	return (
-		<div className="min-h-screen w-screen overflow-x-visible">
-			<GradientBackground />
-			<div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4">
-				<LoadingIndicator isLoading={isDatesLoading} />
-				<div className="w-full max-w-lg flex items-center space-x-4 mb-6">
-					<DateSelector
-						dates={dates}
-						initialDate={currentDate}
-						onSelect={handleDateSelect}
-					/>
-					<Button disabled={resetLoading||isShuffling} onClick={() => handleResetGroups()}>Reset Groups</Button>
-					<Button disabled= {isShuffling||resetLoading} onClick={() => handleShuffle()}>Shuffle and Lock</Button>
-
-				</div>
-				<div className="w-full pb-2">
-					<LoadingText visible={isShuffling} text='Shuffling'/>
-					<LoadingText visible={resetLoading} text= 'Resetting'/>
-					{toastMessage && (
-       					<SimpleToast 
-          					message={toastMessage}
-          					type={toastStatus}
-							onClose={() => showToast('')}
-							// Clear when manually closed
-        				/>)
-					}</div>
-				<div className="w-full pb-2">
-  					<StudyGroupGrid groups={groups} loading={groupsLoading} error={groupsError} />
-				</div>
-			</div>
-		</div>
-	)
+  return (
+    <div className="min-h-screen w-screen overflow-x-visible">
+      <GradientBackground />
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4">
+        <LoadingIndicator isLoading={isDatesLoading} />
+        <div className="w-full max-w-lg flex items-center space-x-4 mb-6">
+          <DateSelector dates={dates} initialDate={currentDate} onSelect={handleDateSelect} />
+          <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>
+            Reset Groups
+          </Button>
+          <Button disabled={isShuffling || resetLoading} onClick={() => handleShuffle()}>
+            Shuffle and Lock
+          </Button>
+        </div>
+        <div className="w-full pb-2">
+          <LoadingText visible={isShuffling} text="Shuffling" />
+          <LoadingText visible={resetLoading} text="Resetting" />
+          {toastMessage && (
+            <SimpleToast
+              message={toastMessage}
+              type={toastStatus}
+              onClose={() => showToast('')}
+              // Clear when manually closed
+            />
+          )}
+        </div>
+        <div className="w-full pb-2">
+          <StudyGroupGrid groups={groups} loading={groupsLoading} error={groupsError} />
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default App

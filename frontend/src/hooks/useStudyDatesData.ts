@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { fetchStudyDates, StudyDatesResponse } from "../api/sheet"
+import { useState, useEffect } from 'react'
+import { fetchStudyDates, StudyDatesResponse } from '../api/sheet'
 
 interface StudyDatesData {
   activeDate: string
@@ -7,21 +7,20 @@ interface StudyDatesData {
   isDatesLoading: boolean
 }
 
-
 export function useStudyDatesData(): StudyDatesData {
-	const [datesData, setDates] = useState<StudyDatesResponse>({activeDate: "", dates: []})
-	const [loading, setLoading] = useState<boolean>(false)
-	const [error, setError] = useState<string | null>(null)
+  const [datesData, setDates] = useState<StudyDatesResponse>({ activeDate: '', dates: [] })
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
-	useEffect(() => {
-		setLoading(true)
-		setError(null)
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
 
-		fetchStudyDates()
-			.then(res => setDates(res))
-			.catch(err => setError(err.message || "Unknown error"))
-			.finally(() => setLoading(false))
-	}, [])
+    fetchStudyDates()
+      .then((res) => setDates(res))
+      .catch((err) => setError(err.message || 'Unknown error'))
+      .finally(() => setLoading(false))
+  }, [])
 
-	return {activeDate: datesData.activeDate, dates: datesData.dates,isDatesLoading: loading}
+  return { activeDate: datesData.activeDate, dates: datesData.dates, isDatesLoading: loading }
 }
