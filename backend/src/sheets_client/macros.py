@@ -4,6 +4,7 @@ class GoogleSheetsMacros:
     _GROUPS_SHEET_NAME = "Groups_Current"
     _ATTENDANCE_SHEET_NAME = "Attendance_Current"
     _sheets_client = GoogleSheetsClient()
+    _shuffle_bool= True
 
     def reset(self, spreadsheet_id: str):
         clear_range = self._sheets_client.clear_range
@@ -20,11 +21,8 @@ class GoogleSheetsMacros:
 
     def _toggle_shuffle(self,spreadsheet_id: str):
         toggle_shuffle_cell = f"{self._GROUPS_SHEET_NAME}!I1"
-        if self._sheets_client.read_cell(spreadsheet_id, toggle_shuffle_cell) == "TRUE":
-            self._sheets_client.write_cell(spreadsheet_id, toggle_shuffle_cell, "FALSE")
-        else:
-            self._sheets_client.write_cell(spreadsheet_id, toggle_shuffle_cell, "TRUE")
-
+        self._sheets_client.write_cell(spreadsheet_id, toggle_shuffle_cell, "TRUE" if self._shuffle_bool else "FALSE")
+        self._shuffle_bool = not self._shuffle_bool
 
     def paste_value_lock(self, spreadsheet_id):
         client = self._sheets_client
