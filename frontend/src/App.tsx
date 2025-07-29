@@ -13,11 +13,13 @@ import LoadingIndicator from './components/LoadingIndicator'
 import { useToast } from './hooks/useToast'
 import SimpleToast from './components/SimpleToast'
 import { FetchStatus } from './hooks/types'
+import AnimatedCheckbox from './components/AnimatedCheckbox'
+import ToggleSwitch from './components/ToggleSwitch'
 
 const App = () => {
   const { toastMessage, toastStatus, showToast } = useToast()
   const { dates, activeDate: currentDate, isDatesLoading } = useStudyDatesData()
-  const { fetchGroups, groups, groupsLoading, groupsError, manualSetGroups, scrambleGroups } =
+  const { fetchGroups, groups, groupsLoading, groupsError, locked: groupsLocked, manualSetGroups, scrambleGroups } =
     useStudyGroupData(currentDate)
   const { resetGroups, resetSuccess, resetLoading, resetError } = usePostResetGroups()
   const {
@@ -84,6 +86,7 @@ const App = () => {
           <Button disabled={isShuffling || resetLoading} onClick={() => handleShuffle()}>
             Shuffle and Lock
           </Button>
+          <ToggleSwitch checked={groupsLocked}/>
         </div>
         <div className="w-full max-w-lg pb-2 flex items-center justify-start">
           <LoadingText visible={isShuffling} text="Shuffling" />

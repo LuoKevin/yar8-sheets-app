@@ -21,19 +21,22 @@ class StudyDatesResponse(BaseModel):
 
 class StudyGroupResponse(BaseModel):
     groups: List[StudyGroup]
+    locked: bool
 
 settings = Settings()
 google_api_client = GoogleSheetsClient()
 google_macros = GoogleSheetsMacros()
 
 displayed_groups_range = "Groups_Current!C5:O20"
+locked_cell = "Groups_Current!M1"
 
 @sheets_router.get("/study-group-data", response_model=StudyGroupResponse, summary="Get current study group data")
 async def get_study_group_data():
     try:
         group_range = google_api_client.read_range(settings.SPREADSHEET_ID, displayed_groups_range)
         new_groups = get_study_groups(group_range)
-        return StudyGroupResponse(groups=new_groups)
+        lock_status = True if google_api_client.read_cell(settings.SPREADSHEET_ID, locked_cell)=="TRUE" else False
+        return StudyGroupResponse(groups=new_groups, locked=lock_status)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

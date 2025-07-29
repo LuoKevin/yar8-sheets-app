@@ -5,6 +5,7 @@ import { fetchStudyGroupData } from '../api/sheet'
 interface StudyGroupData {
   fetchGroups: () => Promise<void>
   groups: StudyGroup[]
+  locked: boolean
   groupsLoading: boolean
   groupsError: string | null
   manualSetGroups: (newGroups: StudyGroup[]) => void
@@ -48,6 +49,7 @@ export function useStudyGroupData(date: string): StudyGroupData {
   const [groups, setGroups] = useState<StudyGroup[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  const [locked, setLocked] = useState(false)
 
   const manualSetGroups = (newGroups: StudyGroup[]) => {
     setGroups(newGroups)
@@ -80,8 +82,10 @@ export function useStudyGroupData(date: string): StudyGroupData {
     setError(null)
 
     try {
-      await fetchStudyGroupData().then((data) => {
-        setGroups(data)
+      await fetchStudyGroupData().then(([groups, locked]) => {
+        setGroups(groups)
+        setLocked(locked)
+        
       })
     } catch (err) {
       setError(err.message || 'Unknown error')
@@ -94,6 +98,7 @@ export function useStudyGroupData(date: string): StudyGroupData {
     groups,
     groupsLoading: loading,
     groupsError: error,
+    locked,
     manualSetGroups,
     scrambleGroups,
   }

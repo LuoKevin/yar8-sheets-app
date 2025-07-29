@@ -6,15 +6,18 @@ export type StudyGroup = components['schemas']['StudyGroup']
 export type DateModel = components['schemas']['DateModel']
 export type StudyDatesResponse = components['schemas']['StudyDatesResponse']
 
-export function fetchStudyGroupData(): Promise<StudyGroup[]> {
+export function fetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
   return api
     .get<StudyGroupResponse>('/sheets/study-group-data')
-    .then((value) => value.data.groups as StudyGroup[])
+    .then((value) => {
+      const groups = value.data.groups as StudyGroup[]
+      const locked = value.data.locked
+      return [groups, locked]
+    })
 }
 
 export function postActiveStudyDate(activeDate: string): Promise<DateModel> {
   return api.post('/sheets/active-study-date', { date: activeDate })
-  // .then((value) => value.data as DateModel)
 }
 
 export function fetchStudyDates(): Promise<StudyDatesResponse> {
