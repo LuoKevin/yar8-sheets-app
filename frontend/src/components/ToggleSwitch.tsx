@@ -29,7 +29,7 @@ const ToggleSwitch = ({ checked, label }: ToggleSwitchProps) => {
             checked ? 'text-red-600' : 'text-gray-600'
         }`}
         style={{
-            textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
+            textShadow: '2px 2px 3px rgba(0, 0, 0, 0.5)',
         }}
         >
         {checked ? "GROUPS LOCKED" : "Groups unlocked"}

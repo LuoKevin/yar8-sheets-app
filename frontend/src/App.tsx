@@ -69,13 +69,14 @@ const App = () => {
       return
     }
     try {
-      await startShuffle().then(() => {
-        if (shuffleStatus == FetchStatus.ERROR) {
-          showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
+      const result = await startShuffle()
+
+        if (result.responseStatus == FetchStatus.ERROR) {
+          showToast(`Shuffling failed. Reason: ${result.error}`, 'error')
         } else {
           showToast('Shuffling successful!', 'success')
         }
-      })
+      
       await fetchGroups()
     } catch (err) {
       showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
@@ -89,9 +90,9 @@ const App = () => {
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
       <GradientBackground />
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <LoadingIndicator isLoading={isDatesLoading} />
-        <div className="w-full max-w-lg flex items-center space-x-4 mb-6">
+        <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
           <DateSelector dates={dates} initialDate={currentDate} onSelect={handleDateSelect} />
           <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>
             Reset Groups
