@@ -41,6 +41,7 @@ const App = () => {
   }
 
   const [resetWarning, setResetWarning] = useState(true)
+  const [firstReset, setFirstReset] = useState(false)
 
   const handleResetGroups = () => {
     if(resetWarning && groupsLocked) {
@@ -50,6 +51,7 @@ const App = () => {
     }
     resetGroups()
       .then(() => {
+        setFirstReset(true)
         fetchGroups()
       })
       .then(() => {
@@ -62,7 +64,7 @@ const App = () => {
   }
 
   const handleShuffle = async () => {
-    if(groupsLocked) {
+    if(groupsLocked || !firstReset) {
       showToast("Reset groups before shuffling!", 'error')
       return
     }
