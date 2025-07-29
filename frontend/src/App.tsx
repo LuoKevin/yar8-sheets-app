@@ -40,7 +40,14 @@ const App = () => {
     fetchGroups()
   }
 
+  const [resetWarning, setResetWarning] = useState(true)
+
   const handleResetGroups = () => {
+    if(resetWarning && groupsLocked) {
+      showToast("Groups are currently locked. Are you sure?", 'warning')
+      setResetWarning(false)
+      return
+    }
     resetGroups()
       .then(() => {
         fetchGroups()
@@ -55,6 +62,10 @@ const App = () => {
   }
 
   const handleShuffle = async () => {
+    if(groupsLocked) {
+      showToast("Reset groups before shuffling!", 'error')
+      return
+    }
     try {
       await startShuffle().then(() => {
         if (shuffleStatus == FetchStatus.ERROR) {
