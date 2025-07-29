@@ -13,7 +13,6 @@ import LoadingIndicator from './components/LoadingIndicator'
 import { useToast } from './hooks/useToast'
 import SimpleToast from './components/SimpleToast'
 import { FetchStatus } from './hooks/types'
-import AnimatedCheckbox from './components/AnimatedCheckbox'
 import ToggleSwitch from './components/ToggleSwitch'
 
 const App = () => {

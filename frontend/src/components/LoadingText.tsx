@@ -26,7 +26,7 @@ export const LoadingText: React.FC<LoadingProps> = ({ text, visible }: LoadingPr
         {letters.map((char, i) => (
           <motion.span
             key={i}
-            className="font-extrabold text-3xl"
+            className="font-extrabold text-3xl text-shadow-md text-shadow-zinc-50"
             initial={{ y: 0, opacity: 0, color: rainbow[0] }}
             animate={{
               y: [0, -10, 0],
