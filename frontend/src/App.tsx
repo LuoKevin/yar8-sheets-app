@@ -24,6 +24,7 @@ const App = () => {
     status: shuffleStatus,
     isShuffling,
     startShuffle,
+    shufflingError,
   } = useShuffle(
     () => {
       scrambleGroups()
@@ -51,18 +52,19 @@ const App = () => {
       })
   }
 
-  const handleShuffle = () => {
-    startShuffle()
-      .then(() => {
-        fetchGroups()
-      })
-      .then(() => {
+  const handleShuffle = async () => {
+    try {
+      await startShuffle().then(() => {
         if (shuffleStatus == FetchStatus.ERROR) {
-          showToast(`Shuffling failed. Idiot.`, 'error')
-          return
+          showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
+        } else {
+          showToast('Shuffling successful!', 'success')
         }
-        showToast('Shuffling successful!', 'success')
       })
+      await fetchGroups()
+    } catch (err) {
+      showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
+    }
   }
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const App = () => {
             Shuffle and Lock
           </Button>
         </div>
-        <div className="w-full pb-2">
+        <div className="w-full max-w-lg pb-2 flex items-center justify-start">
           <LoadingText visible={isShuffling} text="Shuffling" />
           <LoadingText visible={resetLoading} text="Resetting" />
           {toastMessage && (

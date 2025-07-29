@@ -6,6 +6,7 @@ import { FetchStatus } from './types'
 interface ShuffleData {
   status: FetchStatus
   isShuffling: boolean
+  shufflingError: string
   startShuffle: () => Promise<void>
 }
 
@@ -16,24 +17,27 @@ export function useShuffle(
   const [progress, setProgress] = useState(0)
   const [isShuffling, setIsShuffling] = useState(false)
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE)
+  const [error, setError] = useState('')
 
   const startShuffle = async (): Promise<void> => {
-    const intervalId = window.setInterval(onShuffle, 1000)
+    const intervalId = window.setInterval(onShuffle, 500)
     setIsShuffling(true)
     setStatus(FetchStatus.LOADING)
-    try {
-      // Perform the POST
-      const data = await shuffleAndLock()
-      setStatus(FetchStatus.SUCCESS)
-      return data
-    } catch {
-      setStatus(FetchStatus.ERROR)
-    } finally {
-      // Always clear the interval, even if POST throws
-      setIsShuffling(false)
-      clearInterval(intervalId)
-    }
+    setError('')
+
+    await shuffleAndLock()
+      .then(() => {
+        setStatus(FetchStatus.SUCCESS)
+      })
+      .catch((err) => {
+        setStatus(FetchStatus.ERROR)
+        setError(err.message || 'Unknown error')
+      })
+      .finally(() => {
+        setIsShuffling(false)
+        clearInterval(intervalId)
+      })
   }
 
-  return { status, isShuffling, startShuffle }
+  return { status, shufflingError: error, isShuffling, startShuffle }
 }
