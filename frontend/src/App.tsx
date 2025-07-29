@@ -35,14 +35,15 @@ const App = () => {
       manualSetGroups(newGroups)
     },
   )
-
-  const handleDateSelect = () => {
-    fetchGroups()
-  }
-
   const [resetWarning, setResetWarning] = useState(true)
   const [firstReset, setFirstReset] = useState(false)
 
+  const handleDateSelect = () => {
+    fetchGroups()
+    setFirstReset(false)
+  }
+
+  
   const handleResetGroups = () => {
     if(resetWarning && groupsLocked) {
       showToast("Groups are currently locked. Are you sure?", 'warning')
