@@ -26,7 +26,7 @@ class AttendanceClient:
         date_cols = results[1]
         target_col = next((col for col in date_cols if col[0] == date), None)
         if target_col is None:
-            raise HTTPException(status_code=400, detail=f"Error: ${date} attendance not found")
+            raise HTTPException(status_code=400, detail=f"Error: {date} attendance not found")
         target_col = target_col[1:]
         current_attendance: Dict[str,bool] = {}
         for i in range(0, len(names)):

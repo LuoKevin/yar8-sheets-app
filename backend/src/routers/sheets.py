@@ -82,10 +82,9 @@ async def get_study_dates():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-@sheets_router.get("/current-attendance", response_model=CurrentAttendanceResponse, summary="Get current attendance for date")
-async def get_current_attendance(data: DateModel):
+@sheets_router.get("/attendance/", response_model=CurrentAttendanceResponse, summary="Get current attendance for date")
+async def get_current_attendance(date: str):
     try:
-        date = data.date
         current_attendance = attendance_client.get_attendance(settings.SPREADSHEET_ID, date)
         attendee_tuples: List[Tuple[str, bool]] = list(current_attendance.attendance_status.items())
         return CurrentAttendanceResponse(date=date, attendees=attendee_tuples)
