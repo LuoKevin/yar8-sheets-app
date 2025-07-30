@@ -11,8 +11,10 @@ export default defineConfig(({command, mode}) => {
 	plugins: [react()],
 	server: {
 		port: 3000,
+		historyApiFallback: true,
 	},
 	build: {
 		outDir: "build",
-	},}
+	},
+}
 })
