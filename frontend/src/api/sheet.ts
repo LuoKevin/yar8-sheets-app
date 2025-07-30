@@ -5,6 +5,7 @@ export type StudyGroupResponse = components['schemas']['StudyGroupResponse']
 export type StudyGroup = components['schemas']['StudyGroup']
 export type DateModel = components['schemas']['DateModel']
 export type StudyDatesResponse = components['schemas']['StudyDatesResponse']
+export type CurrentAttendanceResponse = components['schemas']['CurrentAttendanceResponse']
 
 export function fetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
   return api
@@ -30,4 +31,8 @@ export function postResetGroups(): Promise<void> {
 
 export function shuffleAndLock(): Promise<void> {
   return api.post('/sheets/shuffle-lock')
+}
+
+export function fetchAttendance(date: string): Promise<CurrentAttendanceResponse> {
+  return api.get('/sheets/attendance', { params:{date} })
 }
