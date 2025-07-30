@@ -2,7 +2,6 @@ from typing import List
 
 from .provider import GoogleServiceProvider
 
-
 class GoogleSheetsClient:
     def __init__(self):
         self._service = GoogleServiceProvider.get_sheets_service()
@@ -16,6 +15,17 @@ class GoogleSheetsClient:
         ).execute()
 
         return results.get("values", [])
+
+    def read_ranges(self, spreadsheet_id: str, cell_ranges: List[str], major_dimensions: str = 'ROWS') -> List[List[List[str]]]:
+
+        results =  self._service.spreadsheets().values().batchGet(
+            spreadsheetId=spreadsheet_id,
+            ranges=cell_ranges,
+            majorDimension=major_dimensions,
+        ).execute()
+
+        ranges = results.get("valueRanges", [])
+        return list(map(lambda r: r.get("values", []), ranges))
 
     def write_range(
             self,

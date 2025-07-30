@@ -1,4 +1,5 @@
-from typing import List
+from http.client import responses
+from typing import List, Tuple
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -6,6 +7,7 @@ from pydantic import BaseModel
 from ..config import Settings
 from ..models.study_group import StudyGroup
 from ..services.study_groups_service import get_study_groups
+from ..sheets_client.attendance import AttendanceClient
 from ..sheets_client.client import GoogleSheetsClient
 from ..sheets_client.macros import GoogleSheetsMacros
 
@@ -23,19 +25,26 @@ class StudyGroupResponse(BaseModel):
     groups: List[StudyGroup]
     locked: bool
 
+class CurrentAttendanceResponse(BaseModel):
+    date: str
+    attendees: List[Tuple[str, bool]]
+
 settings = Settings()
 google_api_client = GoogleSheetsClient()
 google_macros = GoogleSheetsMacros()
+attendance_client = AttendanceClient()
 
-displayed_groups_range = "Groups_Current!C5:O20"
-locked_cell = "Groups_Current!M1"
+DISPLAY_GROUPS_RANGE = "Groups_Current!C5:O20"
+LOCKED_CELL = "Groups_Current!M1"
+
+
 
 @sheets_router.get("/study-group-data", response_model=StudyGroupResponse, summary="Get current study group data")
 async def get_study_group_data():
     try:
-        group_range = google_api_client.read_range(settings.SPREADSHEET_ID, displayed_groups_range)
+        group_range = google_api_client.read_range(settings.SPREADSHEET_ID, DISPLAY_GROUPS_RANGE)
         new_groups = get_study_groups(group_range)
-        lock_status = True if google_api_client.read_cell(settings.SPREADSHEET_ID, locked_cell)=="TRUE" else False
+        lock_status = True if google_api_client.read_cell(settings.SPREADSHEET_ID, LOCKED_CELL) == "TRUE" else False
         return StudyGroupResponse(groups=new_groups, locked=lock_status)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -73,23 +82,12 @@ async def get_study_dates():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-# @sheets_router.websocket("/ws-shuffle")
-# async def ws_shuffle_study_groups(ws: WebSocket):
-#     await ws.accept()
-#
-#     loop = asyncio.get_event_loop()
-#
-#     main_task: asyncio.Future = loop.run_in_executor(
-#         None,
-#         google_macros.paste_value_lock,
-#         settings.SPREADSHEET_ID,
-#     )
-#
-#     while not main_task.done():
-#         await ws.send_json({"type": "shuffle"})
-#         await asyncio.sleep(1)
-#
-#     final = await main_task
-#     groups = get_study_groups(google_api_client.read_range(settings.SPREADSHEET_ID, "Groups_Current!C5:O20"))
-#     await ws.send_json({"type": "complete", "groups": list(map(StudyGroup.to_json, groups))})
-#     await ws.close()
+@sheets_router.get("/current-attendance", response_model=CurrentAttendanceResponse, summary="Get current attendance for date")
+async def get_current_attendance(data: DateModel):
+    try:
+        date = data.date
+        current_attendance = attendance_client.get_attendance(settings.SPREADSHEET_ID, date)
+        attendee_tuples: List[Tuple[str, bool]] = list(current_attendance.attendance_status.items())
+        return CurrentAttendanceResponse(date=date, attendees=attendee_tuples)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
