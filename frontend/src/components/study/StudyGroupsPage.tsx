@@ -1,15 +1,15 @@
 import StudyGroupGrid from './StudyGroupGrid'
 import { useStudyGroupData } from '../../hooks/useStudyGroupData'
-import GradientBackground from './GradientBackground'
+import GradientBackground from '../GradientBackground'
 import DateSelector from './DateSelector'
 import { useStudyDatesData } from '../../hooks/useStudyDatesData'
 import { useEffect, useState } from 'react'
-import { Button } from './Button'
+import { Button } from '../Button'
 import { usePostResetGroups } from '../../hooks/usePostReset'
 import { StudyGroup } from '../../api/sheet'
 import { useShuffle } from '../../hooks/useShuffle'
 import { LoadingText } from './LoadingText'
-import LoadingIndicator from './LoadingIndicator'
+import LoadingIndicator from '../LoadingIndicator'
 import { useToast } from '../../hooks/useToast'
 import SimpleToast from './SimpleToast'
 import { FetchStatus } from '../../hooks/types'
@@ -89,7 +89,6 @@ const StudyGroupsPage = () => {
 
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
-      <GradientBackground />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <LoadingIndicator isLoading={isDatesLoading} />
         <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">

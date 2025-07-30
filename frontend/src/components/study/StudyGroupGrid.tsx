@@ -1,7 +1,7 @@
 import { motion, LayoutGroup } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 import StudyGroupColumn from './StudyGroupColumn'
-import LoadingIndicator from './LoadingIndicator'
+import LoadingIndicator from '../LoadingIndicator'
 
 interface StudyGroup {
   leader: string

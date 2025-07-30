@@ -35,4 +35,5 @@ export function shuffleAndLock(): Promise<void> {
 
 export function fetchAttendance(date: string): Promise<CurrentAttendanceResponse> {
   return api.get('/sheets/attendance', { params:{date} })
+  .then((res) => res.data)
 }

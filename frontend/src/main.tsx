@@ -1,12 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import StudyGroupsPage from './components/study/StudyGroupsPage'
+import AttendancePage from './components/attendance/AttendancePage'
+import BackgroundLayout from './components/BackgroundLayout'
 
 const Root = () => (
-  <Router>
     <Routes>
-      <Route path="/" element={<StudyGroupsPage />} />
+      <Route path="/" element={<BackgroundLayout />}>
+        <Route index element={<StudyGroupsPage />} />
+        <Route path="/attendance" element={<AttendancePage />}/>
+      </Route>
     </Routes>
-  </Router>
 )
 
 export default Root
