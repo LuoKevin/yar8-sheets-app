@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { ToastIcons } from '../components/SimpleToast'
+import { ToastIcons } from '../components/study/SimpleToast'
 
 export enum FetchStatus {
   IDLE = 'idle',

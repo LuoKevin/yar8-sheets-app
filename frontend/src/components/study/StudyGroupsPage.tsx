@@ -1,21 +1,21 @@
-import StudyGroupGrid from './components/StudyGroupGrid'
-import { useStudyGroupData } from './hooks/useStudyGroupData'
-import GradientBackground from './components/GradientBackground'
-import DateSelector from './components/DateSelector'
-import { useStudyDatesData } from './hooks/useStudyDatesData'
+import StudyGroupGrid from './StudyGroupGrid'
+import { useStudyGroupData } from '../../hooks/useStudyGroupData'
+import GradientBackground from './GradientBackground'
+import DateSelector from './DateSelector'
+import { useStudyDatesData } from '../../hooks/useStudyDatesData'
 import { useEffect, useState } from 'react'
-import { Button } from './components/Button'
-import { usePostResetGroups } from './hooks/usePostReset'
-import { StudyGroup } from './api/sheet'
-import { useShuffle } from './hooks/useShuffle'
-import { LoadingText } from './components/LoadingText'
-import LoadingIndicator from './components/LoadingIndicator'
-import { useToast } from './hooks/useToast'
-import SimpleToast from './components/SimpleToast'
-import { FetchStatus } from './hooks/types'
-import ToggleSwitch from './components/ToggleSwitch'
+import { Button } from './Button'
+import { usePostResetGroups } from '../../hooks/usePostReset'
+import { StudyGroup } from '../../api/sheet'
+import { useShuffle } from '../../hooks/useShuffle'
+import { LoadingText } from './LoadingText'
+import LoadingIndicator from './LoadingIndicator'
+import { useToast } from '../../hooks/useToast'
+import SimpleToast from './SimpleToast'
+import { FetchStatus } from '../../hooks/types'
+import ToggleSwitch from './ToggleSwitch'
 
-const App = () => {
+const StudyGroupsPage = () => {
   const { toastMessage, toastStatus, showToast } = useToast()
   const { dates, activeDate: currentDate, isDatesLoading } = useStudyDatesData()
   const { fetchGroups, groups, groupsLoading, groupsError, locked: groupsLocked, manualSetGroups, scrambleGroups } =
@@ -122,4 +122,4 @@ const App = () => {
   )
 }
 
-export default App
+export default StudyGroupsPage
