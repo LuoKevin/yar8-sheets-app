@@ -30,6 +30,10 @@ class CurrentAttendanceResponse(BaseModel):
     attendees: List[Tuple[str, bool]]
     index: int
 
+class PostAttendanceRequest(BaseModel):
+    index: int
+    attendees: List[bool]
+
 settings = Settings()
 google_api_client = GoogleSheetsClient()
 google_macros = GoogleSheetsMacros()
@@ -87,5 +91,13 @@ async def get_current_attendance(date: str):
         current_attendance = attendance_client.get_attendance(settings.SPREADSHEET_ID, date)
         attendee_tuples: List[Tuple[str, bool]] = list(current_attendance.attendance_status.items())
         return CurrentAttendanceResponse(date=date, attendees=attendee_tuples, index=current_attendance.index)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
+@sheets_router.post("/take-attendance", summary="post attendance for date")
+async def take_attendance(request: PostAttendanceRequest):
+    try:
+        attendance_client.post_attendance(settings.SPREADSHEET_ID, request.date, request.attendance)
+        return { "status" : "Attendance updated successfully" }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")

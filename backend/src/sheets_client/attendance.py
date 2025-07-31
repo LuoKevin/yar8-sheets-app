@@ -1,15 +1,23 @@
 from typing import List, Dict
-
 from fastapi import HTTPException
-
 from .client import GoogleSheetsClient
 from ..models.attendance import Attendance
 
 
+# zero-indexed 0 -> A, 1 -> B,
+def _column_to_letter(index: int) -> str:
+    result = ""
+    while index >= 0:
+        index, remainder = divmod(index, 26)
+        result = chr(65 + remainder) + result
+        index -= 1  # shift for 0-based offset
+    return result
+
+
 class AttendanceClient:
     _ATTENDANCE_SHEET_NAME = "Attendance_Current"
-    _NAMES_RANGE = f"{_ATTENDANCE_SHEET_NAME}!E3:E136"
-    _DATES_GRID_RANGE = f"{_ATTENDANCE_SHEET_NAME}!F2:AG136"
+    _NAMES_RANGE = f"{_ATTENDANCE_SHEET_NAME}!E3:E200"
+    _DATES_GRID_RANGE = f"{_ATTENDANCE_SHEET_NAME}!F2:AG200"
     _sheets_client = GoogleSheetsClient()
     '''
     1. Get all names and all dates-grid
@@ -38,3 +46,11 @@ class AttendanceClient:
             attendance_status=current_attendance,
             index=index
         )
+
+
+    def post_attendance(self, spreadsheet_id: str, index: int, attendance_status: List[bool]):
+        base_date_index = 5
+        date_col_letter = _column_to_letter(base_date_index + index)
+        str_attendance_list: List[str] = list(map(lambda x: "TRUE" if x else "FALSE", attendance_status))
+        target_range = f"{self._ATTENDANCE_SHEET_NAME}!{date_col_letter}3:{date_col_letter}200"
+        self._sheets_client.write_range(spreadsheet_id,target_range,[str_attendance_list])
