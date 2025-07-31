@@ -53,4 +53,10 @@ class AttendanceClient:
         date_col_letter = _column_to_letter(base_date_index + index)
         str_attendance_list: List[str] = list(map(lambda x: "TRUE" if x else "FALSE", attendance_status))
         target_range = f"{self._ATTENDANCE_SHEET_NAME}!{date_col_letter}3:{date_col_letter}200"
-        self._sheets_client.write_range(spreadsheet_id,target_range,[str_attendance_list])
+        print(target_range)
+        self._sheets_client.write_range(
+            spreadsheet_id,
+            target_range,
+            [str_attendance_list],
+            major_dimension="COLUMNS"
+        )

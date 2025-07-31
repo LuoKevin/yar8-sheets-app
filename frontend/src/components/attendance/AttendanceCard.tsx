@@ -1,5 +1,4 @@
 import { motion, Variants } from 'framer-motion'
-import { Button } from '../Button'
 
 interface AttendanceCardProps {
   name: string
@@ -35,15 +34,13 @@ const AttendanceCard = ({ name, present, onToggle }: AttendanceCardProps) => {
 
   return (
     <motion.div
-      layout
       variants={cardVariants}
       initial="rest"
-      animate="float"
       whileHover="hover"
-      className="w-28 h-28 sm:w-32 sm:h-32 perspective-1000 origin-center"
+      className="w-full max-w-xs sm:max-w-sm h-24 sm:h-28 md:h-32 perspective-1000 origin-center"
     >
       <motion.div
-        className={`w-full h-full rounded-xl shadow-lg flex flex-col items-center justify-center p-2 border-2 transition-colors duration-200 cursor-pointer ${
+        className={`w-full h-full rounded-lg shadow-lg flex items-center justify-center border-2 transition-colors duration-200 cursor-pointer ${
           present
             ? 'bg-green-600 border-green-300 hover:bg-green-500'
             : 'bg-red-600 border-red-300 hover:bg-red-500'
@@ -51,13 +48,10 @@ const AttendanceCard = ({ name, present, onToggle }: AttendanceCardProps) => {
         onClick={onToggle}
       >
         <span
-          className="font-extrabold text-white text-center leading-tight text-xl sm:text-2xl"
+          className="font-extrabold text-white text-2xl sm:text-3xl md:text-4xl text-center"
           style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
         >
           {name}
-        </span>
-        <span className="text-white text-sm mt-1">
-          {present ? '✅ Present' : '❌ Absent'}
         </span>
       </motion.div>
     </motion.div>

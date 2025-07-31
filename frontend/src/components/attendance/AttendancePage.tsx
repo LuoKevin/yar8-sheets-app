@@ -1,36 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button } from '../Button'
 import LoadingIndicator from '../LoadingIndicator'
 import AttendanceCard from './AttendanceCard'
 import { useAttendance } from '../../hooks/useAttendance'
 import { FetchStatus } from '../../hooks/types'
-import { useStudyGroupData } from '../../hooks/useStudyGroupData'
-import { useStudyDatesData } from '../../hooks/useStudyDatesData'
 import { useDateContext } from '../../context/DateContext'
 import DateSelector from '../study/DateSelector'
+import { usePostAttendance } from '../../hooks/usePostAttendance'
+import SimpleToast from '../SimpleToast'
+import { useToast } from '../../hooks/useToast'
+import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
 
 interface DisplayedAttendee {
   name: string
   present: boolean
 }
 
-const mockAttendees: DisplayedAttendee[] = [
-  { name: 'Alice', present: false },
-  { name: 'Bob', present: true },
-  { name: 'Charlie', present: false },
-  { name: 'Dana', present: true },
-]
-
 const AttendancePage = () => {
-  const [attendees, setAttendees] = useState<DisplayedAttendee[]>(mockAttendees)
+  const [initialAttendees, setInitialAttendees] = useState<DisplayedAttendee[]>([])
+  const [attendees, setAttendees] = useState<DisplayedAttendee[]>([])
   const [attDateIndex, setAttDateIndex] = useState<number>(-1)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [hasUnsavedChanges, setHasChanges] = useState(false)
 
   const {fetchAttendance, status: attendanceStatus} = useAttendance()
   const {currentDate, allDates, dateStatus, dateError, setDate} = useDateContext()
+  const { submitAttendance } = usePostAttendance()
+  const { toastMessage, toastStatus, showToast } = useToast()
+
+  // const shouldBlock = useCallback<BlockerFunction>(() => hasUnsavedChanges,[hasUnsavedChanges] )
+  // const blocker = useBlocker(shouldBlock)
   
-
   useEffect((() => {
-
     const asyncAttendance = async () => {
       if(currentDate=="") return
       const result = await fetchAttendance(currentDate)
@@ -41,46 +42,102 @@ const AttendancePage = () => {
         })
         setAttendees(fetchedAttendees)
         setAttDateIndex(result.attDateIndex)
+        setInitialAttendees(fetchedAttendees)
+        setHasChanges(false)
+      } else {
+        showToast(`Error: Unable to fetch attendees for:${result.error || ""}`, FetchStatus.ERROR)
       }
     }
-    
     asyncAttendance()
   }),[currentDate])
 
-  const toggle = (index: number) => {
+  useEffect(() => {
+     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault()
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [hasUnsavedChanges])
+
+  const toggle = (name: string) => {
+    setHasChanges(true)
     setAttendees((prev) =>
-      prev.map((a, i) => (i === index ? { ...a, present: !a.present } : a)),
+    prev.map((a) =>
+      a.name === name ? { ...a, present: !a.present } : a
     )
+  )
   }
 
   const handleSubmit = () => {
-    setTimeout(() => {
-      console.log('Submitted attendance:', attendees)
-    }, 1000)
+    submitAttendance(attDateIndex, attendees.map((attendee) => {return attendee.present}))
+    .then((res) => {
+      if (res.status == FetchStatus.SUCCESS) {
+        showToast("Successfully updated attendance", FetchStatus.SUCCESS)
+        setHasChanges(false)
+      }
+    })
+    .catch((err) => {
+      showToast(`Error in updating attendance. Reason:${err.message || "Unknown"}`, FetchStatus.ERROR)
+    })
+  }
+
+  const navigate = useNavigate()
+
+  const handleNavigate = () => {
+
+    navigate("/attendance", {replace:true})
   }
 
   return (
-    <div className="min-h-screen w-screen overflow-x-visible">
+    <div className="min-h-screen w-screen overflow-x-visible px-2 sm:px-4">
       <LoadingIndicator isLoading={dateStatus==FetchStatus.LOADING||attendanceStatus==FetchStatus.LOADING} />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
 
-        <h1 className="text-2xl font-bold text-white">Take Attendance</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Take Attendance</h1>
         <DateSelector dates={allDates} initialDate={currentDate} onSelect={(newDate) =>{setDate(newDate)}} />
+          <Button onClick={() => handleNavigate()}>
+            Study Groups Page ➡️
+            </Button>
 
-        <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4">
-          {attendees.map((attendee, i) => (
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="fixed top-4 left-4 w-56 sm:w-64 p-2 rounded-md border border-gray-300 bg-white shadow-md z-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        
+       {toastMessage && (<div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+        <SimpleToast 
+          message={toastMessage}
+          type={toastStatus}
+          onClose={() => showToast('')}
+        />
+      </div>)}
+
+        <Button
+          className="fixed bottom-4 right-4 z-50 shadow-lg"
+          onClick={handleSubmit}
+        >
+          Submit Attendance
+        </Button>
+
+        <div className="w-full max-w-3xl flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {attendees.filter((a) =>
+              a.name.toLowerCase().includes(searchTerm.toLowerCase())
+           )
+          .map((attendee) => (
             <AttendanceCard
               key={attendee.name}
               name={attendee.name}
               present={attendee.present}
-              onToggle={() => toggle(i)}
+              onToggle={() => toggle(attendee.name)}
             />
           ))}
         </div>
 
-        <Button className="mt-4" onClick={handleSubmit}>
-          Submit Attendance
-        </Button>
       </div>
     </div>
   )

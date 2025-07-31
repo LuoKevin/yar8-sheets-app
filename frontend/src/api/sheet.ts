@@ -6,6 +6,7 @@ export type StudyGroup = components['schemas']['StudyGroup']
 export type DateModel = components['schemas']['DateModel']
 export type StudyDatesResponse = components['schemas']['StudyDatesResponse']
 export type CurrentAttendanceResponse = components['schemas']['CurrentAttendanceResponse']
+export type PostAttendanceRequest = components['schemas']['PostAttendanceRequest']
 
 export function fetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
   return api
@@ -36,4 +37,8 @@ export function shuffleAndLock(): Promise<void> {
 export function fetchAttendance(date: string): Promise<CurrentAttendanceResponse> {
   return api.get('/sheets/attendance', { params:{date} })
   .then((res) => res.data)
+}
+
+export function postAttendance(request: PostAttendanceRequest): Promise<void> {
+  return api.post('sheets/take-attendance', request)
 }

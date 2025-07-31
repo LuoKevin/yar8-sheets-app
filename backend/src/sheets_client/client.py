@@ -32,10 +32,12 @@ class GoogleSheetsClient:
             spreadsheet_id: str,
             sheet_cell_range: str,
             values: List[List[str]],
-            input_option='USER_ENTERED'
+            input_option='USER_ENTERED',
+            major_dimension: str = 'ROWS',
     ) -> None:
         body = {
-            'values': values
+            'values': values,
+            "majorDimension": major_dimension,
         }
 
         result = self._service.spreadsheets().values().update(

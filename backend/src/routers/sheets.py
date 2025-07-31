@@ -97,7 +97,8 @@ async def get_current_attendance(date: str):
 @sheets_router.post("/take-attendance", summary="post attendance for date")
 async def take_attendance(request: PostAttendanceRequest):
     try:
-        attendance_client.post_attendance(settings.SPREADSHEET_ID, request.date, request.attendance)
+        print("TAKING ATTENDANCE")
+        attendance_client.post_attendance(settings.SPREADSHEET_ID, request.index, request.attendees)
         return { "status" : "Attendance updated successfully" }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
