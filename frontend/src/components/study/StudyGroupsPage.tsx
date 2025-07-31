@@ -14,10 +14,11 @@ import { useToast } from '../../hooks/useToast'
 import SimpleToast from './SimpleToast'
 import { FetchStatus } from '../../hooks/types'
 import ToggleSwitch from './ToggleSwitch'
+import { useDate } from '../../context/DateContext'
 
 const StudyGroupsPage = () => {
   const { toastMessage, toastStatus, showToast } = useToast()
-  const { dates, activeDate: currentDate, isDatesLoading } = useStudyDatesData()
+  const {currentDate, allDates, dateStatus, dateError, setDate} = useDate()
   const { fetchGroups, groups, groupsLoading, groupsError, locked: groupsLocked, manualSetGroups, scrambleGroups } =
     useStudyGroupData(currentDate)
   const { resetGroups, resetSuccess, resetLoading, resetError } = usePostResetGroups()
@@ -37,7 +38,8 @@ const StudyGroupsPage = () => {
   const [resetWarning, setResetWarning] = useState(true)
   const [firstReset, setFirstReset] = useState(false)
 
-  const handleDateSelect = () => {
+  const handleDateSelect = (newDate: string) => {
+    setDate(newDate)
     fetchGroups()
     setFirstReset(false)
   }
@@ -90,9 +92,9 @@ const StudyGroupsPage = () => {
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
-        <LoadingIndicator isLoading={isDatesLoading} />
+        <LoadingIndicator isLoading={dateStatus == FetchStatus.LOADING} />
         <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
-          <DateSelector dates={dates} initialDate={currentDate} onSelect={handleDateSelect} />
+          <DateSelector dates={allDates} initialDate={currentDate} onSelect={handleDateSelect} />
           <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>
             Reset Groups
           </Button>

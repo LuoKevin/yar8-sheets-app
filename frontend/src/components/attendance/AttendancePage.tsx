@@ -4,6 +4,8 @@ import LoadingIndicator from '../LoadingIndicator'
 import AttendanceCard from './AttendanceCard'
 import { useAttendance } from '../../hooks/useAttendance'
 import { FetchStatus } from '../../hooks/types'
+import { useStudyGroupData } from '../../hooks/useStudyGroupData'
+import { useStudyDatesData } from '../../hooks/useStudyDatesData'
 
 interface DisplayedAttendee {
   name: string
@@ -22,11 +24,12 @@ const AttendancePage = () => {
   const [loading, setLoading] = useState(false)
 
   const {fetchAttendance, status: attendanceStatus} = useAttendance()
+  const {activeDate, dates, isDatesLoading} = useStudyDatesData()
 
   useEffect((() => {
 
     const asyncAttendance = async () => {
-      const result = await fetchAttendance("7/18/2025")
+      const result = await fetchAttendance(activeDate)
 
       if(result.status == FetchStatus.SUCCESS) {
         const fetchedAttendees = result.attendees.map((tuple) => {
@@ -37,7 +40,6 @@ const AttendancePage = () => {
     }
     
     asyncAttendance()
-
   }),[])
 
   const toggle = (index: number) => {
