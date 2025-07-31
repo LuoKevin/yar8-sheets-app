@@ -15,6 +15,7 @@ import SimpleToast from '../SimpleToast'
 import { FetchStatus } from '../../hooks/types'
 import ToggleSwitch from './ToggleSwitch'
 import { useDateContext } from '../../context/DateContext'
+import { useNavigate } from 'react-router-dom'
 
 const StudyGroupsPage = () => {
   const { toastMessage, toastStatus, showToast } = useToast()
@@ -88,12 +89,20 @@ const StudyGroupsPage = () => {
   useEffect(() => {
     fetchGroups()
   }, [])
+  
+  const navigate = useNavigate()
+  const handleNavigate = () => {
+    navigate("/attendance", {replace: true})
+  }
 
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <LoadingIndicator isLoading={dateStatus == FetchStatus.LOADING} />
         <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
+          <Button onClick={() => handleNavigate()}>
+           ⬅️ Take Attendance
+            </Button>
           <DateSelector dates={allDates} initialDate={currentDate} onSelect={handleDateSelect} />
           <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>
             Reset Groups

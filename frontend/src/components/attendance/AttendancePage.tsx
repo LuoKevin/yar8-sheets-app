@@ -17,7 +17,6 @@ interface DisplayedAttendee {
 }
 
 const AttendancePage = () => {
-  const [initialAttendees, setInitialAttendees] = useState<DisplayedAttendee[]>([])
   const [attendees, setAttendees] = useState<DisplayedAttendee[]>([])
   const [attDateIndex, setAttDateIndex] = useState<number>(-1)
   const [searchTerm, setSearchTerm] = useState('')
@@ -42,7 +41,6 @@ const AttendancePage = () => {
         })
         setAttendees(fetchedAttendees)
         setAttDateIndex(result.attDateIndex)
-        setInitialAttendees(fetchedAttendees)
         setHasChanges(false)
       } else {
         showToast(`Error: Unable to fetch attendees for:${result.error || ""}`, FetchStatus.ERROR)
@@ -87,7 +85,7 @@ const AttendancePage = () => {
 
   const handleNavigate = () => {
 
-    navigate("/attendance", {replace:true})
+    navigate("/", {replace:true})
   }
 
   return (
