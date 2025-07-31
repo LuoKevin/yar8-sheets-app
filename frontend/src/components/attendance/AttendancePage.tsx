@@ -23,6 +23,7 @@ const mockAttendees: DisplayedAttendee[] = [
 
 const AttendancePage = () => {
   const [attendees, setAttendees] = useState<DisplayedAttendee[]>(mockAttendees)
+  const [attDateIndex, setAttDateIndex] = useState<number>(-1)
 
   const {fetchAttendance, status: attendanceStatus} = useAttendance()
   const {currentDate, allDates, dateStatus, dateError, setDate} = useDateContext()
@@ -39,6 +40,7 @@ const AttendancePage = () => {
           return {name:tuple[0], present: tuple[1]} as DisplayedAttendee
         })
         setAttendees(fetchedAttendees)
+        setAttDateIndex(result.attDateIndex)
       }
     }
     

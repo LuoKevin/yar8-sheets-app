@@ -24,7 +24,7 @@ class AttendanceClient:
         )
         names = results[0][0]
         date_cols = results[1]
-        index = next((i for i, col  in date_cols if col[0] == date), None)
+        index = next((i for i, col  in enumerate(date_cols) if col[0] == date), None)
         target_col = date_cols[index] if index is not None else None
         if target_col is None:
             raise HTTPException(status_code=400, detail=f"Error: {date} attendance not found")

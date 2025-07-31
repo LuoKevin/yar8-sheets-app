@@ -8,6 +8,7 @@ interface FetchAttendanceResult {
     status: FetchStatus
     error: string
     attendees: Attendee[]
+    attDateIndex: number
 }
 
 interface UseAttendanceProps {
@@ -19,19 +20,19 @@ export function useAttendance(): UseAttendanceProps {
     const [status, setStatus] = useState(FetchStatus.IDLE)
   const getAttendance = async (date: string): Promise<FetchAttendanceResult> => {
         try {
-            setStatus(FetchStatus.LOADING)
-            console.log("GETTING")
+          setStatus(FetchStatus.LOADING)
           const result: CurrentAttendanceResponse = await fetchAttendance(date)
          
           setStatus(FetchStatus.SUCCESS)
           return {
             status: FetchStatus.SUCCESS,
             error: "",
-            attendees: result.attendees.map((a) => [a[0], a[1]])
+            attendees: result.attendees.map((a) => [a[0], a[1]]),
+            attDateIndex: result.index
             } as FetchAttendanceResult
         } catch(err) {
             setStatus
-          return {status: FetchStatus.ERROR, error : err.message || "Unknown error", attendees: []} as FetchAttendanceResult
+          return {status: FetchStatus.ERROR, error : err.message || "Unknown error", attendees: [], attDateIndex: -1} as FetchAttendanceResult
         } finally {
         }
         

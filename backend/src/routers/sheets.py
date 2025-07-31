@@ -38,8 +38,6 @@ attendance_client = AttendanceClient()
 DISPLAY_GROUPS_RANGE = "Groups_Current!C5:O20"
 LOCKED_CELL = "Groups_Current!M1"
 
-
-
 @sheets_router.get("/study-group-data", response_model=StudyGroupResponse, summary="Get current study group data")
 async def get_study_group_data():
     try:
