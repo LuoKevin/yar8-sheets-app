@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { fetchStudyDates, StudyDatesResponse } from '../api/sheet'
-import { useDate } from '../context/DateContext'
+import { useDateContext } from '../context/DateContext'
 
 interface StudyDatesData {
   activeDate: string
@@ -12,7 +12,7 @@ export function useStudyDatesData(): StudyDatesData {
   const [datesData, setDates] = useState<StudyDatesResponse>({ activeDate: '', dates: [] })
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
-  const context = useDate()
+  const context = useDateContext()
 
   useEffect(() => {
     setLoading(true)

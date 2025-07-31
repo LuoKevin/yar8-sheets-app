@@ -14,11 +14,11 @@ import { useToast } from '../../hooks/useToast'
 import SimpleToast from './SimpleToast'
 import { FetchStatus } from '../../hooks/types'
 import ToggleSwitch from './ToggleSwitch'
-import { useDate } from '../../context/DateContext'
+import { useDateContext } from '../../context/DateContext'
 
 const StudyGroupsPage = () => {
   const { toastMessage, toastStatus, showToast } = useToast()
-  const {currentDate, allDates, dateStatus, dateError, setDate} = useDate()
+  const {currentDate, allDates, dateStatus, dateError, setDate} = useDateContext()
   const { fetchGroups, groups, groupsLoading, groupsError, locked: groupsLocked, manualSetGroups, scrambleGroups } =
     useStudyGroupData(currentDate)
   const { resetGroups, resetSuccess, resetLoading, resetError } = usePostResetGroups()

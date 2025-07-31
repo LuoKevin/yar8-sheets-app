@@ -6,6 +6,8 @@ import { useAttendance } from '../../hooks/useAttendance'
 import { FetchStatus } from '../../hooks/types'
 import { useStudyGroupData } from '../../hooks/useStudyGroupData'
 import { useStudyDatesData } from '../../hooks/useStudyDatesData'
+import { useDateContext } from '../../context/DateContext'
+import DateSelector from '../study/DateSelector'
 
 interface DisplayedAttendee {
   name: string
@@ -21,15 +23,16 @@ const mockAttendees: DisplayedAttendee[] = [
 
 const AttendancePage = () => {
   const [attendees, setAttendees] = useState<DisplayedAttendee[]>(mockAttendees)
-  const [loading, setLoading] = useState(false)
 
   const {fetchAttendance, status: attendanceStatus} = useAttendance()
-  const {activeDate, dates, isDatesLoading} = useStudyDatesData()
+  const {currentDate, allDates, dateStatus, dateError, setDate} = useDateContext()
+  
 
   useEffect((() => {
 
     const asyncAttendance = async () => {
-      const result = await fetchAttendance(activeDate)
+      if(currentDate=="") return
+      const result = await fetchAttendance(currentDate)
 
       if(result.status == FetchStatus.SUCCESS) {
         const fetchedAttendees = result.attendees.map((tuple) => {
@@ -40,7 +43,7 @@ const AttendancePage = () => {
     }
     
     asyncAttendance()
-  }),[])
+  }),[currentDate])
 
   const toggle = (index: number) => {
     setAttendees((prev) =>
@@ -49,19 +52,18 @@ const AttendancePage = () => {
   }
 
   const handleSubmit = () => {
-    setLoading(true)
     setTimeout(() => {
       console.log('Submitted attendance:', attendees)
-      setLoading(false)
     }, 1000)
   }
 
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
+      <LoadingIndicator isLoading={dateStatus==FetchStatus.LOADING||attendanceStatus==FetchStatus.LOADING} />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
-        <LoadingIndicator isLoading={loading} />
 
         <h1 className="text-2xl font-bold text-white">Take Attendance</h1>
+        <DateSelector dates={allDates} initialDate={currentDate} onSelect={(newDate) =>{setDate(newDate)}} />
 
         <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4">
           {attendees.map((attendee, i) => (

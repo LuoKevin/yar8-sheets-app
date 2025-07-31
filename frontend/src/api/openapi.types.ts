@@ -89,7 +89,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sheets/attendance/": {
+    "/sheets/attendance": {
         parameters: {
             query?: never;
             header?: never;
@@ -97,7 +97,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get current attendance for date */
-        get: operations["get_current_attendance_sheets_attendance__get"];
+        get: operations["get_current_attendance_sheets_attendance_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -119,6 +119,8 @@ export interface components {
                 string,
                 boolean
             ][];
+            /** Index */
+            index: number;
         };
         /** DateModel */
         DateModel: {
@@ -282,7 +284,7 @@ export interface operations {
             };
         };
     };
-    get_current_attendance_sheets_attendance__get: {
+    get_current_attendance_sheets_attendance_get: {
         parameters: {
             query: {
                 date: string;
