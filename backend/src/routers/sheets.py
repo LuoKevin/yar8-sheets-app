@@ -29,6 +29,7 @@ class CurrentAttendanceResponse(BaseModel):
     date: str
     attendees: List[Tuple[str, bool]]
     index: int
+    latecomers: List[str]
 
 class PostAttendanceRequest(BaseModel):
     index: int
@@ -91,7 +92,7 @@ async def get_current_attendance(date: str):
     try:
         current_attendance = attendance_client.get_attendance(settings.SPREADSHEET_ID, date)
         attendee_tuples: List[Tuple[str, bool]] = list(current_attendance.attendance_status.items())
-        return CurrentAttendanceResponse(date=date, attendees=attendee_tuples, index=current_attendance.index)
+        return CurrentAttendanceResponse(date=date, attendees=attendee_tuples, index=current_attendance.index, latecomers=current_attendance.latecomer_timestamps)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 

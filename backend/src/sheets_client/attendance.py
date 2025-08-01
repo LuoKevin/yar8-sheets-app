@@ -31,7 +31,7 @@ class AttendanceClient:
         )
         names = results[0][0]
         date_cols = results[1]
-        latecomer_times = results[2][0]
+        latecomer_times = results[2][0] if len(results[2]) > 0 else []
         index = next((i for i, col  in enumerate(date_cols) if col[0] == date), None)
         target_col = date_cols[index] if index is not None else None
         if target_col is None:
@@ -40,6 +40,11 @@ class AttendanceClient:
         current_attendance: Dict[str,bool] = {}
         for i in range(0, len(names)):
             current_attendance[names[i]] = True if target_col[i] == "TRUE" else False
+        target_late_length = 197
+        num_to_fill = target_late_length - len(latecomer_times)
+
+        if num_to_fill > 0:
+            latecomer_times.extend([""] * num_to_fill)
 
         return Attendance(
             date=date,

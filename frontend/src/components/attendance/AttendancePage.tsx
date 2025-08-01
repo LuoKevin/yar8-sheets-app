@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 interface DisplayedAttendee {
   name: string
   present: boolean
+  lateTime: string | null
 }
 
 const AttendancePage = () => {

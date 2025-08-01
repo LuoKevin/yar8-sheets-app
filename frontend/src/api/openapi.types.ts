@@ -138,6 +138,8 @@ export interface components {
             ][];
             /** Index */
             index: number;
+            /** Latecomers */
+            latecomers: string[];
         };
         /** DateModel */
         DateModel: {
