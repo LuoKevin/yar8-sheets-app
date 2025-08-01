@@ -84,7 +84,12 @@ const AttendancePage = () => {
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-
+ if (hasUnsavedChanges) {
+    const confirmLeave = window.confirm(
+      'Unsaved changes, navigate anyway?'
+    )
+    if (!confirmLeave) return
+  }
     navigate("/", {replace:true})
   }
 
@@ -100,12 +105,13 @@ const AttendancePage = () => {
             </Button>
 
         <input
-          type="text"
-          placeholder="Search by name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="fixed top-4 left-4 w-56 sm:w-64 p-2 rounded-md border border-gray-300 bg-white shadow-md z-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+  type="text"
+  placeholder="Search by name..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  className="w-full max-w-md p-2 rounded-md border border-gray-300 bg-white shadow focus:outline-none focus:ring-2 focus:ring-blue-400"
+/>
+
         
        {toastMessage && (<div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
         <SimpleToast 
@@ -116,7 +122,7 @@ const AttendancePage = () => {
       </div>)}
 
         <Button
-          className="fixed bottom-4 right-4 z-50 shadow-lg"
+          className="fixed bottom-4 right-4 z-50 shadow-lg  "
           onClick={handleSubmit}
         >
           Submit Attendance

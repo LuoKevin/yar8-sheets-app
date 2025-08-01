@@ -13,20 +13,16 @@ interface UsePostAttendance {
 }
 
 export function usePostAttendance(): UsePostAttendance {
-    const [status, setStatus] = useState(FetchStatus.IDLE)
-    const [error, setError] = useState<string | undefined>(undefined)
     const submitAttendance = async(index: number, attendanceState: boolean[]) => {
-        setStatus(FetchStatus.LOADING)
         try {
             await postAttendance({index, attendees: attendanceState})
-            setStatus(FetchStatus.SUCCESS)
+            return { status: FetchStatus.SUCCESS } as PostAttendanceResponse
         } catch (err) {
-            setStatus(FetchStatus.ERROR)
-            setError(`Error in posting attendance. Reason:${err.message || "Unknown"}`)
-        } finally {
-            return {status, error}
-        }
+            return {
+                 status: FetchStatus.ERROR, 
+                 error: `Error in posting attendance. Reason:${err.message || "Unknown"}`
+                } as PostAttendanceResponse
+        } 
     }
-
     return {submitAttendance}
 }

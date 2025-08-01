@@ -1,4 +1,3 @@
-// src/components/Button.tsx
 import React, { type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 
@@ -20,12 +19,15 @@ export const Button: React.FC<ButtonProps> = ({
     onClick={onClick}
     disabled={disabled}
     className={`
-      flex items-center justify-center 
+      flex items-center justify-center
       px-4 py-2
-      bg-white/10 backdrop-blur-sm
-      rounded-lg border border-white/30
-      text-white font-extrabold uppercase tracking-wider
-      transition-colors duration-200
+      bg-white text-gray-900
+      border border-gray-300 shadow-md
+      rounded-md
+      font-semibold uppercase tracking-wide
+      transition duration-200 ease-in-out
+      hover:bg-blue-100 hover:border-blue-400
+      focus:outline-none focus:ring-2 focus:ring-blue-500
       disabled:opacity-50 disabled:cursor-not-allowed
       ${className}
     `}
