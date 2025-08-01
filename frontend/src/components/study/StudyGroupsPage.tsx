@@ -85,7 +85,9 @@ const StudyGroupsPage = () => {
       if (result.responseStatus == FetchStatus.ERROR) {
         showToast(`Shuffling failed. Reason: ${result.error}`, 'error')
       } else {
-        setPage('locked')
+        setPage('groups')
+        setFirstReset(false)
+        setResetWarning(true)
         showToast('Shuffling successful!', 'success')
       }
 
@@ -129,9 +131,10 @@ const StudyGroupsPage = () => {
           <LoadingText visible={resetLoading} text="Resetting" />
           {toastMessage && (
             <SimpleToast
+              key={toastMessage + toastStatus}
               message={toastMessage}
               type={toastStatus}
-              onClose={() => showToast('')}
+              onClose={() => {}}
               // Clear when manually closed
             />
           )}

@@ -10,13 +10,29 @@ This app is designed to create a smoother user experience in handling the YAR8 G
 ## 🏗 Project Structure
 
 ### 🧩 Backend
-- 🐍 **Python**: 🏃 FastAPI Router, 📊 Google Sheets API integration
+- 🐍 **Python**: 🏃 FastAPI Router, 📊 Google Sheets API
 
 ### 🖼️ Frontend
-- 🎨 **TypeScript**: ⚛️ React, ⚡ Vite, 💨 TailwindCSS, 🌀 Motion.dev
+- 🎨 **TypeScript**: ⚛️ React, ⚡ Vite, 💨 TailwindCSS, 🌀 Motion.div
 
 ## 🧰 Features
 - Simple clean UI layout
 - Study group date selection
 - Resetting groups
 - Shuffling and live-updates
+
+ 
+#### Study Groups display
+- Seamless integration with the Google Sheets API
+- Date selection
+- Resetting
+- Shuffling and locking groups
+- Lock display status
+- Bold name cards for visibility
+- UX Guardrails (Only allow shuffling after resetting, confirming to reset if groups are already locked, etc.)
+
+#### Attendance Page
+- Mobile-friendly attendance taking
+- Toggeable bold name cards for those with big fingers🖐️ 
+- Search Functionality 
+- Latecomer mode for stragglers

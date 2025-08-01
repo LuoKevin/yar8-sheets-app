@@ -8,6 +8,9 @@ interface ToggleSwitchProps {
 
 const LatecomerToggle = ({ checked, label, onClick }: ToggleSwitchProps) => {
   return (
+    <motion.div
+    whileTap={{scale: 0.95}}
+    >
     <label className="inline-flex items-center space-x-3 cursor-pointer select-none"
       onClick={onClick}
     >
@@ -39,6 +42,7 @@ const LatecomerToggle = ({ checked, label, onClick }: ToggleSwitchProps) => {
         {checked ? 'Latecomer Mode Active!' : 'Enable Latecomer Mode'}
       </span>
     </label>
+    </motion.div>
   )
 }
 

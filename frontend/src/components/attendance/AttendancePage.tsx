@@ -93,11 +93,6 @@ const AttendancePage = () => {
   )
 }
 
-
-  const toggleLatecomerMode = (b: boolean) => {
-    setLatecomerMode(!b)
-  }
-
   const handleSubmit = () => {
     submitAttendance(
       attDateIndex,

@@ -77,7 +77,7 @@ const SimpleToast = ({ message, type, duration = 3000, onClose }: SimpleToastPro
   useEffect(() => {
     const timer = setTimeout(onClose, duration)
     return () => clearTimeout(timer)
-  }, [duration, onClose])
+  }, [message, type])
 
   return (
     <div
