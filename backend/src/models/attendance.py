@@ -5,3 +5,4 @@ class Attendance(BaseModel):
     index: int
     date:str
     attendance_status: dict[str, bool]
+    latecomer_timestamps: list[str]

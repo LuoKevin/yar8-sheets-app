@@ -3,7 +3,6 @@ from fastapi import HTTPException
 from .client import GoogleSheetsClient
 from ..models.attendance import Attendance
 
-
 # zero-indexed 0 -> A, 1 -> B,
 def _column_to_letter(index: int) -> str:
     result = ""
@@ -13,11 +12,11 @@ def _column_to_letter(index: int) -> str:
         index -= 1  # shift for 0-based offset
     return result
 
-
 class AttendanceClient:
     _ATTENDANCE_SHEET_NAME = "Attendance_Current"
     _NAMES_RANGE = f"{_ATTENDANCE_SHEET_NAME}!E3:E200"
-    _DATES_GRID_RANGE = f"{_ATTENDANCE_SHEET_NAME}!F2:AG200"
+    _ATTENDANCE_GRID_RANGE = f"{_ATTENDANCE_SHEET_NAME}!F2:AG200"
+    _LATECOMER_TIME_COL_RANGE = f"{_ATTENDANCE_SHEET_NAME}!B3:B200"
     _sheets_client = GoogleSheetsClient()
     '''
     1. Get all names and all dates-grid
@@ -27,11 +26,12 @@ class AttendanceClient:
         #List results -> Lists of ranges -> Lists of rows/cols
         results: List[List[List[str]]] = self._sheets_client.read_ranges(
             spreadsheet_id,
-            [self._NAMES_RANGE, self._DATES_GRID_RANGE],
+            [self._NAMES_RANGE, self._ATTENDANCE_GRID_RANGE, self._LATECOMER_TIME_COL_RANGE],
             "COLUMNS"
         )
         names = results[0][0]
         date_cols = results[1]
+        latecomer_times = results[2][0]
         index = next((i for i, col  in enumerate(date_cols) if col[0] == date), None)
         target_col = date_cols[index] if index is not None else None
         if target_col is None:
@@ -44,19 +44,26 @@ class AttendanceClient:
         return Attendance(
             date=date,
             attendance_status=current_attendance,
-            index=index
+            index=index,
+            latecomer_timestamps=latecomer_times
         )
 
-
-    def post_attendance(self, spreadsheet_id: str, index: int, attendance_status: List[bool]):
+    def post_attendance(
+            self,
+            spreadsheet_id: str,
+            index: int,
+            attendance_status: List[bool],
+            attendee_timestamps: List[str]
+    ):
         base_date_index = 5
         date_col_letter = _column_to_letter(base_date_index + index)
         str_attendance_list: List[str] = list(map(lambda x: "TRUE" if x else "FALSE", attendance_status))
-        target_range = f"{self._ATTENDANCE_SHEET_NAME}!{date_col_letter}3:{date_col_letter}200"
-        print(target_range)
-        self._sheets_client.write_range(
-            spreadsheet_id,
-            target_range,
-            [str_attendance_list],
-            major_dimension="COLUMNS"
+        attendance_col_range = f"{self._ATTENDANCE_SHEET_NAME}!{date_col_letter}3:{date_col_letter}200"
+        latecomer_col_range = f"{self._ATTENDANCE_SHEET_NAME}!{self._LATECOMER_TIME_COL_RANGE}"
+
+        self._sheets_client.write_ranges(
+            spreadsheet_id=spreadsheet_id,
+            sheet_cell_ranges=[attendance_col_range, latecomer_col_range],
+            values=[[str_attendance_list], [attendee_timestamps]],
+            major_dimension='COLUMNS'
         )

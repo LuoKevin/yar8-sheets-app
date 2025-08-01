@@ -10,7 +10,6 @@ class GoogleSheetsMacros:
         clear_range = self._sheets_client.clear_range
         write_cell = self._sheets_client.write_cell
 
-
         clear_range(spreadsheet_id, self._GROUPS_SHEET_NAME, "AF3:AH103")
         clear_range(spreadsheet_id, self._ATTENDANCE_SHEET_NAME, "B1:B200")
 

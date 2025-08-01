@@ -47,6 +47,33 @@ class GoogleSheetsClient:
             body=body,
         ).execute()
 
+    def write_ranges(
+        self,
+        spreadsheet_id: str,
+        sheet_cell_ranges: List[str],
+        values: List[List[List[str]]],
+        input_option: str = 'USER_ENTERED',
+        major_dimension: str = 'ROWS',
+    ) -> None:
+        assert len(sheet_cell_ranges) == len(values), "Each range must have corresponding values"
+
+        data = []
+        for range_, value in zip(sheet_cell_ranges, values):
+            data.append({
+                "range": range_,
+                "majorDimension": major_dimension,
+                "values": value,
+            })
+
+        body = {
+            "valueInputOption": input_option,
+            "data": data
+        }
+
+        result = self._service.spreadsheets().values().batchUpdate(
+            spreadsheetId=spreadsheet_id,
+            body=body
+        ).execute()
         # TODO: Add exception handling here
 
     def write_cell(
