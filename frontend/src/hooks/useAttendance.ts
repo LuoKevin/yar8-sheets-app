@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CurrentAttendanceResponse, fetchAttendance } from '../api/sheet'
 import { FetchStatus } from './types'
 
-type Attendee = [string, boolean]
+type Attendee = [string, boolean,]
 
 interface FetchAttendanceResult {
   status: FetchStatus

@@ -64,7 +64,7 @@ class AttendanceClient:
         date_col_letter = _column_to_letter(base_date_index + index)
         str_attendance_list: List[str] = list(map(lambda x: "TRUE" if x else "FALSE", attendance_status))
         attendance_col_range = f"{self._ATTENDANCE_SHEET_NAME}!{date_col_letter}3:{date_col_letter}200"
-        latecomer_col_range = f"{self._ATTENDANCE_SHEET_NAME}!{self._LATECOMER_TIME_COL_RANGE}"
+        latecomer_col_range = self._LATECOMER_TIME_COL_RANGE
 
         self._sheets_client.write_ranges(
             spreadsheet_id=spreadsheet_id,

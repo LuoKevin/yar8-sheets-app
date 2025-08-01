@@ -4,17 +4,18 @@ import LoadingIndicator from '../LoadingIndicator'
 import AttendanceCard from './AttendanceCard'
 import { useAttendance } from '../../hooks/useAttendance'
 import { FetchStatus } from '../../hooks/types'
-import { useDateContext } from '../../context/DateContext'
+import { getFormattedTimestamp, useDateContext } from '../../context/DateContext'
 import DateSelector from '../study/DateSelector'
 import { usePostAttendance } from '../../hooks/usePostAttendance'
 import SimpleToast from '../SimpleToast'
 import { useToast } from '../../hooks/useToast'
 import { useNavigate } from 'react-router-dom'
+import LatecomerToggle from './LatecomerToggle'
 
 interface DisplayedAttendee {
   name: string
   present: boolean
-  lateTime: string | null
+  lateTime: string
 }
 
 const AttendancePage = () => {
@@ -22,14 +23,12 @@ const AttendancePage = () => {
   const [attDateIndex, setAttDateIndex] = useState<number>(-1)
   const [searchTerm, setSearchTerm] = useState('')
   const [hasUnsavedChanges, setHasChanges] = useState(false)
+  const [latecomerMode, setLatecomerMode] = useState(false)
 
   const { fetchAttendance, status: attendanceStatus } = useAttendance()
   const { currentDate, allDates, dateStatus, dateError, setDate } = useDateContext()
   const { submitAttendance } = usePostAttendance()
   const { toastMessage, toastStatus, showToast } = useToast()
-
-  // const shouldBlock = useCallback<BlockerFunction>(() => hasUnsavedChanges,[hasUnsavedChanges] )
-  // const blocker = useBlocker(shouldBlock)
 
   useEffect(() => {
     const asyncAttendance = async () => {
@@ -37,8 +36,8 @@ const AttendancePage = () => {
       const result = await fetchAttendance(currentDate)
 
       if (result.status == FetchStatus.SUCCESS) {
-        const fetchedAttendees = result.attendees.map((tuple) => {
-          return { name: tuple[0], present: tuple[1] } as DisplayedAttendee
+        const fetchedAttendees = result.attendees.map((tuple, i) => {
+          return { name: tuple[0], present: tuple[1], lateTime: result.latecomerTimes[i] } as DisplayedAttendee
         })
         setAttendees(fetchedAttendees)
         setAttDateIndex(result.attDateIndex)
@@ -60,17 +59,49 @@ const AttendancePage = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [hasUnsavedChanges])
 
-  const toggle = (name: string) => {
-    setHasChanges(true)
-    setAttendees((prev) => prev.map((a) => (a.name === name ? { ...a, present: !a.present } : a)))
+ const toggleAttendee = (attendee: DisplayedAttendee) => {
+  if(latecomerMode && attendee.present && attendee.lateTime == "") {
+    showToast("Cannot toggle off present attendees while in Latecomer Mode", 'warning')
+    return
+  }
+  setHasChanges(true)
+  setAttendees((prev) =>
+    prev.map((a) => {
+      if (a.name !== attendee.name) return a
+
+      const wasPresent = a.present
+      const nowPresent = !a.present
+
+      let updatedLateTime = a.lateTime
+
+      if (latecomerMode) {
+        if (!wasPresent && nowPresent) {
+          updatedLateTime = getFormattedTimestamp() // just became present
+        } else if (wasPresent && !nowPresent) {
+          updatedLateTime = "" // just toggled off while in Latecomer Mode
+        }
+      }
+
+      return {
+        ...a,
+        present: nowPresent,
+        lateTime: updatedLateTime,
+      }
+    })
+  )
+}
+
+
+  const toggleLatecomerMode = (b: boolean) => {
+    setLatecomerMode(!b)
   }
 
   const handleSubmit = () => {
     submitAttendance(
       attDateIndex,
-      attendees.map((attendee) => {
-        return attendee.present
-      }),
+      attendees.map((attendee) => attendee.present),
+      attendees.map((attendee) => attendee.lateTime)
+      
     )
       .then((res) => {
         if (res.status == FetchStatus.SUCCESS) {
@@ -110,6 +141,11 @@ const AttendancePage = () => {
             setDate(newDate)
           }}
         />
+
+        <LatecomerToggle checked={latecomerMode} onClick={() => {
+          setLatecomerMode(!latecomerMode)
+        }}/>
+
         <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
 
         <input
@@ -138,7 +174,9 @@ const AttendancePage = () => {
                 key={attendee.name}
                 name={attendee.name}
                 present={attendee.present}
-                onToggle={() => toggle(attendee.name)}
+                lateTime={attendee.lateTime}
+                latecomerMode={latecomerMode}
+                onToggle={() => toggleAttendee(attendee)}
               />
             ))}
         </div>

@@ -8,13 +8,13 @@ interface PostAttendanceResponse {
 }
 
 interface UsePostAttendance {
-  submitAttendance: (index: number, attendanceState: boolean[]) => Promise<PostAttendanceResponse>
+  submitAttendance: (index: number, attendanceState: boolean[], latecomers: string[]) => Promise<PostAttendanceResponse>
 }
 
 export function usePostAttendance(): UsePostAttendance {
-  const submitAttendance = async (index: number, attendanceState: boolean[]) => {
+  const submitAttendance = async (index: number, attendanceState: boolean[], latecomers: string[]) => {
     try {
-      await postAttendance({ index, attendees: attendanceState })
+      await postAttendance({ index, attendees: attendanceState, latecomers })
       return { status: FetchStatus.SUCCESS } as PostAttendanceResponse
     } catch (err) {
       return {

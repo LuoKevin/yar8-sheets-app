@@ -11,7 +11,7 @@ import LoadingIndicator from '../LoadingIndicator'
 import { useToast } from '../../hooks/useToast'
 import SimpleToast from '../SimpleToast'
 import { FetchStatus } from '../../hooks/types'
-import ToggleSwitch from './ToggleSwitch'
+import Toggle from './GroupLockToggle'
 import { useDateContext } from '../../context/DateContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -112,7 +112,7 @@ const StudyGroupsPage = () => {
           <Button disabled={isShuffling || resetLoading} onClick={() => handleShuffle()}>
             Shuffle and Lock
           </Button>
-          <ToggleSwitch checked={groupsLocked} />
+          <Toggle checked={groupsLocked} />
         </div>
         <div className="w-full max-w-lg pb-2 flex items-center justify-start">
           <LoadingText visible={isShuffling} text="Shuffling" />
