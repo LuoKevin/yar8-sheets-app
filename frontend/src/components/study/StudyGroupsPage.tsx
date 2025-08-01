@@ -14,8 +14,10 @@ import { FetchStatus } from '../../hooks/types'
 import Toggle from './GroupLockToggle'
 import { useDateContext } from '../../context/DateContext'
 import { useNavigate } from 'react-router-dom'
+import { usePageContext } from '../../context/PageContext'
 
 const StudyGroupsPage = () => {
+  const { page, setPage } = usePageContext()
   const { toastMessage, toastStatus, showToast } = useToast()
   const { currentDate, allDates, dateStatus, dateError, setDate } = useDateContext()
   const {
@@ -58,6 +60,7 @@ const StudyGroupsPage = () => {
     }
     resetGroups()
       .then(() => {
+        setPage('groups')
         setFirstReset(true)
         fetchGroups()
       })
@@ -76,27 +79,34 @@ const StudyGroupsPage = () => {
       return
     }
     try {
+      setPage('shuffling')
       const result = await startShuffle()
 
       if (result.responseStatus == FetchStatus.ERROR) {
         showToast(`Shuffling failed. Reason: ${result.error}`, 'error')
       } else {
+        setPage('locked')
         showToast('Shuffling successful!', 'success')
       }
 
       await fetchGroups()
     } catch (err) {
       showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
+      setPage('groups')
+    } finally {
     }
   }
 
   useEffect(() => {
     fetchGroups()
+    if(groupsLocked) setPage('locked')
+   else setPage('groups')
   }, [])
 
   const navigate = useNavigate()
   const handleNavigate = () => {
     navigate('/attendance', { replace: true })
+    setPage('attendance')
   }
 
   return (

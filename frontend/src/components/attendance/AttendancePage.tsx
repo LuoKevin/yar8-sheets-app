@@ -11,6 +11,7 @@ import SimpleToast from '../SimpleToast'
 import { useToast } from '../../hooks/useToast'
 import { useNavigate } from 'react-router-dom'
 import LatecomerToggle from './LatecomerToggle'
+import { usePageContext } from '../../context/PageContext'
 
 interface DisplayedAttendee {
   name: string
@@ -19,6 +20,7 @@ interface DisplayedAttendee {
 }
 
 const AttendancePage = () => {
+  const {page, setPage} = usePageContext()
   const [attendees, setAttendees] = useState<DisplayedAttendee[]>([])
   const [attDateIndex, setAttDateIndex] = useState<number>(-1)
   const [searchTerm, setSearchTerm] = useState('')
@@ -143,7 +145,13 @@ const AttendancePage = () => {
         />
 
         <LatecomerToggle checked={latecomerMode} onClick={() => {
+          if(!latecomerMode) {
+            setPage('latecoming')
+          } else {
+            setPage('attendance')
+          }
           setLatecomerMode(!latecomerMode)
+          
         }}/>
 
         <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>

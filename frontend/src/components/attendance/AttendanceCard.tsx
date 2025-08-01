@@ -10,7 +10,6 @@ interface AttendanceCardProps {
 
 const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
 
-
 const AttendanceCard = ({ name, present, lateTime, latecomerMode, onToggle }: AttendanceCardProps) => {
   const cardVariants: Variants = {
     rest: {
