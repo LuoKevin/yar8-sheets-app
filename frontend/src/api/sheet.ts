@@ -1,5 +1,5 @@
 import api from './client'
-import type { paths, components } from './openapi.types'
+import type { components } from './openapi.types'
 
 export type StudyGroupResponse = components['schemas']['StudyGroupResponse']
 export type StudyGroup = components['schemas']['StudyGroup']
@@ -9,13 +9,11 @@ export type CurrentAttendanceResponse = components['schemas']['CurrentAttendance
 export type PostAttendanceRequest = components['schemas']['PostAttendanceRequest']
 
 export function fetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
-  return api
-    .get<StudyGroupResponse>('/sheets/study-group-data')
-    .then((value) => {
-      const groups = value.data.groups as StudyGroup[]
-      const locked = value.data.locked
-      return [groups, locked]
-    })
+  return api.get<StudyGroupResponse>('/sheets/study-group-data').then((value) => {
+    const groups = value.data.groups as StudyGroup[]
+    const locked = value.data.locked
+    return [groups, locked]
+  })
 }
 
 export function postActiveStudyDate(activeDate: string): Promise<DateModel> {
@@ -35,8 +33,7 @@ export function shuffleAndLock(): Promise<void> {
 }
 
 export function fetchAttendance(date: string): Promise<CurrentAttendanceResponse> {
-  return api.get('/sheets/attendance', { params:{date} })
-  .then((res) => res.data)
+  return api.get('/sheets/attendance', { params: { date } }).then((res) => res.data)
 }
 
 export function postAttendance(request: PostAttendanceRequest): Promise<void> {

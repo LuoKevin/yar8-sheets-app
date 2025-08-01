@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '../Button'
 import LoadingIndicator from '../LoadingIndicator'
 import AttendanceCard from './AttendanceCard'
@@ -9,7 +9,7 @@ import DateSelector from '../study/DateSelector'
 import { usePostAttendance } from '../../hooks/usePostAttendance'
 import SimpleToast from '../SimpleToast'
 import { useToast } from '../../hooks/useToast'
-import { BlockerFunction, useBlocker, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 interface DisplayedAttendee {
   name: string
@@ -22,35 +22,35 @@ const AttendancePage = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [hasUnsavedChanges, setHasChanges] = useState(false)
 
-  const {fetchAttendance, status: attendanceStatus} = useAttendance()
-  const {currentDate, allDates, dateStatus, dateError, setDate} = useDateContext()
+  const { fetchAttendance, status: attendanceStatus } = useAttendance()
+  const { currentDate, allDates, dateStatus, dateError, setDate } = useDateContext()
   const { submitAttendance } = usePostAttendance()
   const { toastMessage, toastStatus, showToast } = useToast()
 
   // const shouldBlock = useCallback<BlockerFunction>(() => hasUnsavedChanges,[hasUnsavedChanges] )
   // const blocker = useBlocker(shouldBlock)
-  
-  useEffect((() => {
+
+  useEffect(() => {
     const asyncAttendance = async () => {
-      if(currentDate=="") return
+      if (currentDate == '') return
       const result = await fetchAttendance(currentDate)
 
-      if(result.status == FetchStatus.SUCCESS) {
+      if (result.status == FetchStatus.SUCCESS) {
         const fetchedAttendees = result.attendees.map((tuple) => {
-          return {name:tuple[0], present: tuple[1]} as DisplayedAttendee
+          return { name: tuple[0], present: tuple[1] } as DisplayedAttendee
         })
         setAttendees(fetchedAttendees)
         setAttDateIndex(result.attDateIndex)
         setHasChanges(false)
       } else {
-        showToast(`Error: Unable to fetch attendees for:${result.error || ""}`, FetchStatus.ERROR)
+        showToast(`Error: Unable to fetch attendees for:${result.error || ''}`, FetchStatus.ERROR)
       }
     }
     asyncAttendance()
-  }),[currentDate])
+  }, [currentDate])
 
   useEffect(() => {
-     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges) {
         e.preventDefault()
       }
@@ -61,87 +61,86 @@ const AttendancePage = () => {
 
   const toggle = (name: string) => {
     setHasChanges(true)
-    setAttendees((prev) =>
-    prev.map((a) =>
-      a.name === name ? { ...a, present: !a.present } : a
-    )
-  )
+    setAttendees((prev) => prev.map((a) => (a.name === name ? { ...a, present: !a.present } : a)))
   }
 
   const handleSubmit = () => {
-    submitAttendance(attDateIndex, attendees.map((attendee) => {return attendee.present}))
-    .then((res) => {
-      if (res.status == FetchStatus.SUCCESS) {
-        showToast("Successfully updated attendance", FetchStatus.SUCCESS)
-        setHasChanges(false)
-      }
-    })
-    .catch((err) => {
-      showToast(`Error in updating attendance. Reason:${err.message || "Unknown"}`, FetchStatus.ERROR)
-    })
+    submitAttendance(
+      attDateIndex,
+      attendees.map((attendee) => {
+        return attendee.present
+      }),
+    )
+      .then((res) => {
+        if (res.status == FetchStatus.SUCCESS) {
+          showToast('Successfully updated attendance', FetchStatus.SUCCESS)
+          setHasChanges(false)
+        }
+      })
+      .catch((err) => {
+        showToast(
+          `Error in updating attendance. Reason:${err.message || 'Unknown'}`,
+          FetchStatus.ERROR,
+        )
+      })
   }
 
   const navigate = useNavigate()
 
   const handleNavigate = () => {
- if (hasUnsavedChanges) {
-    const confirmLeave = window.confirm(
-      'Unsaved changes, navigate anyway?'
-    )
-    if (!confirmLeave) return
-  }
-    navigate("/", {replace:true})
+    if (hasUnsavedChanges) {
+      const confirmLeave = window.confirm('Unsaved changes, navigate anyway?')
+      if (!confirmLeave) return
+    }
+    navigate('/', { replace: true })
   }
 
   return (
     <div className="min-h-screen w-screen overflow-x-visible px-2 sm:px-4">
-      <LoadingIndicator isLoading={dateStatus==FetchStatus.LOADING||attendanceStatus==FetchStatus.LOADING} />
+      <LoadingIndicator
+        isLoading={dateStatus == FetchStatus.LOADING || attendanceStatus == FetchStatus.LOADING}
+      />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
-
         <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Take Attendance</h1>
-        <DateSelector dates={allDates} initialDate={currentDate} onSelect={(newDate) =>{setDate(newDate)}} />
-          <Button onClick={() => handleNavigate()}>
-            Study Groups Page ➡️
-            </Button>
+        <DateSelector
+          dates={allDates}
+          initialDate={currentDate}
+          onSelect={(newDate) => {
+            setDate(newDate)
+          }}
+        />
+        <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
 
         <input
-  type="text"
-  placeholder="Search by name..."
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  className="w-full max-w-md p-2 rounded-md border border-gray-300 bg-white shadow focus:outline-none focus:ring-2 focus:ring-blue-400"
-/>
-
-        
-       {toastMessage && (<div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
-        <SimpleToast 
-          message={toastMessage}
-          type={toastStatus}
-          onClose={() => showToast('')}
+          type="text"
+          placeholder="Search by name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full max-w-md p-2 rounded-md border border-gray-300 bg-white shadow focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-      </div>)}
 
-        <Button
-          className="fixed bottom-4 right-4 z-50 shadow-lg  "
-          onClick={handleSubmit}
-        >
+        {toastMessage && (
+          <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+            <SimpleToast message={toastMessage} type={toastStatus} onClose={() => showToast('')} />
+          </div>
+        )}
+
+        <Button className="fixed bottom-4 right-4 z-50 shadow-lg  " onClick={handleSubmit}>
           Submit Attendance
         </Button>
 
         <div className="w-full max-w-3xl flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {attendees.filter((a) =>
-              a.name.toLowerCase().includes(searchTerm.toLowerCase())
-           )
-          .map((attendee) => (
-            <AttendanceCard
-              key={attendee.name}
-              name={attendee.name}
-              present={attendee.present}
-              onToggle={() => toggle(attendee.name)}
-            />
-          ))}
+          {attendees
+            .filter((a) => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            .map((attendee) => (
+              <AttendanceCard
+                key={attendee.name}
+                name={attendee.name}
+                present={attendee.present}
+                onToggle={() => toggle(attendee.name)}
+              />
+            ))}
         </div>
-
       </div>
     </div>
   )

@@ -19,10 +19,10 @@ export function useStudyDatesData(): StudyDatesData {
     setError(null)
 
     fetchStudyDates()
-      .then((res) =>{
-         setDates(res)
-          context.setDate(res.activeDate)
-        })
+      .then((res) => {
+        setDates(res)
+        context.setDate(res.activeDate)
+      })
       .catch((err) => setError(err.message || 'Unknown error'))
       .finally(() => setLoading(false))
   }, [])

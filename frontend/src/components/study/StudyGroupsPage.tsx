@@ -1,8 +1,6 @@
 import StudyGroupGrid from './StudyGroupGrid'
 import { useStudyGroupData } from '../../hooks/useStudyGroupData'
-import GradientBackground from '../GradientBackground'
 import DateSelector from './DateSelector'
-import { useStudyDatesData } from '../../hooks/useStudyDatesData'
 import { useEffect, useState } from 'react'
 import { Button } from '../Button'
 import { usePostResetGroups } from '../../hooks/usePostReset'
@@ -19,9 +17,16 @@ import { useNavigate } from 'react-router-dom'
 
 const StudyGroupsPage = () => {
   const { toastMessage, toastStatus, showToast } = useToast()
-  const {currentDate, allDates, dateStatus, dateError, setDate} = useDateContext()
-  const { fetchGroups, groups, groupsLoading, groupsError, locked: groupsLocked, manualSetGroups, scrambleGroups } =
-    useStudyGroupData(currentDate)
+  const { currentDate, allDates, dateStatus, dateError, setDate } = useDateContext()
+  const {
+    fetchGroups,
+    groups,
+    groupsLoading,
+    groupsError,
+    locked: groupsLocked,
+    manualSetGroups,
+    scrambleGroups,
+  } = useStudyGroupData(currentDate)
   const { resetGroups, resetSuccess, resetLoading, resetError } = usePostResetGroups()
   const {
     status: shuffleStatus,
@@ -45,10 +50,9 @@ const StudyGroupsPage = () => {
     setFirstReset(false)
   }
 
-  
   const handleResetGroups = () => {
-    if(resetWarning && groupsLocked) {
-      showToast("Groups are currently locked. Are you sure?", 'warning')
+    if (resetWarning && groupsLocked) {
+      showToast('Groups are currently locked. Are you sure?', 'warning')
       setResetWarning(false)
       return
     }
@@ -67,19 +71,19 @@ const StudyGroupsPage = () => {
   }
 
   const handleShuffle = async () => {
-    if(groupsLocked || !firstReset) {
-      showToast("Reset groups before shuffling!", 'error')
+    if (groupsLocked || !firstReset) {
+      showToast('Reset groups before shuffling!', 'error')
       return
     }
     try {
       const result = await startShuffle()
 
-        if (result.responseStatus == FetchStatus.ERROR) {
-          showToast(`Shuffling failed. Reason: ${result.error}`, 'error')
-        } else {
-          showToast('Shuffling successful!', 'success')
-        }
-      
+      if (result.responseStatus == FetchStatus.ERROR) {
+        showToast(`Shuffling failed. Reason: ${result.error}`, 'error')
+      } else {
+        showToast('Shuffling successful!', 'success')
+      }
+
       await fetchGroups()
     } catch (err) {
       showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
@@ -89,10 +93,10 @@ const StudyGroupsPage = () => {
   useEffect(() => {
     fetchGroups()
   }, [])
-  
+
   const navigate = useNavigate()
   const handleNavigate = () => {
-    navigate("/attendance", {replace: true})
+    navigate('/attendance', { replace: true })
   }
 
   return (
@@ -100,9 +104,7 @@ const StudyGroupsPage = () => {
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <LoadingIndicator isLoading={dateStatus == FetchStatus.LOADING} />
         <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
-          <Button onClick={() => handleNavigate()}>
-           ⬅️ Take Attendance
-            </Button>
+          <Button onClick={() => handleNavigate()}>⬅️ Take Attendance</Button>
           <DateSelector dates={allDates} initialDate={currentDate} onSelect={handleDateSelect} />
           <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>
             Reset Groups
@@ -110,7 +112,7 @@ const StudyGroupsPage = () => {
           <Button disabled={isShuffling || resetLoading} onClick={() => handleShuffle()}>
             Shuffle and Lock
           </Button>
-          <ToggleSwitch checked={groupsLocked}/>
+          <ToggleSwitch checked={groupsLocked} />
         </div>
         <div className="w-full max-w-lg pb-2 flex items-center justify-start">
           <LoadingText visible={isShuffling} text="Shuffling" />

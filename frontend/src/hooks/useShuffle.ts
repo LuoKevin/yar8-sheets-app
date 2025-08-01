@@ -1,5 +1,5 @@
 // src/hooks/useLongTask.ts
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useState } from 'react'
 import { shuffleAndLock, StudyGroup } from '../api/sheet'
 import { FetchStatus } from './types'
 
@@ -29,17 +29,18 @@ export function useShuffle(
     setIsShuffling(true)
     setStatus(FetchStatus.LOADING)
     setError('')
-      try {
-        await shuffleAndLock()
-        return {responseStatus: FetchStatus.SUCCESS, error: ""} as ShuffleResult
-      } catch(err) {
-        return {responseStatus: FetchStatus.ERROR, error : err.message || "Unknown error"} as ShuffleResult
-      } finally {
-        setIsShuffling(false)
-        clearInterval(intervalId)
-      }
-      
-    
+    try {
+      await shuffleAndLock()
+      return { responseStatus: FetchStatus.SUCCESS, error: '' } as ShuffleResult
+    } catch (err) {
+      return {
+        responseStatus: FetchStatus.ERROR,
+        error: err.message || 'Unknown error',
+      } as ShuffleResult
+    } finally {
+      setIsShuffling(false)
+      clearInterval(intervalId)
+    }
   }
 
   return { status, shufflingError: error, isShuffling, startShuffle }

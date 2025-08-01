@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import type { StudyGroup, StudyGroupResponse } from '../api/sheet'
+import { useState } from 'react'
+import type { StudyGroup } from '../api/sheet'
 import { fetchStudyGroupData } from '../api/sheet'
 
 interface StudyGroupData {
@@ -85,7 +85,6 @@ export function useStudyGroupData(date: string): StudyGroupData {
       await fetchStudyGroupData().then(([groups, locked]) => {
         setGroups(groups)
         setLocked(locked)
-        
       })
     } catch (err) {
       setError(err.message || 'Unknown error')

@@ -24,16 +24,16 @@ const ToggleSwitch = ({ checked, label }: ToggleSwitchProps) => {
           }}
         />
       </div>
-        <span
+      <span
         className={`text-lg font-extrabold transition-colors duration-300 ${
-            checked ? 'text-red-600' : 'text-gray-600'
+          checked ? 'text-red-600' : 'text-gray-600'
         }`}
         style={{
-            textShadow: '2px 2px 3px rgba(0, 0, 0, 0.5)',
+          textShadow: '2px 2px 3px rgba(0, 0, 0, 0.5)',
         }}
-        >
-        {checked ? "GROUPS LOCKED" : "Groups unlocked"}
-        </span>
+      >
+        {checked ? 'GROUPS LOCKED' : 'Groups unlocked'}
+      </span>
     </label>
   )
 }
