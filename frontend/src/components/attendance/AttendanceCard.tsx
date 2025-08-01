@@ -6,6 +6,9 @@ interface AttendanceCardProps {
   onToggle: () => void
 }
 
+const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
+
+
 const AttendanceCard = ({ name, present, onToggle }: AttendanceCardProps) => {
   const cardVariants: Variants = {
     rest: {
@@ -36,7 +39,8 @@ const AttendanceCard = ({ name, present, onToggle }: AttendanceCardProps) => {
     <motion.div
       variants={cardVariants}
       initial="rest"
-      whileHover="hover"
+      whileHover={isTouchDevice ? undefined : "hover"}
+      whileTap={{ scale: 0.97 }}
       className="w-full max-w-xs sm:max-w-sm h-24 sm:h-28 md:h-32 perspective-1000 origin-center"
     >
       <motion.div
