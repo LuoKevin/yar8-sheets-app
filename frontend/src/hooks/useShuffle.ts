@@ -25,7 +25,7 @@ export function useShuffle(
   const [error, setError] = useState('')
 
   const startShuffle = async (): Promise<ShuffleResult> => {
-    const intervalId = window.setInterval(onShuffle, 500)
+    const intervalId = window.setInterval(onShuffle, 1000)
     setIsShuffling(true)
     setStatus(FetchStatus.LOADING)
     setError('')

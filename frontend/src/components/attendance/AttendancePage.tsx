@@ -3,7 +3,7 @@ import { Button } from '../Button'
 import LoadingIndicator from '../LoadingIndicator'
 import AttendanceCard from './AttendanceCard'
 import { useAttendance } from '../../hooks/useAttendance'
-import { FetchStatus } from '../../hooks/types'
+import { AttendeeFilter, FetchStatus } from '../../hooks/types'
 import { getFormattedTimestamp, useDateContext } from '../../context/DateContext'
 import DateSelector from '../study/DateSelector'
 import { usePostAttendance } from '../../hooks/usePostAttendance'
@@ -12,12 +12,14 @@ import { useToast } from '../../hooks/useToast'
 import { useNavigate } from 'react-router-dom'
 import LatecomerToggle from './LatecomerToggle'
 import { usePageContext } from '../../context/PageContext'
+import ToggleCheckbox from '../ToggleCheckbox'
 
 interface DisplayedAttendee {
   name: string
   present: boolean
   lateTime: string
 }
+
 
 const AttendancePage = () => {
   const {page, setPage} = usePageContext()
@@ -26,6 +28,7 @@ const AttendancePage = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [hasUnsavedChanges, setHasChanges] = useState(false)
   const [latecomerMode, setLatecomerMode] = useState(false)
+  const [filterMode, setFilterMode] = useState<AttendeeFilter>('all')
 
   const { fetchAttendance, status: attendanceStatus } = useAttendance()
   const { currentDate, allDates, dateStatus, dateError, setDate } = useDateContext()
@@ -138,6 +141,34 @@ const AttendancePage = () => {
             setDate(newDate)
           }}
         />
+
+
+        <ToggleCheckbox 
+        label="Filter only present"
+        checked={filterMode == 'only-present'} 
+        onClick={ () => {
+          if(filterMode == 'only-present') {
+            setFilterMode('all')
+          } else {
+            setFilterMode('only-present')
+          }
+        } } 
+        color={"bg-green-500"} 
+        />
+
+         <ToggleCheckbox 
+        label="Filter only absent"
+        checked={filterMode == 'only-absent'} 
+        onClick={ () => {
+          if(filterMode == 'only-absent') {
+            setFilterMode('all')
+          } else {
+            setFilterMode('only-absent')
+          }
+        } } 
+        color={"bg-red-500"} 
+        />
+
 
         <LatecomerToggle checked={latecomerMode} onClick={() => {
           if(!latecomerMode) {

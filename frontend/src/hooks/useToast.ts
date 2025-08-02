@@ -1,6 +1,5 @@
-import { use, useRef, useState } from 'react'
-
-export type ToastType = 'success' | 'error' | 'warning' | 'info'
+import { useRef, useState } from 'react'
+import { ToastType } from './types'
 
 export const useToast = () => {
   const [toastMessage, setToastMessage] = useState<string>('') // Just stores the message string
