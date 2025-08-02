@@ -48,7 +48,6 @@ export const useDateContext = (): DateData => {
   return context
 }
 
-
 export function getFormattedTimestamp(): string {
   const now = new Date()
 

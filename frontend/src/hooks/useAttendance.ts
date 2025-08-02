@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CurrentAttendanceResponse, fetchAttendance } from '../api/sheet'
 import { FetchStatus } from './types'
 
-type Attendee = [string, boolean,]
+type Attendee = [string, boolean]
 
 interface FetchAttendanceResult {
   status: FetchStatus
@@ -30,7 +30,7 @@ export function useAttendance(): UseAttendanceProps {
         error: '',
         attendees: result.attendees.map((a) => [a[0], a[1]]),
         attDateIndex: result.index,
-        latecomerTimes: result.latecomers
+        latecomerTimes: result.latecomers,
       } as FetchAttendanceResult
     } catch (err) {
       setStatus
@@ -39,7 +39,7 @@ export function useAttendance(): UseAttendanceProps {
         error: err.message || 'Unknown error',
         attendees: [],
         attDateIndex: -1,
-        latecomerTimes: []
+        latecomerTimes: [],
       } as FetchAttendanceResult
     } finally {
     }

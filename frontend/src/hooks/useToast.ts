@@ -8,7 +8,7 @@ export const useToast = () => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const showToast = (message: string, type: ToastType = 'info', duration = 3000) => {
-    if(timeoutRef.current) {
+    if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
     setToastMessage(message)

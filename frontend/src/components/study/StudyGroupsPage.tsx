@@ -84,8 +84,9 @@ const StudyGroupsPage = () => {
 
       if (result.responseStatus == FetchStatus.ERROR) {
         showToast(`Shuffling failed. Reason: ${result.error}`, 'error')
-      } else {
         setPage('groups')
+      } else {
+        setPage('locked')
         setFirstReset(false)
         setResetWarning(true)
         showToast('Shuffling successful!', 'success')
@@ -101,9 +102,12 @@ const StudyGroupsPage = () => {
 
   useEffect(() => {
     fetchGroups()
-    if(groupsLocked) setPage('locked')
-   else setPage('groups')
   }, [])
+
+  useEffect(() => {
+    if (groupsLocked) setPage('locked')
+    else setPage('groups')
+  }, [groupsLocked])
 
   const navigate = useNavigate()
   const handleNavigate = () => {

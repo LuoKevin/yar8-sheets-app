@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import { Button } from '../Button'
 import LoadingIndicator from '../LoadingIndicator'
 import AttendanceCard from './AttendanceCard'
@@ -20,9 +21,8 @@ interface DisplayedAttendee {
   lateTime: string
 }
 
-
 const AttendancePage = () => {
-  const {page, setPage} = usePageContext()
+  const { page, setPage } = usePageContext()
   const [attendees, setAttendees] = useState<DisplayedAttendee[]>([])
   const [attDateIndex, setAttDateIndex] = useState<number>(-1)
   const [searchTerm, setSearchTerm] = useState('')
@@ -42,7 +42,11 @@ const AttendancePage = () => {
 
       if (result.status == FetchStatus.SUCCESS) {
         const fetchedAttendees = result.attendees.map((tuple, i) => {
-          return { name: tuple[0], present: tuple[1], lateTime: result.latecomerTimes[i] } as DisplayedAttendee
+          return {
+            name: tuple[0],
+            present: tuple[1],
+            lateTime: result.latecomerTimes[i],
+          } as DisplayedAttendee
         })
         setAttendees(fetchedAttendees)
         setAttDateIndex(result.attDateIndex)
@@ -64,44 +68,43 @@ const AttendancePage = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [hasUnsavedChanges])
 
- const toggleAttendee = (attendee: DisplayedAttendee) => {
-  if(latecomerMode && attendee.present && attendee.lateTime == "") {
-    showToast("Cannot toggle off present attendees while in Latecomer Mode", 'warning')
-    return
-  }
-  setHasChanges(true)
-  setAttendees((prev) =>
-    prev.map((a) => {
-      if (a.name !== attendee.name) return a
+  const toggleAttendee = (attendee: DisplayedAttendee) => {
+    if (latecomerMode && attendee.present && attendee.lateTime == '') {
+      showToast('Cannot toggle off present attendees while in Latecomer Mode', 'warning')
+      return
+    }
+    setHasChanges(true)
+    setAttendees((prev) =>
+      prev.map((a) => {
+        if (a.name !== attendee.name) return a
 
-      const wasPresent = a.present
-      const nowPresent = !a.present
+        const wasPresent = a.present
+        const nowPresent = !a.present
 
-      let updatedLateTime = a.lateTime
+        let updatedLateTime = a.lateTime
 
-      if (latecomerMode) {
-        if (!wasPresent && nowPresent) {
-          updatedLateTime = getFormattedTimestamp() // just became present
-        } else if (wasPresent && !nowPresent) {
-          updatedLateTime = "" // just toggled off while in Latecomer Mode
+        if (latecomerMode) {
+          if (!wasPresent && nowPresent) {
+            updatedLateTime = getFormattedTimestamp() // just became present
+          } else if (wasPresent && !nowPresent) {
+            updatedLateTime = '' // just toggled off while in Latecomer Mode
+          }
         }
-      }
 
-      return {
-        ...a,
-        present: nowPresent,
-        lateTime: updatedLateTime,
-      }
-    })
-  )
-}
+        return {
+          ...a,
+          present: nowPresent,
+          lateTime: updatedLateTime,
+        }
+      }),
+    )
+  }
 
   const handleSubmit = () => {
     submitAttendance(
       attDateIndex,
       attendees.map((attendee) => attendee.present),
-      attendees.map((attendee) => attendee.lateTime)
-      
+      attendees.map((attendee) => attendee.lateTime),
     )
       .then((res) => {
         if (res.status == FetchStatus.SUCCESS) {
@@ -124,6 +127,7 @@ const AttendancePage = () => {
       const confirmLeave = window.confirm('Unsaved changes, navigate anyway?')
       if (!confirmLeave) return
     }
+    setPage('groups')
     navigate('/', { replace: true })
   }
 
@@ -142,43 +146,43 @@ const AttendancePage = () => {
           }}
         />
 
-
-        <ToggleCheckbox 
-        label="Filter only present"
-        checked={filterMode == 'only-present'} 
-        onClick={ () => {
-          if(filterMode == 'only-present') {
-            setFilterMode('all')
-          } else {
-            setFilterMode('only-present')
-          }
-        } } 
-        color={"bg-green-500"} 
+        <ToggleCheckbox
+          label="Filter only present"
+          checked={filterMode == 'only-present'}
+          onClick={() => {
+            if (filterMode == 'only-present') {
+              setFilterMode('all')
+            } else {
+              setFilterMode('only-present')
+            }
+          }}
+          color={'bg-green-500'}
         />
 
-         <ToggleCheckbox 
-        label="Filter only absent"
-        checked={filterMode == 'only-absent'} 
-        onClick={ () => {
-          if(filterMode == 'only-absent') {
-            setFilterMode('all')
-          } else {
-            setFilterMode('only-absent')
-          }
-        } } 
-        color={"bg-red-500"} 
+        <ToggleCheckbox
+          label="Filter only absent"
+          checked={filterMode == 'only-absent'}
+          onClick={() => {
+            if (filterMode == 'only-absent') {
+              setFilterMode('all')
+            } else {
+              setFilterMode('only-absent')
+            }
+          }}
+          color={'bg-red-500'}
         />
 
-
-        <LatecomerToggle checked={latecomerMode} onClick={() => {
-          if(!latecomerMode) {
-            setPage('latecoming')
-          } else {
-            setPage('attendance')
-          }
-          setLatecomerMode(!latecomerMode)
-          
-        }}/>
+        <LatecomerToggle
+          checked={latecomerMode}
+          onClick={() => {
+            if (!latecomerMode) {
+              setPage('latecoming')
+            } else {
+              setPage('attendance')
+            }
+            setLatecomerMode(!latecomerMode)
+          }}
+        />
 
         <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
 
@@ -204,21 +208,32 @@ const AttendancePage = () => {
           {attendees
             .filter((a) => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
             .filter((a) => {
-              switch(filterMode) {
-               case 'only-present' : return a.present
-               case 'only-absent'  : return !a.present
-               default : return true
+              switch (filterMode) {
+                case 'only-present':
+                  return a.present
+                case 'only-absent':
+                  return !a.present
+                default:
+                  return true
               }
             })
             .map((attendee) => (
-              <AttendanceCard
+              <motion.div
                 key={attendee.name}
-                name={attendee.name}
-                present={attendee.present}
-                lateTime={attendee.lateTime}
-                latecomerMode={latecomerMode}
-                onToggle={() => toggleAttendee(attendee)}
-              />
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.25 }}
+              >
+                <AttendanceCard
+                  name={attendee.name}
+                  present={attendee.present}
+                  lateTime={attendee.lateTime}
+                  latecomerMode={latecomerMode}
+                  onToggle={() => toggleAttendee(attendee)}
+                />
+              </motion.div>
             ))}
         </div>
       </div>

@@ -12,11 +12,7 @@ const PageContext = createContext<PageContextType | undefined>(undefined)
 export const PageProvider = ({ children }: { children: ReactNode }) => {
   const [page, setPage] = useState<Page>('groups')
 
-  return (
-    <PageContext.Provider value={{ page, setPage }}>
-      {children}
-    </PageContext.Provider>
-  )
+  return <PageContext.Provider value={{ page, setPage }}>{children}</PageContext.Provider>
 }
 
 export const usePageContext = () => {

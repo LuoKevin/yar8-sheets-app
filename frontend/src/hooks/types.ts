@@ -5,7 +5,6 @@ export type ToastType = 'success' | 'error' | 'warning' | 'info'
 
 export type AttendeeFilter = 'all' | 'only-present' | 'only-absent'
 
-
 export enum FetchStatus {
   IDLE = 'idle',
   LOADING = 'loading',

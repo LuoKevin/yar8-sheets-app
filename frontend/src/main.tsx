@@ -9,44 +9,51 @@ import { PageProvider } from './context/PageContext'
 import GradientBackground from './components/GradientBackground'
 
 const attendanceTranVars = {
-  initial: { x: '-100%', opacity: 0 },     // ⬅️ Start off-screen to the left
-  animate: { x: 0, opacity: 1 },           // ⬆️ Animate into view
-  exit: { x: '-100vw', opacity: 0 },       // ⬅️ Slide back out to the left
+  initial: { x: '-100%', opacity: 0 }, // ⬅️ Start off-screen to the left
+  animate: { x: 0, opacity: 1 }, // ⬆️ Animate into view
+  exit: { x: '-100vw', opacity: 0 }, // ⬅️ Slide back out to the left
   transition: { type: 'tween', duration: 0.4 },
 }
 
 const studyTranVars = {
-  initial: { x: '100%', opacity: 0 },     // 👉 Start off-screen to the right
-  animate: { x: 0, opacity: 1 },          // ⬅️ Animate into center
-  exit: { x: '100vw', opacity: 0 },       // 👉 Slide out to the right
+  initial: { x: '100%', opacity: 0 }, // 👉 Start off-screen to the right
+  animate: { x: 0, opacity: 1 }, // ⬅️ Animate into center
+  exit: { x: '100vw', opacity: 0 }, // 👉 Slide out to the right
   transition: { type: 'tween', duration: 0.4 },
 }
 
-const Root = () =>{ 
+const Root = () => {
   const location = useLocation()
   return (
-  <DateProvider>
-    <PageProvider>
-            <GradientBackground /> {/* ✅ This stays mounted across routes */}
+    <DateProvider>
+      <PageProvider>
+        <GradientBackground /> {/* ✅ This stays mounted across routes */}
         <AnimatePresence mode="wait">
-    <Routes location={location} key={location.pathname}>
-      <Route path="/" element={<BackgroundLayout />}>
-        <Route index element={
-                    <PageTransitionWrapper variants={studyTranVars}>
-          <StudyGroupsPage />
-                    </PageTransitionWrapper>
-          } />
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<BackgroundLayout />}>
+              <Route
+                index
+                element={
+                  <PageTransitionWrapper variants={studyTranVars}>
+                    <StudyGroupsPage />
+                  </PageTransitionWrapper>
+                }
+              />
 
-        <Route path="/attendance" element={
-          <PageTransitionWrapper variants={attendanceTranVars}>
-          <AttendancePage />
-          </PageTransitionWrapper>
-          } />
-      </Route>
-    </Routes>
-    </AnimatePresence>
-    </PageProvider>
-  </DateProvider>
-)}
+              <Route
+                path="/attendance"
+                element={
+                  <PageTransitionWrapper variants={attendanceTranVars}>
+                    <AttendancePage />
+                  </PageTransitionWrapper>
+                }
+              />
+            </Route>
+          </Routes>
+        </AnimatePresence>
+      </PageProvider>
+    </DateProvider>
+  )
+}
 
 export default Root
