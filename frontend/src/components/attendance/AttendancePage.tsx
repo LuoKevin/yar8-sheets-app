@@ -203,6 +203,13 @@ const AttendancePage = () => {
         <div className="w-full max-w-3xl flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           {attendees
             .filter((a) => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
+            .filter((a) => {
+              switch(filterMode) {
+               case 'only-present' : return a.present
+               case 'only-absent'  : return !a.present
+               default : return true
+              }
+            })
             .map((attendee) => (
               <AttendanceCard
                 key={attendee.name}
