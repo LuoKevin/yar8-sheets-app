@@ -1,3 +1,5 @@
+import time
+
 from .client import GoogleSheetsClient
 
 class GoogleSheetsMacros:
@@ -7,16 +9,19 @@ class GoogleSheetsMacros:
     _shuffle_bool= True
 
     def reset(self, spreadsheet_id: str):
-        clear_range = self._sheets_client.clear_range
-        write_cell = self._sheets_client.write_cell
+        locked_copy_range = f"{self._GROUPS_SHEET_NAME}!AF3:AH103"
+        late_col_range = f"{self._ATTENDANCE_SHEET_NAME}!B1:B200"
+        new_girl_range = f"{self._ATTENDANCE_SHEET_NAME}!AI3:AI136"
+        lock_cell =f"{self._GROUPS_SHEET_NAME}!M1"
 
-        clear_range(spreadsheet_id, self._GROUPS_SHEET_NAME, "AF3:AH103")
-        clear_range(spreadsheet_id, self._ATTENDANCE_SHEET_NAME, "B1:B200")
+        self._sheets_client.clear_ranges(spreadsheet_id, [locked_copy_range, late_col_range])
 
-        write_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!M1", "FALSE")
-        write_cell(spreadsheet_id, f"{self._ATTENDANCE_SHEET_NAME}!AI3:AI136", "FALSE")
-
-        clear_range(spreadsheet_id, self._GROUPS_SHEET_NAME, "B1:B200")
+        self._sheets_client.write_ranges(
+            spreadsheet_id,
+            [lock_cell, new_girl_range],
+            [[["FALSE"]], [["FALSE"] * 133]],
+            major_dimension="COLUMNS"
+        )
 
     def _toggle_shuffle(self,spreadsheet_id: str):
         toggle_shuffle_cell = f"{self._GROUPS_SHEET_NAME}!I1"
@@ -34,6 +39,7 @@ class GoogleSheetsMacros:
                 (alt_run and client.read_cell(spreadsheet_id, "Exceptions!E1") != "OK")
         ):
             self._toggle_shuffle(spreadsheet_id)
+            time.sleep(1)#avoid hitting quota limit of 60 requests per min
 
         client.write_range(spreadsheet_id, paste_range, client.read_range(spreadsheet_id, copy_range))
         client.write_cell(spreadsheet_id,f"{self._GROUPS_SHEET_NAME}!M1", "TRUE")

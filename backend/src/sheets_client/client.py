@@ -96,3 +96,18 @@ class GoogleSheetsClient:
         ).execute()
 
         return response
+
+    def clear_ranges(
+        self,
+        spreadsheet_id: str,
+        sheet_cell_ranges: List[str],
+    ) -> None:
+        body = {
+            "ranges" : sheet_cell_ranges
+        }
+
+        result = self._service.spreadsheets().values().batchClear(
+            spreadsheetId=spreadsheet_id,
+            body=body
+        ).execute()
+        # TODO: Add exception handling here
