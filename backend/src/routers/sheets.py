@@ -101,3 +101,11 @@ async def take_attendance(request: PostAttendanceRequest):
         return { "status" : "Attendance updated successfully" }
     except HTTPError as e:
         raise HTTPException(status_code=e.code, detail=f"Error: {e.reason}")
+
+@sheets_router.get("/care-groups", summary="Get all care groups")
+async def get_care_groups():
+    try:
+        groups = attendance_client.get_care_groups(settings.SPREADSHEET_ID)
+        return groups
+    except HTTPError as e:
+        raise HTTPException(status_code=e.code, detail=f"Error: {e.reason}")

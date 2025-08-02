@@ -16,12 +16,12 @@ class GoogleSheetsClient:
 
         return results.get("values", [])
 
-    def read_ranges(self, spreadsheet_id: str, cell_ranges: List[str], major_dimensions: str = 'ROWS') -> List[List[List[str]]]:
+    def read_ranges(self, spreadsheet_id: str, cell_ranges: List[str], major_dimension: str = 'ROWS') -> List[List[List[str]]]:
 
         results =  self._service.spreadsheets().values().batchGet(
             spreadsheetId=spreadsheet_id,
             ranges=cell_ranges,
-            majorDimension=major_dimensions,
+            majorDimension=major_dimension,
         ).execute()
 
         ranges = results.get("valueRanges", [])
