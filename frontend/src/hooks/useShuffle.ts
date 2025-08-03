@@ -1,6 +1,6 @@
 // src/hooks/useLongTask.ts
 import { useState } from 'react'
-import { shuffleAndLock, StudyGroup } from '../api/sheet'
+import { apiShuffleAndLock, StudyGroup } from '../api/sheet'
 import { FetchStatus } from './types'
 
 interface ShuffleResult {
@@ -30,7 +30,7 @@ export function useShuffle(
     setStatus(FetchStatus.LOADING)
     setError('')
     try {
-      await shuffleAndLock()
+      await apiShuffleAndLock()
       return { responseStatus: FetchStatus.SUCCESS, error: '' } as ShuffleResult
     } catch (err) {
       return {

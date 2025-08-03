@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from urllib.error import HTTPError
 
 from ..config import Settings
+from ..models.care_group import CareGroup
 from ..models.study_group import StudyGroup
 from ..services.study_groups_service import get_study_groups
 from ..sheets_client.attendance import AttendanceClient
@@ -19,6 +20,8 @@ class StudyDatesResponse(BaseModel):
     activeDate: str
     dates: List[str]
 
+class CareGroupsResponse(BaseModel):
+    groups: List[CareGroup]
 
 class StudyGroupResponse(BaseModel):
     groups: List[StudyGroup]
@@ -102,10 +105,10 @@ async def take_attendance(request: PostAttendanceRequest):
     except HTTPError as e:
         raise HTTPException(status_code=e.code, detail=f"Error: {e.reason}")
 
-@sheets_router.get("/care-groups", summary="Get all care groups")
+@sheets_router.get("/care-groups", response_model=CareGroupsResponse, summary="Get all care groups")
 async def get_care_groups():
     try:
         groups = attendance_client.get_care_groups(settings.SPREADSHEET_ID)
-        return groups
+        return CareGroupsResponse(groups=groups)
     except HTTPError as e:
         raise HTTPException(status_code=e.code, detail=f"Error: {e.reason}")

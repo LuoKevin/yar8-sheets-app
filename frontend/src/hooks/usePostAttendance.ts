@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { postAttendance } from '../api/sheet'
+import { apiPostAttendance } from '../api/sheet'
 import { FetchStatus } from './types'
 
 interface PostAttendanceResponse {
@@ -22,7 +22,7 @@ export function usePostAttendance(): UsePostAttendance {
     latecomers: string[],
   ) => {
     try {
-      await postAttendance({ index, attendees: attendanceState, latecomers })
+      await apiPostAttendance({ index, attendees: attendanceState, latecomers })
       return { status: FetchStatus.SUCCESS } as PostAttendanceResponse
     } catch (err) {
       return {

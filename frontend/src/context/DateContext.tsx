@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
-import { fetchStudyDates } from '../api/sheet'
+import { apiFetchStudyDates } from '../api/sheet'
 import { FetchStatus } from '../hooks/types'
 
 interface DateData {
@@ -20,7 +20,7 @@ export const DateProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     setDateStatus(FetchStatus.LOADING)
-    fetchStudyDates()
+    apiFetchStudyDates()
       .then((fetchResponse) => {
         setDateStatus(FetchStatus.SUCCESS)
         setCurrentDate(fetchResponse.activeDate)

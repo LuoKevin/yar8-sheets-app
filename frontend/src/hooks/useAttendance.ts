@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CurrentAttendanceResponse, fetchAttendance } from '../api/sheet'
+import { CurrentAttendanceResponse, apiFetchAttendance } from '../api/sheet'
 import { FetchStatus } from './types'
 
 type Attendee = [string, boolean]
@@ -22,7 +22,7 @@ export function useAttendance(): UseAttendanceProps {
   const getAttendance = async (date: string): Promise<FetchAttendanceResult> => {
     try {
       setStatus(FetchStatus.LOADING)
-      const result: CurrentAttendanceResponse = await fetchAttendance(date)
+      const result: CurrentAttendanceResponse = await apiFetchAttendance(date)
 
       setStatus(FetchStatus.SUCCESS)
       return {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { StudyGroup } from '../api/sheet'
-import { fetchStudyGroupData } from '../api/sheet'
+import { apiFetchStudyGroupData } from '../api/sheet'
 
 interface StudyGroupData {
   fetchGroups: () => Promise<void>
@@ -82,7 +82,7 @@ export function useStudyGroupData(date: string): StudyGroupData {
     setError(null)
 
     try {
-      await fetchStudyGroupData().then(([groups, locked]) => {
+      await apiFetchStudyGroupData().then(([groups, locked]) => {
         setGroups(groups)
         setLocked(locked)
       })

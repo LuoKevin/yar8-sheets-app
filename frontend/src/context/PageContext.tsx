@@ -5,7 +5,7 @@ interface PageContextType {
   setPage: (newPage: Page) => void
 }
 
-export type Page = 'groups' | 'attendance' | 'latecoming' | 'shuffling' | 'locked'
+export type Page = 'groups' | 'attendance' | 'latecoming' | 'shuffling' | 'locked' | 'care'
 
 const PageContext = createContext<PageContextType | undefined>(undefined)
 

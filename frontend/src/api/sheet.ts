@@ -1,14 +1,19 @@
 import api from './client'
 import type { components } from './openapi.types'
 
-export type StudyGroupResponse = components['schemas']['StudyGroupResponse']
-export type StudyGroup = components['schemas']['StudyGroup']
-export type DateModel = components['schemas']['DateModel']
-export type StudyDatesResponse = components['schemas']['StudyDatesResponse']
-export type CurrentAttendanceResponse = components['schemas']['CurrentAttendanceResponse']
-export type PostAttendanceRequest = components['schemas']['PostAttendanceRequest']
+type schemas = components['schemas']
 
-export function fetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
+export type StudyGroupResponse = schemas['StudyGroupResponse']
+export type StudyGroup = schemas['StudyGroup']
+export type DateModel = schemas['DateModel']
+export type StudyDatesResponse = schemas['StudyDatesResponse']
+export type CurrentAttendanceResponse = schemas['CurrentAttendanceResponse']
+export type PostAttendanceRequest = schemas['PostAttendanceRequest']
+export type CareGroupsResponse = schemas['CareGroupsResponse']
+
+export type CareGroup = schemas['CareGroup']
+
+export function apiFetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
   return api.get<StudyGroupResponse>('/sheets/study-group-data').then((value) => {
     const groups = value.data.groups as StudyGroup[]
     const locked = value.data.locked
@@ -16,26 +21,30 @@ export function fetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
   })
 }
 
-export function postActiveStudyDate(activeDate: string): Promise<DateModel> {
+export function apiPostActiveStudyDate(activeDate: string): Promise<DateModel> {
   return api.post('/sheets/active-study-date', { date: activeDate })
 }
 
-export function fetchStudyDates(): Promise<StudyDatesResponse> {
+export function apiFetchStudyDates(): Promise<StudyDatesResponse> {
   return api.get<StudyDatesResponse>('/sheets/study-dates').then((value) => value.data)
 }
 
-export function postResetGroups(): Promise<void> {
+export function apiPostResetGroups(): Promise<void> {
   return api.post('/sheets/reset-groups')
 }
 
-export function shuffleAndLock(): Promise<void> {
+export function apiShuffleAndLock(): Promise<void> {
   return api.post('/sheets/shuffle-lock')
 }
 
-export function fetchAttendance(date: string): Promise<CurrentAttendanceResponse> {
+export function apiFetchAttendance(date: string): Promise<CurrentAttendanceResponse> {
   return api.get('/sheets/attendance', { params: { date } }).then((res) => res.data)
 }
 
-export function postAttendance(request: PostAttendanceRequest): Promise<void> {
-  return api.post('sheets/take-attendance', request)
+export function apiPostAttendance(request: PostAttendanceRequest): Promise<void> {
+  return api.post('/sheets/take-attendance', request)
+}
+
+export function apiFetchCareGroups(): Promise<CareGroupsResponse> {
+  return api.get('/sheets/care-groups').then((value) => value.data)
 }

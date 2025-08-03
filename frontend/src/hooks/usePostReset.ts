@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { postResetGroups } from '../api/sheet'
+import { apiPostResetGroups } from '../api/sheet'
 
 interface PostResetGroupsResponse {
   resetGroups: () => Promise<void>
@@ -18,7 +18,7 @@ export function usePostResetGroups(): PostResetGroupsResponse {
     setSuccess(false)
 
     try {
-      await postResetGroups()
+      await apiPostResetGroups()
       setSuccess(true)
     } catch (err) {
       setError(err.message || 'Unknown error')

@@ -7,15 +7,16 @@ import { AnimatePresence, motion, Transition } from 'framer-motion'
 import PageTransitionWrapper from './components/PageTransitionWrapper'
 import { PageProvider } from './context/PageContext'
 import GradientBackground from './components/GradientBackground'
+import CareGroupsPage from './components/care/CareGroupsPage'
 
-const attendanceTranVars = {
+const slideInFromLeftVars = {
   initial: { x: '-100%', opacity: 0 }, // ⬅️ Start off-screen to the left
   animate: { x: 0, opacity: 1 }, // ⬆️ Animate into view
   exit: { x: '-100vw', opacity: 0 }, // ⬅️ Slide back out to the left
   transition: { type: 'tween', duration: 0.4 },
 }
 
-const studyTranVars = {
+const slideInFromRightVars = {
   initial: { x: '100%', opacity: 0 }, // 👉 Start off-screen to the right
   animate: { x: 0, opacity: 1 }, // ⬅️ Animate into center
   exit: { x: '100vw', opacity: 0 }, // 👉 Slide out to the right
@@ -34,7 +35,7 @@ const Root = () => {
               <Route
                 index
                 element={
-                  <PageTransitionWrapper variants={studyTranVars}>
+                  <PageTransitionWrapper variants={slideInFromRightVars}>
                     <StudyGroupsPage />
                   </PageTransitionWrapper>
                 }
@@ -43,8 +44,16 @@ const Root = () => {
               <Route
                 path="/attendance"
                 element={
-                  <PageTransitionWrapper variants={attendanceTranVars}>
+                  <PageTransitionWrapper variants={slideInFromLeftVars}>
                     <AttendancePage />
+                  </PageTransitionWrapper>
+                }
+              />
+              <Route 
+                path="/care"
+                element = {
+                  <PageTransitionWrapper variants={slideInFromRightVars}>
+                    <CareGroupsPage />
                   </PageTransitionWrapper>
                 }
               />

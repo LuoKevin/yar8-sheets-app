@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { postActiveStudyDate } from '../api/sheet'
+import { apiPostActiveStudyDate } from '../api/sheet'
 
 interface ActiveDateResponse {
   postDate: (payloadDate: string) => Promise<void>
@@ -18,7 +18,7 @@ export function usePostActiveDate(): ActiveDateResponse {
     setSuccess(false)
 
     try {
-      await postActiveStudyDate(payloadDate)
+      await apiPostActiveStudyDate(payloadDate)
       setSuccess(true)
     } catch (err) {
       setError(err.message || 'Unknown error')

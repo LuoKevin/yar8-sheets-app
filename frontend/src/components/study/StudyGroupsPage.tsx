@@ -110,17 +110,23 @@ const StudyGroupsPage = () => {
   }, [groupsLocked])
 
   const navigate = useNavigate()
-  const handleNavigate = () => {
+  const navigateAttendance = () => {
     navigate('/attendance', { replace: true })
     setPage('attendance')
   }
 
+  const navigateCare = () => {
+    navigate('/care', {replace: true})
+    setPage('care')
+  }
+
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
+      <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Study Groups</h1>
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <LoadingIndicator isLoading={dateStatus == FetchStatus.LOADING} />
         <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
-          <Button onClick={() => handleNavigate()}>⬅️ Take Attendance</Button>
+          <Button onClick={() => navigateAttendance()}>⬅️ Take Attendance</Button>
           <DateSelector dates={allDates} initialDate={currentDate} onSelect={handleDateSelect} />
           <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>
             Reset Groups
@@ -129,6 +135,7 @@ const StudyGroupsPage = () => {
             Shuffle and Lock
           </Button>
           <Toggle checked={groupsLocked} />
+          <Button  onClick={() => navigateCare()}>Care Groups ➡️</Button>
         </div>
         <div className="w-full max-w-lg pb-2 flex items-center justify-start">
           <LoadingText visible={isShuffling} text="Shuffling" />

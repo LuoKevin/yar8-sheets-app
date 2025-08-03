@@ -201,7 +201,7 @@ const AttendancePage = () => {
         )}
 
         <Button className="fixed bottom-4 right-4 z-50 shadow-lg  " onClick={handleSubmit}>
-          Submit Attendance
+          Save Attendance
         </Button>
 
         <div className="w-full max-w-3xl flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchStudyDates, StudyDatesResponse } from '../api/sheet'
+import { apiFetchStudyDates, StudyDatesResponse } from '../api/sheet'
 import { useDateContext } from '../context/DateContext'
 
 interface StudyDatesData {
@@ -18,7 +18,7 @@ export function useStudyDatesData(): StudyDatesData {
     setLoading(true)
     setError(null)
 
-    fetchStudyDates()
+    apiFetchStudyDates()
       .then((res) => {
         setDates(res)
         context.setDate(res.activeDate)

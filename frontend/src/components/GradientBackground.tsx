@@ -8,6 +8,7 @@ const colorThemes = [
   { start: '#c28800ff', end: '#000000ff', angle: 180 },
   { start: '#ff0000', end: '#280000ff', angle: 135 }, // Red to hot pinkish red
   { start: '#2b0000', end: '#8b0000', angle: 135 }, // Scarlet dark red
+  { start: '#68038d8e', end: '#ff00f7ff', angle: 135 }, // Scarlet dark red
 ]
 
 const GradientBackground = () => {
@@ -28,6 +29,7 @@ const GradientBackground = () => {
       latecoming: 2,
       shuffling: 3,
       locked: 4,
+      care: 5
     }
 
     const newThemeIndex = pageToTheme[page] ?? 0
