@@ -49,9 +49,9 @@ const Root = () => {
                   </PageTransitionWrapper>
                 }
               />
-              <Route 
+              <Route
                 path="/care"
-                element = {
+                element={
                   <PageTransitionWrapper variants={slideInFromRightVars}>
                     <CareGroupsPage />
                   </PageTransitionWrapper>

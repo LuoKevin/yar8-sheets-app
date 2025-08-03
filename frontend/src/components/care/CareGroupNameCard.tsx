@@ -25,7 +25,7 @@ const CareGroupNameCard = ({ name, present }: CareGroupNameCardProps) => {
     },
     float: {
       y: [0, -5, 0],
-      rotate: [ -1,  1,  -1],
+      rotate: [-1, 1, -1],
       transition: {
         y: {
           duration: 2 + Math.random() * 2,
@@ -54,9 +54,7 @@ const CareGroupNameCard = ({ name, present }: CareGroupNameCardProps) => {
     >
       <motion.div
         className={`w-full rounded-xl shadow-lg flex items-center justify-center p-2 cursor-pointer border-2 transition-colors duration-200 ${
-          present
-            ? 'h-24 bg-green-500 hover:bg-green-400'
-            : 'h-24 bg-red-700 hover:bg-red-600'
+          present ? 'h-24 bg-green-500 hover:bg-green-400' : 'h-24 bg-red-700 hover:bg-red-600'
         }`}
         variants={cardVariants}
         initial="rest"

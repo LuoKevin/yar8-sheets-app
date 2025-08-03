@@ -1,18 +1,18 @@
-import { CareGroup } from "../../api/sheet"
-import CareGroupNameCard from "./CareGroupNameCard"
-
+import { CareGroup } from '../../api/sheet'
+import CareGroupNameCard from './CareGroupNameCard'
 
 interface CareGroupClusterProps {
-    group: CareGroup
+  group: CareGroup
 }
 
-const CareGroupCluster = ({group}:CareGroupClusterProps) => {
-
-    return (<div>
-        {group.members.map((name, i) => (
-            <CareGroupNameCard name={name} present={group.attendance[i]} />
-        ))}
-    </div>)
+const CareGroupCluster = ({ group }: CareGroupClusterProps) => {
+  return (
+    <div>
+      {group.members.map((name, i) => (
+        <CareGroupNameCard name={name} present={group.attendance[i]} />
+      ))}
+    </div>
+  )
 }
 
-export default CareGroupCluster 
+export default CareGroupCluster

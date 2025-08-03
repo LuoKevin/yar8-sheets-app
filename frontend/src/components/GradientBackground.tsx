@@ -29,7 +29,7 @@ const GradientBackground = () => {
       latecoming: 2,
       shuffling: 3,
       locked: 4,
-      care: 5
+      care: 5,
     }
 
     const newThemeIndex = pageToTheme[page] ?? 0

@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react"
-import { CareGroup } from "../../api/sheet"
-import LoadingIndicator from "../LoadingIndicator"
-import StudyGroupColumn from "../study/StudyGroupColumn"
+import { useEffect, useState } from 'react'
+import { CareGroup } from '../../api/sheet'
+import LoadingIndicator from '../LoadingIndicator'
+import StudyGroupColumn from '../study/StudyGroupColumn'
 import { motion, LayoutGroup } from 'framer-motion'
-import CareGroupCluster from "./CareGroupCluster"
+import CareGroupCluster from './CareGroupCluster'
 
 interface CareGroupsDisplayProps {
-    groups: CareGroup[]
+  groups: CareGroup[]
 }
 
 const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
-    const [currentGroups, setCurrentGroups] = useState<CareGroup[]>([])
+  const [currentGroups, setCurrentGroups] = useState<CareGroup[]>([])
   useEffect(() => {
     setCurrentGroups(groups)
     console.log(currentGroups)
@@ -29,7 +29,6 @@ const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
                 style={{ width: 'max-content' }} // allows full natural width
                 transition={{ layout: { type: 'spring', stiffness: 300, damping: 30 } }}
               >
-                
                 {currentGroups.map((group) => (
                   <motion.div layout>
                     <CareGroupCluster group={group} />

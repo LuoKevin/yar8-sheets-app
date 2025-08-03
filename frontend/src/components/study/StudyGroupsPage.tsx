@@ -116,7 +116,7 @@ const StudyGroupsPage = () => {
   }
 
   const navigateCare = () => {
-    navigate('/care', {replace: true})
+    navigate('/care', { replace: true })
     setPage('care')
   }
 
@@ -135,7 +135,7 @@ const StudyGroupsPage = () => {
             Shuffle and Lock
           </Button>
           <Toggle checked={groupsLocked} />
-          <Button  onClick={() => navigateCare()}>Care Groups ➡️</Button>
+          <Button onClick={() => navigateCare()}>Care Groups ➡️</Button>
         </div>
         <div className="w-full max-w-lg pb-2 flex items-center justify-start">
           <LoadingText visible={isShuffling} text="Shuffling" />
