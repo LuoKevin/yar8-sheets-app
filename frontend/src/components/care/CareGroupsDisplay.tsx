@@ -18,28 +18,27 @@ const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
 
   return (
     <div className="relative z-10 min-h-screen w-full px-2 sm:px-4">
-      {/* Main Display */}
-      <div className="w-full pt-4">
-        <div className="min-w-full overflow-x-auto">
-          <div className="pl-4 sm:pl-0 w-max mx-auto">
-            <LayoutGroup>
-              <motion.div
-                layout
-                className="grid gap-4 auto-cols-[minmax(150px,1fr)] grid-flow-col"
-                style={{ width: 'max-content' }} // allows full natural width
-                transition={{ layout: { type: 'spring', stiffness: 300, damping: 30 } }}
-              >
-                {currentGroups.map((group) => (
-                  <motion.div layout>
-                    <CareGroupCluster group={group} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </LayoutGroup>
-          </div>
-        </div>
-      </div>
-    </div>
+  {/* Main Display */}
+  <div className="w-full pt-4">
+    <LayoutGroup>
+     <motion.div
+  layout
+  className="grid gap-6 justify-center mx-auto"
+  style={{
+    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+    maxWidth: '1280px',
+  }}
+  transition={{ layout: { type: 'spring', stiffness: 300, damping: 30 } }}
+>
+  {currentGroups.map((group, index) => (
+    <motion.div key={index} layout>
+      <CareGroupCluster group={group} />
+    </motion.div>
+  ))}
+</motion.div>
+    </LayoutGroup>
+  </div>
+</div>
   )
 }
 

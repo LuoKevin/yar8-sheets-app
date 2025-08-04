@@ -1,14 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../Button'
 import LoadingIndicator from '../LoadingIndicator'
-import DateSelector from '../study/DateSelector'
 import { FetchStatus } from '../../hooks/types'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useCareGroups } from '../../hooks/useCareGroups'
 import { usePageContext } from '../../context/PageContext'
 import { useToast } from '../../hooks/useToast'
 import SimpleToast from '../SimpleToast'
-import StudyGroupGrid from '../study/StudyGroupGrid'
 import CareGroupsDisplay from './CareGroupsDisplay'
 
 const CareGroupsPage = () => {
@@ -32,7 +30,7 @@ const CareGroupsPage = () => {
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <LoadingIndicator isLoading={status == FetchStatus.LOADING} />
         <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
-          <Button onClick={() => handleNavigate()}>⬅️ Take Attendance</Button>
+          <Button onClick={() => handleNavigate()}>⬅️ Study Groups</Button>
         </div>
         <div className="w-full max-w-lg pb-2 flex items-center justify-start">
           {toastMessage && (

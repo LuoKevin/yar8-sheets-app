@@ -124,8 +124,8 @@ const StudyGroupsPage = () => {
     <div className="min-h-screen w-screen overflow-x-visible">
       <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Study Groups</h1>
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
-        <LoadingIndicator isLoading={dateStatus == FetchStatus.LOADING} />
-        <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
+        <LoadingIndicator isLoading={groupsLoading && groups.length == 0} />
+        <div className="flex flex-row items-center justify-center flex-wrap gap-2">
           <Button onClick={() => navigateAttendance()}>⬅️ Take Attendance</Button>
           <DateSelector dates={allDates} initialDate={currentDate} onSelect={handleDateSelect} />
           <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>

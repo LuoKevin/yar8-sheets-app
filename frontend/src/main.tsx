@@ -23,6 +23,13 @@ const slideInFromRightVars = {
   transition: { type: 'tween', duration: 0.4 },
 }
 
+const slideInFromBottomVars = {
+  initial: { y: '100%', opacity: 0 }, // 👉 Start off-screen to the right
+  animate: { y: 0, opacity: 1 }, // ⬅️ Animate into center
+  exit: { y: '100vh', opacity: 0 }, // 👉 Slide out to the right
+  transition: { type: 'tween', duration: 0.4 },
+}
+
 const Root = () => {
   const location = useLocation()
   return (
@@ -35,12 +42,11 @@ const Root = () => {
               <Route
                 index
                 element={
-                  <PageTransitionWrapper variants={slideInFromRightVars}>
+                  <PageTransitionWrapper variants={slideInFromBottomVars}>
                     <StudyGroupsPage />
                   </PageTransitionWrapper>
                 }
               />
-
               <Route
                 path="/attendance"
                 element={
