@@ -1,5 +1,5 @@
 import { motion, useMotionValue, animate, useMotionTemplate } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Page, usePageContext } from '../context/PageContext'
 
 const colorThemes = [

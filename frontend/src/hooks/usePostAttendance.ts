@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { apiPostAttendance } from '../api/sheet'
 import { FetchStatus } from './types'
 

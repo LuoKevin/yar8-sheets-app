@@ -10,10 +10,10 @@ import SimpleToast from '../SimpleToast'
 import CareGroupsDisplay from './CareGroupsDisplay'
 
 const CareGroupsPage = () => {
-  const { fetchCareGroups, careGroups, status, loading, error } = useCareGroups()
+  const { fetchCareGroups, careGroups, status } = useCareGroups()
   const navigate = useNavigate()
-  const { page, setPage } = usePageContext()
-  const { toastMessage, toastStatus, showToast } = useToast()
+  const { setPage } = usePageContext()
+  const { toastMessage, toastStatus } = useToast()
 
   const handleNavigate = () => {
     navigate('/', { replace: true })
@@ -26,8 +26,8 @@ const CareGroupsPage = () => {
 
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
-      <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Care Groups</h1>
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Care Groups</h1>
         <LoadingIndicator isLoading={status == FetchStatus.LOADING} />
         <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
           <Button onClick={() => handleNavigate()}>⬅️ Study Groups</Button>

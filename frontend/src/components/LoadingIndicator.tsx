@@ -1,5 +1,4 @@
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
-import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface LoadingInterfaceProps {
   isLoading: boolean

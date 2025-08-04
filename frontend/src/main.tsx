@@ -1,9 +1,8 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import StudyGroupsPage from './components/study/StudyGroupsPage'
 import AttendancePage from './components/attendance/AttendancePage'
-import BackgroundLayout from './components/BackgroundLayout'
 import { DateProvider } from './context/DateContext'
-import { AnimatePresence, motion, Transition } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import PageTransitionWrapper from './components/PageTransitionWrapper'
 import { PageProvider } from './context/PageContext'
 import GradientBackground from './components/GradientBackground'
@@ -38,7 +37,7 @@ const Root = () => {
         <GradientBackground /> {/* ✅ This stays mounted across routes */}
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" >
+            <Route path="/">
               <Route
                 index
                 element={

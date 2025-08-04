@@ -1,6 +1,6 @@
 // src/hooks/useLongTask.ts
 import { useState } from 'react'
-import { apiShuffleAndLock, StudyGroup } from '../api/sheet'
+import { apiShuffleAndLock } from '../api/sheet'
 import { FetchStatus } from './types'
 
 interface ShuffleResult {
@@ -15,11 +15,7 @@ interface ShuffleData {
   startShuffle: () => Promise<ShuffleResult>
 }
 
-export function useShuffle(
-  onShuffle: () => void,
-  onFinish: (newGroups: StudyGroup[]) => void,
-): ShuffleData {
-  const [progress, setProgress] = useState(0)
+export function useShuffle(onShuffle: () => void): ShuffleData {
   const [isShuffling, setIsShuffling] = useState(false)
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.IDLE)
   const [error, setError] = useState('')

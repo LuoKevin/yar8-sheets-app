@@ -28,6 +28,7 @@ module.exports = {
     'react/prop-types': 'off', // you use TypeScript instead
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    "react/react-in-jsx-scope": "off",
   },
   settings: {
     react: {

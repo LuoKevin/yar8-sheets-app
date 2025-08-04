@@ -45,7 +45,7 @@ function scrambleArr<T>(arr: T[]): T[] {
   return result
 }
 
-export function useStudyGroupData(date: string): StudyGroupData {
+export function useStudyGroupData(): StudyGroupData {
   const [groups, setGroups] = useState<StudyGroup[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)

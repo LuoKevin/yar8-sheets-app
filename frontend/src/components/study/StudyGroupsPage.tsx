@@ -4,7 +4,6 @@ import DateSelector from './DateSelector'
 import { useEffect, useState } from 'react'
 import { Button } from '../Button'
 import { usePostResetGroups } from '../../hooks/usePostReset'
-import { StudyGroup } from '../../api/sheet'
 import { useShuffle } from '../../hooks/useShuffle'
 import { LoadingText } from './LoadingText'
 import LoadingIndicator from '../LoadingIndicator'
@@ -17,32 +16,21 @@ import { useNavigate } from 'react-router-dom'
 import { usePageContext } from '../../context/PageContext'
 
 const StudyGroupsPage = () => {
-  const { page, setPage } = usePageContext()
+  const { setPage } = usePageContext()
   const { toastMessage, toastStatus, showToast } = useToast()
-  const { currentDate, allDates, dateStatus, dateError, setDate } = useDateContext()
+  const { currentDate, allDates, setDate } = useDateContext()
   const {
     fetchGroups,
     groups,
     groupsLoading,
     groupsError,
     locked: groupsLocked,
-    manualSetGroups,
     scrambleGroups,
-  } = useStudyGroupData(currentDate)
-  const { resetGroups, resetSuccess, resetLoading, resetError } = usePostResetGroups()
-  const {
-    status: shuffleStatus,
-    isShuffling,
-    startShuffle,
-    shufflingError,
-  } = useShuffle(
-    () => {
-      scrambleGroups()
-    },
-    (newGroups: StudyGroup[]) => {
-      manualSetGroups(newGroups)
-    },
-  )
+  } = useStudyGroupData()
+  const { resetGroups, resetLoading } = usePostResetGroups()
+  const { isShuffling, startShuffle, shufflingError } = useShuffle(() => {
+    scrambleGroups()
+  })
   const [resetWarning, setResetWarning] = useState(true)
   const [firstReset, setFirstReset] = useState(false)
 
@@ -93,10 +81,9 @@ const StudyGroupsPage = () => {
       }
 
       await fetchGroups()
-    } catch (err) {
+    } catch {
       showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
       setPage('groups')
-    } finally {
     }
   }
 
@@ -106,7 +93,7 @@ const StudyGroupsPage = () => {
 
   useEffect(() => {
     if (groupsLocked) setPage('locked')
-      else setPage('groups')
+    else setPage('groups')
   }, [groupsLocked])
 
   const navigate = useNavigate()
@@ -122,8 +109,8 @@ const StudyGroupsPage = () => {
 
   return (
     <div className="min-h-screen w-screen overflow-x-visible">
-      <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Study Groups</h1>
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Study Groups</h1>
         <LoadingIndicator isLoading={groupsLoading && groups.length == 0} />
         <div className="flex flex-row items-center justify-center flex-wrap gap-2">
           <Button onClick={() => navigateAttendance()}>⬅️ Take Attendance</Button>

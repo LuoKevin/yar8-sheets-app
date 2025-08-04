@@ -6,6 +6,7 @@ interface StudyDatesData {
   activeDate: string
   dates: string[]
   isDatesLoading: boolean
+  error: string | null
 }
 
 export function useStudyDatesData(): StudyDatesData {
@@ -27,5 +28,10 @@ export function useStudyDatesData(): StudyDatesData {
       .finally(() => setLoading(false))
   }, [])
 
-  return { activeDate: datesData.activeDate, dates: datesData.dates, isDatesLoading: loading }
+  return {
+    activeDate: datesData.activeDate,
+    dates: datesData.dates,
+    error,
+    isDatesLoading: loading,
+  }
 }

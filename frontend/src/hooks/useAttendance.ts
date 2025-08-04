@@ -33,7 +33,7 @@ export function useAttendance(): UseAttendanceProps {
         latecomerTimes: result.latecomers,
       } as FetchAttendanceResult
     } catch (err) {
-      setStatus
+      setStatus(FetchStatus.ERROR)
       return {
         status: FetchStatus.ERROR,
         error: err.message || 'Unknown error',
@@ -41,7 +41,6 @@ export function useAttendance(): UseAttendanceProps {
         attDateIndex: -1,
         latecomerTimes: [],
       } as FetchAttendanceResult
-    } finally {
     }
   }
 

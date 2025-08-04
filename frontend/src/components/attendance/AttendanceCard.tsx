@@ -4,19 +4,12 @@ interface AttendanceCardProps {
   name: string
   present: boolean
   lateTime: string
-  latecomerMode: boolean
   onToggle: () => void
 }
 
 const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
 
-const AttendanceCard = ({
-  name,
-  present,
-  lateTime,
-  latecomerMode,
-  onToggle,
-}: AttendanceCardProps) => {
+const AttendanceCard = ({ name, present, lateTime, onToggle }: AttendanceCardProps) => {
   const cardVariants: Variants = {
     rest: {
       scale: 1,

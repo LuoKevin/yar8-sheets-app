@@ -14,7 +14,7 @@ interface StudyGroupGridProps {
   error: string | null
 }
 
-const StudyGroupGrid = ({ groups, loading, error }: StudyGroupGridProps) => {
+const StudyGroupGrid = ({ groups, loading }: StudyGroupGridProps) => {
   const [displayGroups, setDisplayGroups] = useState(groups)
   const initial = useRef(true)
 

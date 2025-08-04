@@ -22,7 +22,7 @@ interface DisplayedAttendee {
 }
 
 const AttendancePage = () => {
-  const { page, setPage } = usePageContext()
+  const { setPage } = usePageContext()
   const [attendees, setAttendees] = useState<DisplayedAttendee[]>([])
   const [attDateIndex, setAttDateIndex] = useState<number>(-1)
   const [searchTerm, setSearchTerm] = useState('')
@@ -31,7 +31,7 @@ const AttendancePage = () => {
   const [filterMode, setFilterMode] = useState<AttendeeFilter>('all')
 
   const { fetchAttendance, status: attendanceStatus } = useAttendance()
-  const { currentDate, allDates, dateStatus, dateError, setDate } = useDateContext()
+  const { currentDate, allDates, dateStatus, setDate } = useDateContext()
   const { submitAttendance } = usePostAttendance()
   const { toastMessage, toastStatus, showToast } = useToast()
 
@@ -230,7 +230,6 @@ const AttendancePage = () => {
                   name={attendee.name}
                   present={attendee.present}
                   lateTime={attendee.lateTime}
-                  latecomerMode={latecomerMode}
                   onToggle={() => toggleAttendee(attendee)}
                 />
               </motion.div>

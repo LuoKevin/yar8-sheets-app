@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { apiPostActiveStudyDate } from '../api/sheet'
 
 interface ActiveDateResponse {
