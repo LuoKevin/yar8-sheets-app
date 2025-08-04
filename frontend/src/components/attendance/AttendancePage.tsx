@@ -127,8 +127,8 @@ const AttendancePage = () => {
       const confirmLeave = window.confirm('Unsaved changes, navigate anyway?')
       if (!confirmLeave) return
     }
-    setPage('groups')
     navigate('/', { replace: true })
+    setPage('groups')
   }
 
   return (

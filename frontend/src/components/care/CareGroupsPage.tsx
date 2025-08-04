@@ -21,7 +21,7 @@ const CareGroupsPage = () => {
   }
 
   useEffect(() => {
-    fetchCareGroups().then(() => console.log(careGroups))
+    fetchCareGroups()
   }, [])
 
   return (

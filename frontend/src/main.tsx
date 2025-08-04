@@ -38,7 +38,7 @@ const Root = () => {
         <GradientBackground /> {/* ✅ This stays mounted across routes */}
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<BackgroundLayout />}>
+            <Route path="/" >
               <Route
                 index
                 element={

@@ -106,7 +106,7 @@ const StudyGroupsPage = () => {
 
   useEffect(() => {
     if (groupsLocked) setPage('locked')
-    else setPage('groups')
+      else setPage('groups')
   }, [groupsLocked])
 
   const navigate = useNavigate()
