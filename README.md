@@ -20,6 +20,8 @@ This app is designed to create a smoother user experience in handling the YAR8 G
 - Study group date selection
 - Resetting groups
 - Shuffling and live-updates
+- Clean attendance taking
+- Care Groups Display
 
  
 #### Study Groups display
@@ -34,5 +36,6 @@ This app is designed to create a smoother user experience in handling the YAR8 G
 #### Attendance Page
 - Mobile-friendly attendance taking
 - Toggeable bold name cards for those with big fingers🖐️ 
-- Search Functionality 
+- Attendance search functionality 
 - Latecomer mode for stragglers
+- Filter only present/ only absent
