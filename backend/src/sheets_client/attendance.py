@@ -18,7 +18,7 @@ def format_group(str_group: List[str], status_dict: dict[str, bool]) -> CareGrou
     invalid_leader_names : List[str] = ["#N/A", "TRUE", "FALSE", ""]
     if len(str_group) == 0 or str_group[0] in invalid_leader_names:
         return None
-    attendance_status: List[bool] = list(map(lambda m: status_dict[m], str_group))
+    attendance_status: List[bool] = list(map(lambda m: status_dict.get(m, False), str_group))
     return CareGroup(members=str_group, attendance=attendance_status)
 
 class AttendanceClient:
