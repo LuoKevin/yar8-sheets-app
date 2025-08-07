@@ -1,4 +1,4 @@
 node_modules
 dist
 build
-openopenapi.types.ts
+src/api/openopenapi.types.ts
