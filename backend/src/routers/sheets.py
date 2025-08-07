@@ -38,6 +38,9 @@ class PostAttendanceRequest(BaseModel):
     attendees: List[bool]
     latecomers: List[str]
 
+class PostNewFollowerRequest(BaseModel):
+    name: str
+
 settings = Settings()
 google_api_client = GoogleSheetsClient()
 google_macros = GoogleSheetsMacros()
@@ -114,9 +117,9 @@ async def get_care_groups():
         raise HTTPException(status_code=e.code, detail=f"Error: {e.reason}")
 
 @sheets_router.post("/new-follower", summary="post new follower")
-async def post_new_follower(name: str):
+async def post_new_follower(request: PostNewFollowerRequest):
     try:
-        attendance_client.add_new_follower(settings.SPREADSHEET_ID, name)
+        attendance_client.add_new_follower(settings.SPREADSHEET_ID, request.name)
         return { "status" : "Follower added" }
     except HTTPError as e:
         raise HTTPException(status_code=e.code, detail=f"Error: {e.detail}")

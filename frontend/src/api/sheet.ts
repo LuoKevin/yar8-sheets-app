@@ -48,3 +48,7 @@ export function apiPostAttendance(request: PostAttendanceRequest): Promise<void>
 export function apiFetchCareGroups(): Promise<CareGroupsResponse> {
   return api.get('/sheets/care-groups').then((value) => value.data)
 }
+
+export function apiPostNewAttendee(name: string): Promise<void> {
+  return api.post('/sheets/')
+}
