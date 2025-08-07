@@ -11,11 +11,11 @@ const StudyGroupColumn = ({ leader, members, isAnimating }: StudyGroupColumnProp
   return (
     <motion.div
       className="flex flex-col items-center mx-2 space-y-2 pt-6"
-      initial={{ opacity: 0, y: "100vh" }}
+      initial={{ opacity: 0, y: '100vh' }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
         type: 'tween',
-        ease: "easeInOut",
+        ease: 'easeInOut',
         stiffness: 150,
         damping: 15,
         delay: 0.2,

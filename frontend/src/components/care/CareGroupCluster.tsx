@@ -19,14 +19,13 @@ const CareGroupCluster = ({ group }: CareGroupClusterProps) => {
   ))
 
   return (
-
-    <motion.div 
-    className="grid grid-cols-3 gap-4 p-4 rounded-lg bg-white/10 backdrop-blur-sm shadow-md min-h-[300px]"
-      initial={{ opacity: 0, x: "100vw" }}
+    <motion.div
+      className="grid grid-cols-3 gap-4 p-4 rounded-lg bg-white/10 backdrop-blur-sm shadow-md min-h-[300px]"
+      initial={{ opacity: 0, x: '100vw' }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
         type: 'tween',
-        ease: "easeInOut",
+        ease: 'easeInOut',
         stiffness: 150,
         damping: 15,
         delay: 0.2,

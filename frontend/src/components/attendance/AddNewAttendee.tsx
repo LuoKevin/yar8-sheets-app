@@ -1,5 +1,1 @@
-
-
-const AddNewAttendee = () => {
-    
-}
+const AddNewAttendee = () => {}
