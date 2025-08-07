@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import LatecomerToggle from './LatecomerToggle'
 import { usePageContext } from '../../context/PageContext'
 import ToggleCheckbox from '../ToggleCheckbox'
+import AddNewAttendeeModal from './AddNewAttendeeModal'
 
 interface DisplayedAttendee {
   name: string
@@ -147,6 +148,8 @@ const AttendancePage = () => {
             setDate(newDate)
           }}
         />
+
+        <AddNewAttendeeModal />
 
         <ToggleCheckbox
           label="Filter only present"

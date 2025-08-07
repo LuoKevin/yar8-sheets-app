@@ -10,7 +10,7 @@ export type StudyDatesResponse = schemas['StudyDatesResponse']
 export type CurrentAttendanceResponse = schemas['CurrentAttendanceResponse']
 export type PostAttendanceRequest = schemas['PostAttendanceRequest']
 export type CareGroupsResponse = schemas['CareGroupsResponse']
-
+export type PostNewAttendeeRequest = schemas['PostNewFollowerRequest']
 export type CareGroup = schemas['CareGroup']
 
 export function apiFetchStudyGroupData(): Promise<[StudyGroup[], boolean]> {
@@ -50,5 +50,5 @@ export function apiFetchCareGroups(): Promise<CareGroupsResponse> {
 }
 
 export function apiPostNewAttendee(name: string): Promise<void> {
-  return api.post('/sheets/')
+  return api.post('/sheets/new-follower', { name: name } as PostNewAttendeeRequest)
 }
