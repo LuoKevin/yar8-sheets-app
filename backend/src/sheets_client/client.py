@@ -6,12 +6,13 @@ class GoogleSheetsClient:
     def __init__(self):
         self._service = GoogleServiceProvider.get_sheets_service()
 
-    def read_range(self, spreadsheet_id: str, cell_range: str) -> List[List[str]]:
+    def read_range(self, spreadsheet_id: str, cell_range: str, major_dimension: str = "ROWS") -> List[List[str]]:
         sheet = self._service.spreadsheets()
 
         results = sheet.values().get(
             spreadsheetId=spreadsheet_id,
             range=cell_range,
+            majorDimension=major_dimension,
         ).execute()
 
         return results.get("values", [])
@@ -81,8 +82,9 @@ class GoogleSheetsClient:
             spreadsheet_id: str,
             cell: str,
             value: str,
+            input_option: str = 'USER_ENTERED',
     ) -> None:
-        self.write_range(spreadsheet_id, cell, [[value]])
+        self.write_range(spreadsheet_id, cell, [[value]], input_option=input_option)
 
     def read_cell(self, spreadsheet_id: str, cell: str, ):
         resp = self.read_range(spreadsheet_id, cell)
@@ -111,3 +113,19 @@ class GoogleSheetsClient:
             body=body
         ).execute()
         # TODO: Add exception handling here
+
+    def append_to_sheet(self, spreadsheet_id: str, target_range: str, values: List[str], major_dimension: str = 'ROWS'):
+        body = {
+            "values" : [values],
+            "majorDimension" : major_dimension,
+        }
+
+        result = self._service.spreadsheets().values().append(
+            spreadsheetId=spreadsheet_id,
+            body=body,
+            range=target_range,
+            valueInputOption="USER_ENTERED",
+        ).execute()
+
+        print(result)
+

@@ -138,6 +138,8 @@ const AttendancePage = () => {
       />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Take Attendance</h1>
+        <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
+
         <DateSelector
           dates={allDates}
           initialDate={currentDate}
@@ -183,8 +185,6 @@ const AttendancePage = () => {
             setLatecomerMode(!latecomerMode)
           }}
         />
-
-        <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
 
         <input
           type="text"

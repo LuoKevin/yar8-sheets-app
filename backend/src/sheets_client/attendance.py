@@ -103,3 +103,13 @@ class AttendanceClient:
         final_groups : List[CareGroup] = [group for group in filtered_groups if group is not None]
 
         return final_groups
+
+    def add_new_follower(self, spreadsheet_id: str, follower_name: str):
+        names_col = f"{self._ATTENDANCE_SHEET_NAME}!E3:E200"
+        all_names = self._sheets_client.read_range(spreadsheet_id, names_col, major_dimension='COLUMNS')[0]
+        num_names = len(all_names)
+
+        next_open_cell = 3 + num_names
+        target_cell = f"{self._ATTENDANCE_SHEET_NAME}!E{next_open_cell}"
+
+        self._sheets_client.write_cell(spreadsheet_id, target_cell, follower_name, input_option="RAW")
