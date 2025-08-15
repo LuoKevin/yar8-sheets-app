@@ -9,3 +9,4 @@ secrets
 .env
 .env.local
 .env.development
+.env.prod

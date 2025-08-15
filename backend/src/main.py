@@ -11,7 +11,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000", "http://localhost:3000", "https://yar8-attendance-app-ui.fly.dev"],
+    allow_origins=["http://localhost:8000", "http://localhost:3000", "https://yar8-attendance-app-ui.fly.dev", "https://yar8-attendance-app-ui-prod.fly.dev"],
     allow_methods=["*"],
     allow_headers=[],
 )
