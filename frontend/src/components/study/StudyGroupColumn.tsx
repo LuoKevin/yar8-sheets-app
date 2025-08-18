@@ -10,7 +10,7 @@ interface StudyGroupColumnProps {
 const StudyGroupColumn = ({ leader, members, isAnimating }: StudyGroupColumnProps) => {
   return (
     <motion.div
-      className="flex flex-col items-center mx-2 space-y-2 pt-6"
+      className="flex flex-col items-center mx-2 space-y-2 pt-6 px-1 bg-white/20 rounded-lg shadow-lg rounded-2xl"
       initial={{ opacity: 0, y: '100vh' }}
       animate={{ opacity: 1, y: 0 }}
       transition={{

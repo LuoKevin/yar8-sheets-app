@@ -44,7 +44,7 @@ const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGr
 
   return (
     <motion.div
-      className={`w-28 h-28 sm:w-32 sm:h-32 perspective-1000 origin-center ${isLeader ? 'mb-4' : 'my-1'}`}
+      className={`w-32 h-28 sm:w-40 sm:h-36 perspective-1000 origin-center ${isLeader ? 'mb-4' : 'my-1'}`}
       layout
       layoutId={name}
       transition={{
@@ -54,22 +54,17 @@ const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGr
       }}
     >
       <motion.div
-        className={`w-full rounded-xl shadow-lg flex items-center justify-center p-2 cursor-pointer border-2 transition-colors duration-200 ${
+        className={`h-28 w-full rounded-xl shadow-lg flex items-center justify-center p-2 cursor-pointer border-2 transition-colors duration-200 ${
           isLeader
-            ? 'h-24 bg-yellow-500 hover:bg-yellow-400'
-            : 'h-24 bg-indigo-700 hover:bg-indigo-600'
+            ? 'sm:h-32 bg-yellow-500 hover:bg-yellow-400'
+            : 'sm:h-32 bg-indigo-700 hover:bg-indigo-600'
         }`}
         variants={cardVariants}
         initial="rest"
         animate={isAnimating ? 'rest' : 'float'}
         whileHover={!isAnimating ? 'hover' : {}}
       >
-        <span
-          className="font-extrabold text-white text-center leading-tight text-xl sm:text-2xl"
-          style={{
-            textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
-          }}
-        >
+        <span className="text-shadow-lg/50 font-extrabold text-white text-center leading-tight text-2xl sm:text-3xl">
           {name}
         </span>
       </motion.div>
