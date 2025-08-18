@@ -10,24 +10,20 @@ interface StudyGroupColumnProps {
 const StudyGroupColumn = ({ leader, members, isAnimating }: StudyGroupColumnProps) => {
   return (
     <motion.div
-      className="flex flex-col items-center mx-2 space-y-2 pt-6 px-1 bg-white/20 rounded-lg shadow-lg rounded-2xl"
-      initial={{ opacity: 0, y: '100vh' }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        type: 'tween',
-        ease: 'easeInOut',
-        stiffness: 150,
-        damping: 15,
-        delay: 0.2,
-      }}
+      layout
+      initial={false} // <- important: don’t re-run entry animation on data updates
+      className="flex flex-col items-center mx-2 space-y-2 pt-6 px-1"
+      transition={{ layout: { type: 'spring', stiffness: 500, damping: 36 } }}
     >
       <StudyGroupCard name={leader} isLeader isAnimating={isAnimating} />
 
-      <div className="flex flex-col items-center">
+      <motion.ul layout className="flex flex-col items-center gap-2">
         {members.map((member) => (
-          <StudyGroupCard key={member} name={member} isAnimating={isAnimating} />
+          <li key={member}>
+            <StudyGroupCard name={member} isAnimating={isAnimating} />
+          </li>
         ))}
-      </div>
+      </motion.ul>
     </motion.div>
   )
 }

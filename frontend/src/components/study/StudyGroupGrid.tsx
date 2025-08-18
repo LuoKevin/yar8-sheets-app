@@ -42,9 +42,17 @@ const StudyGroupGrid = ({ groups, loading }: StudyGroupGridProps) => {
             <LayoutGroup>
               <motion.div
                 layout
+                initial={{ opacity: 0, y: '100vh' }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  type: 'tween',
+                  ease: 'easeInOut',
+                  stiffness: 150,
+                  damping: 15,
+                  delay: 0.2,
+                }}
                 className="grid gap-4 auto-cols-[minmax(150px,1fr)] grid-flow-col"
                 style={{ width: 'max-content' }} // allows full natural width
-                transition={{ layout: { type: 'spring', stiffness: 300, damping: 30 } }}
               >
                 {displayGroups.map((group) => (
                   <motion.div key={group.leader} layout>
