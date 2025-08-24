@@ -46,7 +46,6 @@ const CareGroupNameCard = ({ name, present }: CareGroupNameCardProps) => {
       <motion.div
         className="w-full h-full"
         layout
-        layoutId={name}
         transition={{
           type: 'spring',
           stiffness: 500,
