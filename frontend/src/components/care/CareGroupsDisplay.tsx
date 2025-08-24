@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { CareGroup } from '../../api/sheet'
 import { motion, LayoutGroup } from 'framer-motion'
-import CareGroupCluster from './CareGroupCluster'
 import CareGroupColumn from './CareGroupColumn'
 
 interface CareGroupsDisplayProps {
