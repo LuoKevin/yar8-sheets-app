@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: backend
-      dockerfile: Dockerfile
+      dockerfile: docker/local.Dockerfile
 
     container_name: yar8-app-api
     ports:
