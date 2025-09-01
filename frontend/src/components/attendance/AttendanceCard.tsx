@@ -46,7 +46,7 @@ const AttendanceCard = ({ name, present, lateTime, onToggle }: AttendanceCardPro
       <motion.div
         className={`w-full h-full rounded-lg shadow-lg flex items-center justify-center border-2 transition-colors duration-200 cursor-pointer ${
           lateTime
-            ? 'bg-yellow-600 border-yellow-300 hover:bg-yellow-500'
+            ? 'bg-yellow-500 border-yellow-300 hover:bg-yellow-400'
             : present
               ? 'bg-green-600 border-green-300 hover:bg-green-500'
               : 'bg-red-600 border-red-300 hover:bg-red-500'
@@ -60,7 +60,7 @@ const AttendanceCard = ({ name, present, lateTime, onToggle }: AttendanceCardPro
           {name}
         </span>
         {lateTime && (
-          <span className="font-extrabold text-white text-xl mt-1 block pr-1">
+          <span className="font-black text-red-600 text-shadow-md text-3xl mt-1 block pr-1">
             {lateTime.split(' ')[1]}
           </span>
         )}

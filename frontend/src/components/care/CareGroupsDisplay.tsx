@@ -22,8 +22,7 @@ const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
             <LayoutGroup>
               <motion.div
                 layout
-                className="grid gap-4 auto-cols-[minmax(150px,1fr)] grid-flow-col"
-                style={{ width: 'max-content' }} // allows full natural width
+                className="grid gap-4 grid-cols-6"
                 initial={{ opacity: 0, y: '100vh' }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
