@@ -41,7 +41,6 @@ const StudyGroupGrid = ({ groups, loading }: StudyGroupGridProps) => {
           <div className="pl-4 sm:pl-0 w-max mx-auto">
             <LayoutGroup>
               <motion.div
-                
                 initial={{ opacity: 0, y: '100vh' }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
