@@ -34,12 +34,14 @@ class GoogleSheetsMacros:
         paste_range = f"{self._GROUPS_SHEET_NAME}!AF3:AH103"
         alt_run: bool = client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!I2") == "TRUE"
 
-        while (
-                client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") != "OK" or
-                (alt_run and client.read_cell(spreadsheet_id, "Exceptions!E1") != "OK")
-        ):
-            self._toggle_shuffle(spreadsheet_id)
-            time.sleep(1)#avoid hitting quota limit of 60 requests per min
+        if alt_run:
+            while (client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") == "meh" or
+                   client.read_cell(spreadsheet_id, "Exceptions!E1") == "meh"
+            ):
+                self._toggle_shuffle(spreadsheet_id)
+        else:
+            while client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") == "meh":
+                self._toggle_shuffle(spreadsheet_id)
 
         client.write_range(spreadsheet_id, paste_range, client.read_range(spreadsheet_id, copy_range))
         client.write_cell(spreadsheet_id,f"{self._GROUPS_SHEET_NAME}!M1", "TRUE")

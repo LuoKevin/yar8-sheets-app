@@ -126,6 +126,3 @@ class GoogleSheetsClient:
             range=target_range,
             valueInputOption="USER_ENTERED",
         ).execute()
-
-        print(result)
-

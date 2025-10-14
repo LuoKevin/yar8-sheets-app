@@ -110,6 +110,9 @@ class AttendanceClient:
         num_names = len(all_names)
 
         next_open_cell = 3 + num_names
-        target_cell = f"{self._ATTENDANCE_SHEET_NAME}!E{next_open_cell}"
+        name_cell = f"{self._ATTENDANCE_SHEET_NAME}!E{next_open_cell}"
+        weight_cell = f"{self._ATTENDANCE_SHEET_NAME}!D{next_open_cell}"
 
-        self._sheets_client.write_cell(spreadsheet_id, target_cell, follower_name, input_option="RAW")
+        self._sheets_client.write_cell(spreadsheet_id, name_cell, follower_name, input_option="RAW")
+        self._sheets_client.write_cell(spreadsheet_id, weight_cell, 1, input_option="RAW")
+
