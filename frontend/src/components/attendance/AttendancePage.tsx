@@ -6,7 +6,6 @@ import AttendanceCard from './AttendanceCard.tsx'
 import { useAttendance } from '../../hooks/useAttendance.ts'
 import { AttendeeFilter, FetchStatus } from '../../hooks/types.ts'
 import { getFormattedTimestamp, useDateContext } from '../../context/DateContext.tsx'
-import DateSelector from '../study/DateSelector.tsx'
 import { usePostAttendance } from '../../hooks/usePostAttendance.ts'
 import SimpleToast from '../SimpleToast.tsx'
 import { useToast } from '../../hooks/useToast.ts'
@@ -140,14 +139,6 @@ const AttendancePage = () => {
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Take Attendance</h1>
         <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
-
-        <DateSelector
-          dates={allDates}
-          initialDate={currentDate}
-          onSelect={(newDate) => {
-            setDate(newDate)
-          }}
-        />
 
         <AddNewAttendeeModal />
 
