@@ -1,19 +1,29 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePostActiveDate } from '../../hooks/usePostActiveDate.ts'
+import { useToast } from '../../hooks/useToast.ts'
+import SimpleToast from '../SimpleToast.tsx'
 
 interface DateSelectorProps {
   dates: string[]
   initialDate: string
   onSelect: (item: string) => void
   className?: string
+  groupsLocked: boolean
 }
 
-const DateSelector = ({ dates, initialDate, onSelect, className = '' }: DateSelectorProps) => {
+const DateSelector = ({
+  dates,
+  initialDate,
+  onSelect,
+  className = '',
+  groupsLocked,
+}: DateSelectorProps) => {
   const [activeDate, setActiveDate] = useState(initialDate)
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const { postDate, success, loading, error } = usePostActiveDate()
+  const { toastMessage, toastStatus, showToast } = useToast()
 
   // Sync activeDate with initialDate prop changes
   useEffect(() => {
@@ -34,6 +44,11 @@ const DateSelector = ({ dates, initialDate, onSelect, className = '' }: DateSele
 
   const handleSelect = async (date: string) => {
     try {
+      if (groupsLocked) {
+        showToast('Cannot change date while groups are locked.', 'error')
+        setIsOpen(false)
+        return
+      }
       // Update local state immediately for responsive UI
       setActiveDate(date)
 
@@ -91,6 +106,14 @@ const DateSelector = ({ dates, initialDate, onSelect, className = '' }: DateSele
         {loading && <div className="text-xs text-blue-400 mt-1">Saving...</div>}
         {error && <div className="text-xs text-red-400 mt-1">Error: {error}</div>}
         {success && <div className="text-xs text-green-400 mt-1">Saved!</div>}
+        {toastMessage && (
+          <SimpleToast
+            key={toastMessage + toastStatus}
+            message={toastMessage}
+            type={toastStatus}
+            onClose={() => {}}
+          />
+        )}
 
         {/* Dropdown menu */}
         <AnimatePresence>

@@ -114,7 +114,12 @@ const StudyGroupsPage = () => {
         <LoadingIndicator isLoading={groupsLoading && groups.length == 0} />
         <div className="flex flex-row items-center justify-center flex-wrap gap-2">
           <Button onClick={() => navigateAttendance()}>⬅️ Take Attendance</Button>
-          <DateSelector dates={allDates} initialDate={currentDate} onSelect={handleDateSelect} />
+          <DateSelector
+            dates={allDates}
+            initialDate={currentDate}
+            onSelect={handleDateSelect}
+            groupsLocked={groupsLocked}
+          />
           <Button disabled={resetLoading || isShuffling} onClick={() => handleResetGroups()}>
             Reset Groups
           </Button>
