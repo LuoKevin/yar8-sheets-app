@@ -52,20 +52,22 @@ const StudyGroupCard = ({ name, isLeader = false, isAnimating = false }: StudyGr
       layout
       layoutId={layoutId}
       transition={{ layout: { type: 'spring', stiffness: 500, damping: 36 } }}
-      className={`w-32 h-28 sm:w-30 sm:h-28 origin-center ${isLeader ? 'mb-4' : ''} transform-gpu will-change-transform`}
+      style={{ width: 'var(--card-w)', height: 'var(--card-h)' }}
+      className={`origin-center ${isLeader ? 'mb-4' : ''} transform-gpu will-change-transform`}
     >
       <motion.div
-        className={`h-28 w-full rounded-xl shadow-lg flex items-center justify-center p-2 cursor-pointer border-2 transition-colors duration-200 ${
-          isLeader
-            ? 'sm:h-24 bg-yellow-500 hover:bg-yellow-400'
-            : 'sm:h-24 bg-indigo-700 hover:bg-indigo-600'
+        className={`h-full w-full rounded-xl shadow-lg flex items-center justify-center p-2 cursor-pointer border-2 transition-colors duration-200 ${
+          isLeader ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-indigo-700 hover:bg-indigo-600'
         }`}
         variants={cardVariants}
         initial="rest"
         animate={isAnimating ? 'rest' : 'float'}
         whileHover={isAnimating ? undefined : 'hover'}
       >
-        <span className="text-shadow-lg/50 font-extrabold text-white text-center leading-tight text-xl sm:text-2xl">
+        <span
+          className="text-shadow-lg/50 font-extrabold text-white text-center leading-tight"
+          style={{ fontSize: 'clamp(12px, calc(var(--card-h) * 0.50), 50px)' }}
+        >
           {name}
         </span>
       </motion.div>

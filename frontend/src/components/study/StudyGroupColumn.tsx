@@ -12,7 +12,8 @@ const StudyGroupColumn = ({ leader, members, isAnimating }: StudyGroupColumnProp
     <motion.div
       layout
       initial={false} // <- important: don’t re-run entry animation on data updates
-      className="flex flex-col items-center mx-2 space-y-2 pt-6 px-1"
+      className="flex flex-col items-center px-1"
+      style={{ rowGap: 'var(--gap)', paddingTop: 'var(--gap)' }}
       transition={{ layout: { type: 'spring', stiffness: 500, damping: 36 } }}
     >
       <StudyGroupCard name={leader} isLeader isAnimating={isAnimating} />
