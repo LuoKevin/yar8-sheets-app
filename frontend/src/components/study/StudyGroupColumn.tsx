@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import StudyGroupCard from './StudyGroupCard'
+import StudyGroupCard from './StudyGroupCard.tsx'
 
 interface StudyGroupColumnProps {
   leader: string

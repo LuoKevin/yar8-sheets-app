@@ -1,12 +1,12 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import StudyGroupsPage from './components/study/StudyGroupsPage'
-import AttendancePage from './components/attendance/AttendancePage'
-import { DateProvider } from './context/DateContext'
+import StudyGroupsPage from './components/study/StudyGroupsPage.tsx'
+import AttendancePage from './components/attendance/AttendancePage.tsx'
+import { DateProvider } from './context/DateContext.tsx'
 import { AnimatePresence } from 'framer-motion'
-import PageTransitionWrapper from './components/PageTransitionWrapper'
-import { PageProvider } from './context/PageContext'
-import GradientBackground from './components/GradientBackground'
-import CareGroupsPage from './components/care/CareGroupsPage'
+import PageTransitionWrapper from './components/PageTransitionWrapper.tsx'
+import { PageProvider } from './context/PageContext.tsx'
+import GradientBackground from './components/GradientBackground.tsx'
+import CareGroupsPage from './components/care/CareGroupsPage.tsx'
 
 const slideInFromLeftVars = {
   initial: { x: '-100%', opacity: 0 }, // ⬅️ Start off-screen to the left

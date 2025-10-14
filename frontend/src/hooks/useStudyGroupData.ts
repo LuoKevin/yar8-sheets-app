@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import type { StudyGroup } from '../api/sheet'
-import { apiFetchStudyGroupData } from '../api/sheet'
+import type { StudyGroup } from '../api/sheet.ts'
+import { apiFetchStudyGroupData } from '../api/sheet.ts'
 
 interface StudyGroupData {
   fetchGroups: () => Promise<void>

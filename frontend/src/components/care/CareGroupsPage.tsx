@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../Button'
-import LoadingIndicator from '../LoadingIndicator'
-import { FetchStatus } from '../../hooks/types'
+import { Button } from '../Button.tsx'
+import LoadingIndicator from '../LoadingIndicator.tsx'
+import { FetchStatus } from '../../hooks/types.ts'
 import { useEffect } from 'react'
-import { useCareGroups } from '../../hooks/useCareGroups'
-import { usePageContext } from '../../context/PageContext'
-import { useToast } from '../../hooks/useToast'
-import SimpleToast from '../SimpleToast'
-import CareGroupsDisplay from './CareGroupsDisplay'
+import { useCareGroups } from '../../hooks/useCareGroups.ts'
+import { usePageContext } from '../../context/PageContext.tsx'
+import { useToast } from '../../hooks/useToast.ts'
+import SimpleToast from '../SimpleToast.tsx'
+import CareGroupsDisplay from './CareGroupsDisplay.tsx'
 
 const CareGroupsPage = () => {
   const { fetchCareGroups, careGroups, status } = useCareGroups()

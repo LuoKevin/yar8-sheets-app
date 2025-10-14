@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Button } from '../Button'
-import SimpleModal from '../SimpleModal'
-import { usePostNewAttendee } from '../../hooks/usePostNewAttendee'
-import SimpleToast from '../SimpleToast'
-import { useToast } from '../../hooks/useToast'
-import { FetchStatus } from '../../hooks/types'
+import { Button } from '../Button.tsx'
+import SimpleModal from '../SimpleModal.tsx'
+import { usePostNewAttendee } from '../../hooks/usePostNewAttendee.ts'
+import SimpleToast from '../SimpleToast.tsx'
+import { useToast } from '../../hooks/useToast.ts'
+import { FetchStatus } from '../../hooks/types.ts'
 
 const AddNewAttendeeModal = () => {
   const [modalOpen, setModalOpen] = useState(false)

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { usePostActiveDate } from '../../hooks/usePostActiveDate'
+import { usePostActiveDate } from '../../hooks/usePostActiveDate.ts'
 
 interface DateSelectorProps {
   dates: string[]

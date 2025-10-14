@@ -1,5 +1,5 @@
-import { apiPostNewAttendee } from '../api/sheet'
-import { FetchStatus } from './types'
+import { apiPostNewAttendee } from '../api/sheet.ts'
+import { FetchStatus } from './types.ts'
 
 interface AddNewAttendeeResponse {
   status: FetchStatus

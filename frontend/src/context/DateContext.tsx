@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
-import { apiFetchStudyDates } from '../api/sheet'
-import { FetchStatus } from '../hooks/types'
+import { apiFetchStudyDates } from '../api/sheet.ts'
+import { FetchStatus } from '../hooks/types.ts'
 
 interface DateData {
   currentDate: string

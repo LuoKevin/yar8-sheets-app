@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { apiFetchCareGroups, CareGroup, CareGroupsResponse } from '../api/sheet'
-import { FetchStatus } from './types'
+import { apiFetchCareGroups, CareGroup, CareGroupsResponse } from '../api/sheet.ts'
+import { FetchStatus } from './types.ts'
 
 interface CareGroupData {
   fetchCareGroups: () => Promise<void>

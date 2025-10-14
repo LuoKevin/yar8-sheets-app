@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { typeToToastIcon } from '../hooks/types'
+import { typeToToastIcon } from '../hooks/types.ts'
 
 export const ToastIcons = {
   success: (

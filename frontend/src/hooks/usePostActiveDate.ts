@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { apiPostActiveStudyDate } from '../api/sheet'
+import { apiPostActiveStudyDate } from '../api/sheet.ts'
 
 interface ActiveDateResponse {
   postDate: (payloadDate: string) => Promise<void>

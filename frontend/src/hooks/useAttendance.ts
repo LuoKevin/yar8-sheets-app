@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { CurrentAttendanceResponse, apiFetchAttendance } from '../api/sheet'
-import { FetchStatus } from './types'
+import { CurrentAttendanceResponse, apiFetchAttendance } from '../api/sheet.ts'
+import { FetchStatus } from './types.ts'
 
 type Attendee = [string, boolean]
 

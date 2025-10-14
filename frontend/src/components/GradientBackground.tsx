@@ -1,6 +1,6 @@
 import { motion, useMotionValue, animate, useMotionTemplate } from 'framer-motion'
 import { useEffect } from 'react'
-import { Page, usePageContext } from '../context/PageContext'
+import { Page, usePageContext } from '../context/PageContext.tsx'
 
 const colorThemes = [
   { start: '#000428', end: '#004e92', angle: 135 }, // Deep blue

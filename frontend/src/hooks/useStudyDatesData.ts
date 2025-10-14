@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { apiFetchStudyDates, StudyDatesResponse } from '../api/sheet'
-import { useDateContext } from '../context/DateContext'
+import { apiFetchStudyDates, StudyDatesResponse } from '../api/sheet.ts'
+import { useDateContext } from '../context/DateContext.tsx'
 
 interface StudyDatesData {
   activeDate: string

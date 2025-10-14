@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { CareGroup } from '../../api/sheet'
-import CareGroupNameCard from './CareGroupNameCard'
+import { CareGroup } from '../../api/sheet.ts'
+import CareGroupNameCard from './CareGroupNameCard.tsx'
 
 interface CareGroupClusterProps {
   group: CareGroup

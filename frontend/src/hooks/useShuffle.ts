@@ -1,7 +1,7 @@
 // src/hooks/useLongTask.ts
 import { useState } from 'react'
-import { apiShuffleAndLock } from '../api/sheet'
-import { FetchStatus } from './types'
+import { apiShuffleAndLock } from '../api/sheet.ts'
+import { FetchStatus } from './types.ts'
 
 interface ShuffleResult {
   responseStatus: FetchStatus

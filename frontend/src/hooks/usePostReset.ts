@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { apiPostResetGroups } from '../api/sheet'
+import { apiPostResetGroups } from '../api/sheet.ts'
 
 interface PostResetGroupsResponse {
   resetGroups: () => Promise<void>

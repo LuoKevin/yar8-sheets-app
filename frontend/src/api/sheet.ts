@@ -1,5 +1,5 @@
-import api from './client'
-import type { components } from './openapi.types'
+import api from './client.ts'
+import type { components } from './openapi.types.ts'
 
 type schemas = components['schemas']
 
