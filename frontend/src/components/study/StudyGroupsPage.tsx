@@ -129,7 +129,7 @@ const StudyGroupsPage = () => {
           <Toggle checked={groupsLocked} />
           <Button onClick={() => navigateCare()}>Care Groups ➡️</Button>
         </div>
-        <div className="w-full max-w-lg pb-2 flex items-center justify-start">
+        <div className="w-full max-w-lg pb-2 flex items-center justify-center">
           <LoadingText visible={isShuffling} text="Shuffling" />
           <LoadingText visible={resetLoading} text="Resetting" />
           {toastMessage && (

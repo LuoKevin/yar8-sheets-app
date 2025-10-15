@@ -31,7 +31,7 @@ const AttendancePage = () => {
   const [filterMode, setFilterMode] = useState<AttendeeFilter>('all')
 
   const { fetchAttendance, status: attendanceStatus } = useAttendance()
-  const { currentDate, allDates, dateStatus, setDate } = useDateContext()
+  const { currentDate, dateStatus } = useDateContext()
   const { submitAttendance } = usePostAttendance()
   const { toastMessage, toastStatus, showToast } = useToast()
 

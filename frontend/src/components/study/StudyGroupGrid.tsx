@@ -27,10 +27,10 @@ const StudyGroupGrid = ({ groups, loading }: StudyGroupGridProps) => {
   }, [groups])
 
   // derive grid shape
-  const columns = displayGroups.filter(g => g.members.length > 0).length
+  const columns = displayGroups.filter((g) => g.members.length > 0).length
   const rows =
     displayGroups.length > 0
-      ? Math.max(...displayGroups.map(g => 1 + g.members.length)) // +1 for leader row
+      ? Math.max(...displayGroups.map((g) => 1 + g.members.length)) // +1 for leader row
       : 1
 
   // Tailwind gap-4 = 16px; keep it in a single place
@@ -45,7 +45,6 @@ const StudyGroupGrid = ({ groups, loading }: StudyGroupGridProps) => {
     // height per card = (viewport height - total gaps - top padding) / rows
     ['--card-h' as string]: `calc((100vh - (${Math.max(rows - 1, 0)} * var(--gap)) - 4rem) / ${Math.max(rows, 1)})`,
   }
-
 
   if (displayGroups.length == 0) return null
 
