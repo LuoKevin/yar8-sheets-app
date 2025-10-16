@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { Button } from '../Button.tsx'
 import LoadingIndicator from '../LoadingIndicator.tsx'
-import AttendanceCard from './AttendanceCard.tsx'
 import { useAttendance } from '../../hooks/useAttendance.ts'
 import { AttendeeFilter, FetchStatus } from '../../hooks/types.ts'
 import { getFormattedTimestamp, useDateContext } from '../../context/DateContext.tsx'
@@ -14,8 +12,9 @@ import LatecomerToggle from './LatecomerToggle.tsx'
 import { usePageContext } from '../../context/PageContext.tsx'
 import ToggleCheckbox from '../ToggleCheckbox.tsx'
 import AddNewAttendeeModal from './AddNewAttendeeModal.tsx'
+import AttendanceView from './AttendanceView.tsx'
 
-interface DisplayedAttendee {
+export interface DisplayedAttendee {
   name: string
   present: boolean
   lateTime: string
@@ -198,37 +197,12 @@ const AttendancePage = () => {
           Save Attendance
         </Button>
 
-        <div className="w-full max-w-3xl flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {attendees
-            .filter((a) => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
-            .filter((a) => {
-              switch (filterMode) {
-                case 'only-present':
-                  return a.present
-                case 'only-absent':
-                  return !a.present
-                default:
-                  return true
-              }
-            })
-            .map((attendee) => (
-              <motion.div
-                key={attendee.name}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.25 }}
-              >
-                <AttendanceCard
-                  name={attendee.name}
-                  present={attendee.present}
-                  lateTime={attendee.lateTime}
-                  onToggle={() => toggleAttendee(attendee)}
-                />
-              </motion.div>
-            ))}
-        </div>
+        <AttendanceView
+          attendees={attendees}
+          filterMode={filterMode}
+          searchTerm={searchTerm}
+          toggleAttendee={toggleAttendee}
+        />
       </div>
     </div>
   )

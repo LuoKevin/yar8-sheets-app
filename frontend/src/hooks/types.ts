@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { ToastIcons } from '../components/SimpleToast'
+import { ToastIcons } from '../components/SimpleToast.tsx'
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
 
