@@ -13,7 +13,6 @@ import { usePageContext } from '../../context/PageContext.tsx'
 import ToggleCheckbox from '../ToggleCheckbox.tsx'
 import AddNewAttendeeModal from './AddNewAttendeeModal.tsx'
 import AttendanceView from './AttendanceView.tsx'
-import AttendanceAltView from './AttendanceAltView.tsx'
 
 export interface DisplayedAttendee {
   name: string
@@ -152,46 +151,47 @@ const AttendancePage = () => {
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
         <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Take Attendance</h1>
         <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
+        <div className="relative flex flex-row gap-2">
+          <AddNewAttendeeModal />
 
-        <AddNewAttendeeModal />
+          <ToggleCheckbox
+            label="Filter only present"
+            checked={filterMode == 'only-present'}
+            onClick={() => {
+              if (filterMode == 'only-present') {
+                setFilterMode('all')
+              } else {
+                setFilterMode('only-present')
+              }
+            }}
+            color={'bg-green-500'}
+          />
 
-        <ToggleCheckbox
-          label="Filter only present"
-          checked={filterMode == 'only-present'}
-          onClick={() => {
-            if (filterMode == 'only-present') {
-              setFilterMode('all')
-            } else {
-              setFilterMode('only-present')
-            }
-          }}
-          color={'bg-green-500'}
-        />
+          <ToggleCheckbox
+            label="Filter only absent"
+            checked={filterMode == 'only-absent'}
+            onClick={() => {
+              if (filterMode == 'only-absent') {
+                setFilterMode('all')
+              } else {
+                setFilterMode('only-absent')
+              }
+            }}
+            color={'bg-red-500'}
+          />
 
-        <ToggleCheckbox
-          label="Filter only absent"
-          checked={filterMode == 'only-absent'}
-          onClick={() => {
-            if (filterMode == 'only-absent') {
-              setFilterMode('all')
-            } else {
-              setFilterMode('only-absent')
-            }
-          }}
-          color={'bg-red-500'}
-        />
-
-        <LatecomerToggle
-          checked={latecomerMode}
-          onClick={() => {
-            if (!latecomerMode) {
-              setPage('latecoming')
-            } else {
-              setPage('attendance')
-            }
-            setLatecomerMode(!latecomerMode)
-          }}
-        />
+          <LatecomerToggle
+            checked={latecomerMode}
+            onClick={() => {
+              if (!latecomerMode) {
+                setPage('latecoming')
+              } else {
+                setPage('attendance')
+              }
+              setLatecomerMode(!latecomerMode)
+            }}
+          />
+        </div>
 
         <input
           type="text"
@@ -211,8 +211,8 @@ const AttendancePage = () => {
           Save Attendance
         </Button>
 
-        {/* <AttendanceView attendees={displayedAttendees} toggleAttendee={toggleAttendee} /> */}
-        <AttendanceAltView attendees={displayedAttendees} toggleAttendee={toggleAttendee} />
+        <AttendanceView attendees={displayedAttendees} toggleAttendee={toggleAttendee} />
+        {/* <AttendanceAltView attendees={displayedAttendees} toggleAttendee={toggleAttendee} /> */}
       </div>
     </div>
   )
