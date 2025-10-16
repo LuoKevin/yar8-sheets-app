@@ -18,7 +18,7 @@ const StudyGroupColumn = ({ leader, members, isAnimating }: StudyGroupColumnProp
     >
       <StudyGroupCard name={leader} isLeader isAnimating={isAnimating} />
 
-      <motion.ul layout className="flex flex-col items-center gap-2">
+      <motion.ul layout className="flex flex-col items-center gap-4">
         {members.map((member) => (
           <li key={member}>
             <StudyGroupCard name={member} isAnimating={isAnimating} />

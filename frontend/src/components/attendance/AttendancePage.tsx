@@ -13,6 +13,7 @@ import { usePageContext } from '../../context/PageContext.tsx'
 import ToggleCheckbox from '../ToggleCheckbox.tsx'
 import AddNewAttendeeModal from './AddNewAttendeeModal.tsx'
 import AttendanceView from './AttendanceView.tsx'
+import AttendanceAltView from './AttendanceAltView.tsx'
 
 export interface DisplayedAttendee {
   name: string
@@ -33,6 +34,19 @@ const AttendancePage = () => {
   const { currentDate, dateStatus } = useDateContext()
   const { submitAttendance } = usePostAttendance()
   const { toastMessage, toastStatus, showToast } = useToast()
+
+  const displayedAttendees = attendees
+    .filter((a) => a.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((a) => {
+      switch (filterMode) {
+        case 'only-present':
+          return a.present
+        case 'only-absent':
+          return !a.present
+        default:
+          return true
+      }
+    })
 
   useEffect(() => {
     const asyncAttendance = async () => {
@@ -197,12 +211,8 @@ const AttendancePage = () => {
           Save Attendance
         </Button>
 
-        <AttendanceView
-          attendees={attendees}
-          filterMode={filterMode}
-          searchTerm={searchTerm}
-          toggleAttendee={toggleAttendee}
-        />
+        {/* <AttendanceView attendees={displayedAttendees} toggleAttendee={toggleAttendee} /> */}
+        <AttendanceAltView attendees={displayedAttendees} toggleAttendee={toggleAttendee} />
       </div>
     </div>
   )
