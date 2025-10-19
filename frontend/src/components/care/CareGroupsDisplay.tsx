@@ -23,15 +23,10 @@ const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
               <motion.div
                 layout
                 className="grid gap-4 grid-cols-6"
-                initial={{ opacity: 0, y: '100vh' }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: 'tween',
-                  ease: 'easeInOut',
-                  stiffness: 150,
-                  damping: 15,
-                  delay: 0.2,
-                }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.25 }}
               >
                 {currentGroups.map((group, index) => (
                   <motion.div key={index} layout>
