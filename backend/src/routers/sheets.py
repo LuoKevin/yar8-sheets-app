@@ -22,6 +22,7 @@ class StudyDatesResponse(BaseModel):
 
 class CareGroupsResponse(BaseModel):
     groups: List[CareGroup]
+    nonMembers: List[str]
 
 class StudyGroupResponse(BaseModel):
     groups: List[StudyGroup]
@@ -111,8 +112,8 @@ async def take_attendance(request: PostAttendanceRequest):
 @sheets_router.get("/care-groups", response_model=CareGroupsResponse, summary="Get all care groups")
 async def get_care_groups():
     try:
-        groups = attendance_client.get_care_groups(settings.SPREADSHEET_ID)
-        return CareGroupsResponse(groups=groups)
+        (groups, non_members) = attendance_client.get_care_groups(settings.SPREADSHEET_ID)
+        return CareGroupsResponse(groups=groups, nonMembers=non_members)
     except HTTPError as e:
         raise HTTPException(status_code=e.code, detail=f"Error: {e.reason}")
 

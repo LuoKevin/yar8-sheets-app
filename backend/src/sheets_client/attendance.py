@@ -83,7 +83,7 @@ class AttendanceClient:
             major_dimension='COLUMNS'
         )
 
-    def get_care_groups(self,spreadsheet_id: str) -> List[CareGroup]:
+    def get_care_groups(self,spreadsheet_id: str) -> tuple[List[CareGroup], List[str]]:
         care_group_ranges= [
             f"{self._GROUPS_SHEET_NAME}!C25:M32",
             f"{self._GROUPS_SHEET_NAME}!C35:M43",
@@ -96,13 +96,17 @@ class AttendanceClient:
         top_groups:List[List[str]] = results[0]
         bottom_groups:List[List[str]] = results[1]
         all_groups = top_groups + bottom_groups
+        
+        listed_names: List[str] = [item for sublist in all_groups for item in sublist]
+        attendance: Attendance = self.get_attendance(spreadsheet_id, current_date)
 
-        attendance = self.get_attendance(spreadsheet_id, current_date)
+        present_non_members = [name for (name, present) in attendance.attendance_status.items() if name not in listed_names and present]
 
         filtered_groups = map(lambda group: format_group(group, attendance.attendance_status), all_groups)
         final_groups : List[CareGroup] = [group for group in filtered_groups if group is not None]
 
-        return final_groups
+
+        return (final_groups, present_non_members)
 
     def add_new_follower(self, spreadsheet_id: str, follower_name: str):
         names_col = f"{self._ATTENDANCE_SHEET_NAME}!E3:E200"
