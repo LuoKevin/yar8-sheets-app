@@ -25,11 +25,11 @@ const CareGroupsPage = () => {
   }, [])
 
   return (
-    <div className="min-h-screen w-screen overflow-x-visible">
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-4 space-y-4">
+    <div className="min-h-screen w-screen">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 pt-4 space-y-4">
         <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Care Groups</h1>
         <LoadingIndicator isLoading={status == FetchStatus.LOADING} />
-        <div className="w-full max-w-lg flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
+        <div className="w-full max-w-lg flex flex-col justify-center sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
           <Button onClick={() => handleNavigate()}>⬅️ Study Groups</Button>
         </div>
         <div className="w-full max-w-lg pb-2 flex items-center justify-start">

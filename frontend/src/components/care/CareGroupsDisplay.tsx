@@ -17,7 +17,7 @@ const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
     <div className="relative z-10 min-h-screen w-full px-2 sm:px-4">
       {/* Main Display */}
       <div className="w-full pt-4">
-        <div className="min-w-full overflow-x-auto">
+        <div className="min-w-full">
           <div className="pl-4 sm:pl-0 w-max mx-auto">
             <LayoutGroup>
               <motion.div
