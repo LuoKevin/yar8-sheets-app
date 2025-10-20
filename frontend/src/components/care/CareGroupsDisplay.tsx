@@ -14,7 +14,7 @@ const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
   }, [groups])
 
   return (
-    <div className="relative z-10 min-h-screen w-full px-2 sm:px-4">
+    <div className="relative z-10 w-full px-2 sm:px-4">
       {/* Main Display */}
       <div className="w-full pt-4">
         <div className="min-w-full">

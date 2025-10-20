@@ -8,9 +8,10 @@ import { usePageContext } from '../../context/PageContext.tsx'
 import { useToast } from '../../hooks/useToast.ts'
 import SimpleToast from '../SimpleToast.tsx'
 import CareGroupsDisplay from './CareGroupsDisplay.tsx'
+import GirlsGroupDisplay from './GirlsGroupDisplay.tsx'
 
 const CareGroupsPage = () => {
-  const { fetchCareGroups, careGroups, status } = useCareGroups()
+  const { fetchCareGroups, careGroups, status, nonMembers } = useCareGroups()
   const navigate = useNavigate()
   const { setPage } = usePageContext()
   const { toastMessage, toastStatus } = useToast()
@@ -46,6 +47,7 @@ const CareGroupsPage = () => {
         <div className="w-full pb-2">
           <CareGroupsDisplay groups={careGroups} />
         </div>
+        <GirlsGroupDisplay girls={nonMembers} />
       </div>
     </div>
   )

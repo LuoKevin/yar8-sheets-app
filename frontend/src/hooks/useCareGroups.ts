@@ -8,6 +8,7 @@ interface CareGroupData {
   status: FetchStatus
   loading: boolean
   error: string | null
+  nonMembers: string[]
 }
 
 export function useCareGroups(): CareGroupData {
@@ -15,6 +16,7 @@ export function useCareGroups(): CareGroupData {
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState(FetchStatus.IDLE)
   const [error, setError] = useState<string | null>(null)
+  const [nonMembers, setNonMembers] = useState<string[]>([])
 
   const fetchCareGroups: () => Promise<void> = () => {
     setStatus(FetchStatus.LOADING)
@@ -22,6 +24,7 @@ export function useCareGroups(): CareGroupData {
     return apiFetchCareGroups()
       .then((groupsResponse: CareGroupsResponse) => {
         setCareGroups(groupsResponse.groups)
+        setNonMembers(groupsResponse.nonMembers)
         setStatus(FetchStatus.SUCCESS)
       })
       .catch((err) => {
@@ -32,5 +35,5 @@ export function useCareGroups(): CareGroupData {
         setLoading(false)
       })
   }
-  return { fetchCareGroups, careGroups, status, loading, error }
+  return { fetchCareGroups, careGroups, status, loading, error, nonMembers }
 }
