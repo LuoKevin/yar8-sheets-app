@@ -2,14 +2,14 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../Button.tsx'
 import LoadingIndicator from '../LoadingIndicator.tsx'
 import { FetchStatus } from '../../hooks/types.ts'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useCareGroups } from '../../hooks/useCareGroups.ts'
 import { usePageContext } from '../../context/PageContext.tsx'
 import { useToast } from '../../hooks/useToast.ts'
 import SimpleToast from '../SimpleToast.tsx'
 import CareGroupsDisplay from './CareGroupsDisplay.tsx'
-import GirlsGroupDisplay from './GirlsGroupDisplay.tsx'
 import GlitchyWordBox from './GlitchyWordBox.tsx'
+import { motion } from 'motion/react'
 
 const CareGroupsPage = () => {
   const { fetchCareGroups, careGroups, status, nonMembers } = useCareGroups()
@@ -48,9 +48,18 @@ const CareGroupsPage = () => {
           <CareGroupsDisplay groups={careGroups} />
         </div>
         {/* <GirlsGroupDisplay girls={nonMembers} /> */}
-        <div className="w-full pb-2">
-          <GlitchyWordBox words={nonMembers} />
-        </div>
+
+        {nonMembers.length > 0 && (
+          <motion.div
+            className="w-full pb-2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.25 }}
+          >
+            <GlitchyWordBox words={nonMembers} />
+          </motion.div>
+        )}
       </div>
     </div>
   )

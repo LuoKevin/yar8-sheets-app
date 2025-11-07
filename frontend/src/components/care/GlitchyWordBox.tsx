@@ -38,6 +38,16 @@ const pickRandom = (values: string[], exclude?: string) => {
 }
 
 const glitchChars = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
   '#',
   '%',
   '/',
@@ -45,48 +55,26 @@ const glitchChars = [
   '|',
   '_',
   '-',
-  '∆',
-  '≈',
-  '§',
-  '¤',
-  'Ξ',
-  'Φ',
-  'Ø',
-  '₪',
-  '₿',
-  'ψ',
-  'Ж',
-  '★',
-  '♜',
-  '░',
-  '▒',
-  '▓',
-  '╬',
-  '╪',
-  'Ӝ',
-  '҂',
-  'Ѯ',
-  '命',
-  '道',
-  '信',
-  '⚚',
-  '⚡',
-  '✶',
-  '⌘',
+  '*',
+  '+',
+  '=',
 ]
 
 const renderChaoticWord = (word: string) =>
   word.split('').map((char, index) => {
-    const yOffset = Math.random() < 0.5 ? (Math.random() - 0.5) * 8 : 0
-    const xJitter = Math.random() < 0.35 ? (Math.random() - 0.5) * 5 : 0
-    const scale = 1 + (Math.random() - 0.5) * 0.2
+    const hue = 95 + Math.random() * 25
+    const glowStrength = 0.4 + Math.random() * 0.6
+    const scale = 1 + (Math.random() - 0.5) * 0.12
+    const skew = (Math.random() - 0.5) * 4
 
     return (
       <span
         key={`${word}-${index}`}
         style={{
           display: 'inline-block',
-          transform: `translate(${xJitter}px, ${yOffset}px) scale(${scale})`,
+          transform: `scale(${scale}) skew(${skew}deg)`,
+          color: `hsl(${hue} 90% 55%)`,
+          textShadow: `0 0 ${3 + glowStrength * 3}px rgba(0, 220, 0, ${0.4 + glowStrength / 2})`,
           lineHeight: 1.1,
           letterSpacing: '0.05em',
         }}
@@ -119,14 +107,15 @@ const glitchWord = (value: string) => {
   return chars.join('')
 }
 
-const shuffleWords = (words: string[]) => {
-  const pool = [...words]
+const shuffleArray = <T,>(items: T[]) => {
+  const pool = [...items]
   for (let i = pool.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1))
     ;[pool[i], pool[j]] = [pool[j], pool[i]]
   }
   return pool
 }
+const shuffleWords = (words: string[]) => shuffleArray(words)
 
 const createNode = (
   id: number,
@@ -156,63 +145,34 @@ const createNode = (
   }
 }
 
-const generateNodePositions = (count: number, minDistance = 12) => {
-  const positions: { x: number; y: number }[] = []
-  for (let i = 0; i < count; i += 1) {
-    let attempts = 0
-    let position: { x: number; y: number } | null = null
-    let currentMin = minDistance
+const SCREEN_COLS = 12
+const SCREEN_ROWS = 8
 
-    while (attempts < 120 && !position) {
-      const candidate = {
-        x: 5 + Math.random() * 90,
-        y: 5 + Math.random() * 90,
-      }
-      const overlaps = positions.some((prev) => {
-        const dx = prev.x - candidate.x
-        const dy = prev.y - candidate.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-        return distance < currentMin
-      })
-
-      if (!overlaps) {
-        position = candidate
-        break
-      }
-
-      attempts += 1
-      if (attempts % 30 === 0) {
-        currentMin = Math.max(6, currentMin - 2)
-      }
+const generateNodePositions = (count: number) => {
+  const cells: Array<{ col: number; row: number }> = []
+  for (let row = 1; row < SCREEN_ROWS - 1; row += 1) {
+    for (let col = 1; col < SCREEN_COLS - 1; col += 1) {
+      cells.push({ col, row })
     }
-
-    positions.push(position ?? { x: 5 + Math.random() * 90, y: 5 + Math.random() * 90 })
   }
-
-  return positions
+  const shuffled = shuffleArray(cells).slice(0, count)
+  return shuffled.map(({ col, row }) => ({
+    x: ((col + 0.5) / SCREEN_COLS) * 100,
+    y: ((row + 0.5) / SCREEN_ROWS) * 100,
+  }))
 }
 
-const GlitchyWordBox = ({
-  words,
-  intervalMs = 500,
-  flickerBursts = 20,
-}: GlitchyWordBoxProps) => {
-  const sanitizedWords = useMemo(() => words.filter((word) => word && word.trim().length > 0), [words])
+const GlitchyWordBox = ({ words, intervalMs = 500 }: GlitchyWordBoxProps) => {
+  const sanitizedWords = useMemo(
+    () => words.filter((word) => word && word.trim().length > 0),
+    [words],
+  )
   const activeWords = sanitizedWords.length ? sanitizedWords : FALLBACK_WORDS
   const uniqueWords = useMemo(() => Array.from(new Set(activeWords)), [activeWords])
   const wordPool = uniqueWords.length ? uniqueWords : FALLBACK_WORDS
   const nodeCount = Math.min(NODE_COUNT, wordPool.length)
   const nodeWords = useMemo(() => wordPool.slice(0, nodeCount), [wordPool, nodeCount])
   const nodeWordsSignature = useMemo(() => nodeWords.join('|'), [nodeWords])
-  const bootTimestamp = useMemo(
-    () =>
-      new Date().toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      }),
-    [],
-  )
   const [nodes, setNodes] = useState<NodeState[]>([])
   const morphTimeoutsRef = useRef<Record<number, number>>({})
   const wordTimeoutsRef = useRef<Record<number, number>>({})
@@ -228,7 +188,11 @@ const GlitchyWordBox = ({
     }
     const positions = generateNodePositions(nodeCount)
     const shuffledWords = shuffleWords(nodeWords)
-    setNodes(positions.map((position, index) => createNode(index, nodeWords, shuffledWords[index], position)))
+    setNodes(
+      positions.map((position, index) =>
+        createNode(index, nodeWords, shuffledWords[index], position),
+      ),
+    )
   }, [nodeWordsSignature, nodeCount])
 
   const scheduleWordRefresh = useCallback(
@@ -326,41 +290,42 @@ const GlitchyWordBox = ({
 
   return (
     <div className="glitch-canvas">
-      <div className="glitch-shell-bar">
-        <span>
-          <strong>Windows PowerShell</strong>
-          <small>(Admin)</small>
-        </span>
-        <div className="glitch-shell-controls" aria-hidden="true">
-          <button type="button" />
-          <button type="button" />
-          <button type="button" />
-        </div>
+      <div className="glitch-shell-line">ssh admin@rccc.org</div>
+      <div className="glitch-shell-line">admin@rccc.org&apos;s password: *******</div>
+      <div className="glitch-shell-line">Last login: {new Date().toUTCString()} from 10.0.0.18</div>
+      <div className="glitch-shell-line">admin@yaf-6:~$ ./cr-grp --girl</div>
+      <div className="glitch-shell-line text-red-600 font-bold">
+        Kernel panic: fatal system error in CareBus (SignalOverflowException)
       </div>
-      <div className="glitch-shell-body">
-        <div className="glitch-shell-line">Microsoft Windows [Version 10.0.22631.2861]</div>
-        <div className="glitch-shell-line">(c) YAR8 Ministries. All rights reserved.</div>
-        <div className="glitch-shell-line">PS C:\CareNet\signals&gt; status --scan</div>
-        <div className="glitch-shell-line">
-          Detected {activeCount.toString().padStart(2, '0')} active groups of {nodeCount.toString().padStart(2, '0')}
-        </div>
-        <div className="glitch-shell-grid">
-          {nodes.map((node) => (
-            <div
-              key={node.id}
-              className={`glitch-node ${node.active ? 'glitch-node--on' : ''}`}
-              style={
-                {
-                  left: `${node.x}%`,
-                  top: `${node.y}%`,
-                } as CSSProperties
-              }
-            >
-              <span className="glitch-node__payload">{renderChaoticWord(node.displayWord)}</span>
-            </div>
-          ))}
-        </div>
-        <div className="glitch-shell-line">PS C:\CareNet\signals&gt; _</div>
+      <div className="glitch-shell-line"> EIP: 0x00b7:CareNet_ChannelListener+0x23a (*locked*)</div>
+      <div className="glitch-shell-line"> EBP: 0x7ffd33a8 ESP: 0x7ffd2fe8</div>
+      <div className="glitch-shell-line"> Stack trace:</div>
+      <div className="glitch-shell-line"> 0x0012:CareNet_ChannelListener_process_frame+0x5d</div>
+      <div className="glitch-shell-line"> 0x000f:CareNet_StackRelay_dispatch+0x1b</div>
+      <div className="glitch-shell-line"> 0x000a:CareNet_SignalBus_execute+0x34</div>
+      <div className="glitch-shell-line"> 0x0002:bootstrap_carenet+0x22b</div>
+      <div className="glitch-shell-line text-red-600 font-bold">
+        ERR!! anomalous entities detected {activeCount.toString().padStart(2, '0')} /{' '}
+        {nodeCount.toString().padStart(2, '0')} (segfault while dereferencing data)
+      </div>
+      <div className="glitch-shell-line text-red-600 font-bold">
+        ERR!! Attempting to dump logs...
+      </div>
+      <div className="glitch-shell-grid">
+        {nodes.map((node) => (
+          <div
+            key={node.id}
+            className={`glitch-node ${node.active ? 'glitch-node--on' : ''}`}
+            style={
+              {
+                left: `${node.x}%`,
+                top: `${node.y}%`,
+              } as CSSProperties
+            }
+          >
+            <span className="glitch-node__payload">{renderChaoticWord(node.displayWord)}</span>
+          </div>
+        ))}
       </div>
     </div>
   )

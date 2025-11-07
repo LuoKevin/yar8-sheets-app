@@ -153,7 +153,7 @@ const AttendancePage = () => {
         <Button onClick={() => handleNavigate()}>Study Groups Page ➡️</Button>
         <div className="relative flex flex-row gap-2">
           <AddNewAttendeeModal />
-
+          <span className="pt-3 text-white font-medium">Date: {currentDate}</span>
           <ToggleCheckbox
             label="Filter only present"
             checked={filterMode == 'only-present'}
