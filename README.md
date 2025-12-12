@@ -39,3 +39,8 @@ This app is designed to create a smoother user experience in handling the YAR8 G
 - Attendance search functionality 
 - Latecomer mode for stragglers
 - Filter only present/ only absent
+
+### Deployment
+`fly deploy --dockerfile docker/dev.Dockerfile -c fly-dev.toml`
+
+`fly deploy --dockerfile docker/prod.Dockerfile -c fly-prod.toml`
