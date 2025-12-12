@@ -43,7 +43,7 @@ const StudyGroupGrid = ({ groups, loading }: StudyGroupGridProps) => {
     ['--gap' as string]: `${GAP}px`,
     ['--card-w' as string]: `calc((100vw - (${Math.max(columns - 1, 0)} * var(--gap)) - 10rem) / ${Math.max(columns, 1)})`,
     // height per card = (viewport height - total gaps - top padding) / rows
-    ['--card-h' as string]: `calc((100vh - (${Math.max(rows - 1, 0)} * var(--gap)) - 4rem) / ${Math.max(rows, 1)})`,
+    ['--card-h' as string]: `calc((85vh - (${Math.max(rows - 1, 0)} * var(--gap)) - 4rem) / ${Math.max(rows, 1)})`,
   }
 
   if (displayGroups.length == 0) return null
