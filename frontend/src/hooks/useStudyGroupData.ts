@@ -3,13 +3,17 @@ import type { StudyGroup } from '../api/sheet.ts'
 import { apiFetchStudyGroupData } from '../api/sheet.ts'
 
 interface StudyGroupData {
-  fetchGroups: () => Promise<void>
+  fetchGroups: (options?: FetchGroupsOptions) => Promise<void>
   groups: StudyGroup[]
   locked: boolean
   groupsLoading: boolean
   groupsError: string | null
   manualSetGroups: (newGroups: StudyGroup[]) => void
   scrambleGroups: () => void
+}
+
+interface FetchGroupsOptions {
+  silent?: boolean
 }
 
 function chunkArray<T>(arr: T[], n: number): T[][] {
@@ -77,8 +81,8 @@ export function useStudyGroupData(): StudyGroupData {
     setGroups(scrambledGroups)
   }
 
-  const fetchGroups = async () => {
-    setLoading(true)
+  const fetchGroups = async ({ silent = false }: FetchGroupsOptions = {}) => {
+    if (!silent) setLoading(true)
     setError(null)
 
     try {
@@ -89,7 +93,7 @@ export function useStudyGroupData(): StudyGroupData {
     } catch (err) {
       setError(err.message || 'Unknown error')
     } finally {
-      setLoading(false)
+      if (!silent) setLoading(false)
     }
   }
   return {

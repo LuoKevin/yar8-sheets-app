@@ -8,8 +8,6 @@ import { usePageContext } from '../../context/PageContext.tsx'
 import { useToast } from '../../hooks/useToast.ts'
 import SimpleToast from '../SimpleToast.tsx'
 import CareGroupsDisplay from './CareGroupsDisplay.tsx'
-import GlitchyWordBox from './GlitchyWordBox.tsx'
-import { motion } from 'motion/react'
 
 const CareGroupsPage = () => {
   const { fetchCareGroups, careGroups, status, nonMembers } = useCareGroups()
@@ -26,15 +24,19 @@ const CareGroupsPage = () => {
   }, [])
 
   return (
-    <div className="min-h-screen w-screen">
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-start p-4 pt-10 space-y-4">
-        <h1 className="text-xl sm:text-2xl font-bold text-white text-center">Care Groups</h1>
-        <LoadingIndicator isLoading={status == FetchStatus.LOADING} />
-        <div className="w-full max-w-lg flex flex-col justify-center sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
+    <div className="min-h-[100dvh] w-full overflow-x-hidden">
+      <main className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-[1800px] flex-col items-center gap-5 px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <header className="flex w-full flex-col items-center justify-center gap-3 text-center">
+          <h1 className="text-center text-[clamp(1.5rem,3vw,2rem)] font-bold text-white">
+            Care Groups
+          </h1>
           <Button onClick={() => handleNavigate()}>⬅️ Study Groups</Button>
-        </div>
-        <div className="w-full max-w-lg pb-2 flex items-center justify-start">
-          {toastMessage && (
+        </header>
+
+        <LoadingIndicator isLoading={status == FetchStatus.LOADING} />
+
+        {toastMessage && (
+          <div className="flex w-full justify-center">
             <SimpleToast
               key={toastMessage + toastStatus}
               message={toastMessage}
@@ -42,25 +44,13 @@ const CareGroupsPage = () => {
               onClose={() => {}}
               // Clear when manually closed
             />
-          )}
-        </div>
-        <div className="w-full pb-2">
-          <CareGroupsDisplay groups={careGroups} />
-        </div>
-        {/* <GirlsGroupDisplay girls={nonMembers} /> */}
-
-        {nonMembers.length > 0 && (
-          <motion.div
-            className="w-full pb-2"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.25 }}
-          >
-            <GlitchyWordBox words={nonMembers} />
-          </motion.div>
+          </div>
         )}
-      </div>
+
+        <section className="w-full pb-4" aria-label="Care groups">
+          <CareGroupsDisplay groups={careGroups} />
+        </section>
+      </main>
     </div>
   )
 }

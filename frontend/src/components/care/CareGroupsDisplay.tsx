@@ -14,30 +14,27 @@ const CareGroupsDisplay = ({ groups }: CareGroupsDisplayProps) => {
   }, [groups])
 
   return (
-    <div className="relative z-10 w-full px-2 sm:px-4">
-      {/* Main Display */}
-      <div className="w-full pt-4">
-        <div className="min-w-full">
-          <div className="pl-4 sm:pl-0 w-max mx-auto">
-            <LayoutGroup>
-              <motion.div
-                layout
-                className="grid gap-4 grid-cols-6"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.25 }}
-              >
-                {currentGroups.map((group, index) => (
-                  <motion.div key={index} layout>
-                    <CareGroupColumn group={group} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </LayoutGroup>
-          </div>
-        </div>
-      </div>
+    <div className="relative z-10 mx-auto w-full">
+      <LayoutGroup>
+        <motion.div
+          layout
+          className="flex w-full flex-wrap items-stretch justify-center gap-[clamp(0.5rem,1.25vw,1rem)]"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.25 }}
+        >
+          {currentGroups.map((group, index) => (
+            <motion.div
+              key={index}
+              layout
+              className="min-w-[10rem] max-w-sm flex-1 basis-[clamp(10rem,18vw,15rem)]"
+            >
+              <CareGroupColumn group={group} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </LayoutGroup>
     </div>
   )
 }

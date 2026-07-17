@@ -32,12 +32,10 @@ const StudyGroupsPage = () => {
     scrambleGroups()
   })
   const [resetWarning, setResetWarning] = useState(true)
-  const [firstReset, setFirstReset] = useState(false)
 
   const handleDateSelect = (newDate: string) => {
     setDate(newDate)
     fetchGroups()
-    setFirstReset(false)
   }
 
   const handleResetGroups = () => {
@@ -49,7 +47,6 @@ const StudyGroupsPage = () => {
     resetGroups()
       .then(() => {
         setPage('groups')
-        setFirstReset(true)
         fetchGroups()
       })
       .then(() => {
@@ -62,7 +59,7 @@ const StudyGroupsPage = () => {
   }
 
   const handleShuffle = async () => {
-    if (groupsLocked || !firstReset) {
+    if (groupsLocked) {
       showToast('Reset groups before shuffling!', 'error')
       return
     }
@@ -75,12 +72,11 @@ const StudyGroupsPage = () => {
         setPage('groups')
       } else {
         setPage('locked')
-        setFirstReset(false)
         setResetWarning(true)
         showToast('Shuffling successful!', 'success')
       }
 
-      await fetchGroups()
+      await fetchGroups({ silent: result.responseStatus == FetchStatus.SUCCESS })
     } catch {
       showToast(`Shuffling failed. Reason: ${shufflingError}`, 'error')
       setPage('groups')

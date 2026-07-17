@@ -42,9 +42,9 @@ const CareGroupNameCard = ({ name, present }: CareGroupNameCardProps) => {
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full">
       <motion.div
-        className="w-full h-full"
+        className="w-full"
         layout
         transition={{
           type: 'spring',
@@ -53,15 +53,16 @@ const CareGroupNameCard = ({ name, present }: CareGroupNameCardProps) => {
         }}
       >
         <motion.div
-          className={`w-full h-full rounded-xl shadow-lg flex items-center justify-center p-2 cursor-pointer border-2 transition-colors duration-200 ${
+          className={`flex min-h-[clamp(2.5rem,5vw,4rem)] w-full cursor-pointer items-center justify-center rounded-xl border-2 p-[clamp(0.35rem,0.8vw,0.75rem)] shadow-lg transition-colors duration-200 ${
             present ? 'bg-green-500 hover:bg-green-400' : 'bg-red-700 hover:bg-red-600'
           }`}
           variants={cardVariants}
           initial="rest"
         >
           <span
-            className="font-extrabold text-white text-center leading-tight text-xl sm:text-2xl"
+            className="w-full break-words text-center text-[clamp(0.8rem,1.6vw,1.5rem)] font-extrabold leading-tight text-white"
             style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+            title={name}
           >
             {name}
           </span>
