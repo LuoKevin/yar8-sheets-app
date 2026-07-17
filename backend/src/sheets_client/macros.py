@@ -39,9 +39,11 @@ class GoogleSheetsMacros:
                    client.read_cell(spreadsheet_id, "Exceptions!E1") == "meh"
             ):
                 self._toggle_shuffle(spreadsheet_id)
+                time.sleep(0.5)  # Add a short delay to prevent rapid looping
         else:
             while client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") == "meh":
                 self._toggle_shuffle(spreadsheet_id)
+                time.sleep(0.5)  # Add a short delay to prevent rapid looping
 
         client.write_range(spreadsheet_id, paste_range, client.read_range(spreadsheet_id, copy_range))
         client.write_cell(spreadsheet_id,f"{self._GROUPS_SHEET_NAME}!M1", "TRUE")
