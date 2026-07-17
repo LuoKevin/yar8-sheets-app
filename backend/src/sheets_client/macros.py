@@ -32,18 +32,10 @@ class GoogleSheetsMacros:
         client = self._sheets_client
         copy_range = f"{self._GROUPS_SHEET_NAME}!AC3:AE103"
         paste_range = f"{self._GROUPS_SHEET_NAME}!AF3:AH103"
-        alt_run: bool = client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!I2") == "TRUE"
-
-        if alt_run:
-            while (client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") == "meh" or
-                   client.read_cell(spreadsheet_id, "Exceptions!E1") == "meh"
-            ):
-                self._toggle_shuffle(spreadsheet_id)
-                time.sleep(0.5)  # Add a short delay to prevent rapid looping
-        else:
-            while client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") == "meh":
-                self._toggle_shuffle(spreadsheet_id)
-                time.sleep(0.5)  # Add a short delay to prevent rapid looping
+        
+        while client.read_cell(spreadsheet_id, f"{self._GROUPS_SHEET_NAME}!X22") == "meh":
+            self._toggle_shuffle(spreadsheet_id)
+            time.sleep(0.5)  # Add a short delay to prevent rapid looping
 
         client.write_range(spreadsheet_id, paste_range, client.read_range(spreadsheet_id, copy_range))
         client.write_cell(spreadsheet_id,f"{self._GROUPS_SHEET_NAME}!M1", "TRUE")
